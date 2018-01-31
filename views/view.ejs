@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Data</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">:-))</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="data">View Data</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+
+    <div class="container">
+
+<!--======================================================================  -->
+<!--====================== Basic Layout===================================  -->
+<!--======================================================================  -->
+  <div class="">
+    <table border=1>
+      <thead>
+
+      </thead>
+      <tbody>
+        <tr>
+          <td> course  </td>
+          <td></td>
+          <td> name    </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>  age    </td>
+          <td></td>
+          <td>  gender </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td> category</td>
+          <td></td>
+          <td> mode_of_adm</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td> mob_no  </td>
+          <td></td>
+          <td> email   </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td> add_t   </td>
+          <td></td>
+          <td> add_p   </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td> twf     </td>
+          <td></td>
+          <td> branch  </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td> dob     </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  </div>
+
+<!-- ====================================================================== -->
+<!-- ===================== Exam fee Layout ================================ -->
+<!-- ====================================================================== -->
+<div style="float:left">
+        <table border=1>
+          <thead>
+            <td>Semester</td>
+            <td>Exam Fee</td>
+          </thead>
+          <%
+          for( i=1;i<=data.cur_sem;i++){
+            var s;
+            s = 's_'+i;
+            %>
+                <tr>
+                  <td><%= i %></td>
+                  <td><%= data[s].Exam_fee_Reg %> </td>
+               </tr>
+          <% } %>
+      </table>
+</div>
+<!--====================================================================  -->
+<!--==================== Term fee Layout ===============================  -->
+<!--=====================================================================  -->
+<div style="">
+       <table border=1>
+         <thead>
+           <td>Semester</td>
+           <td>Term Fee</td>
+         </thead>
+         <%
+         for( i=1;i<=data.cur_sem;i++){
+           var s;
+           s = 's_'+i;
+           %>
+               <tr>
+                 <td><%= i %></td>
+                 <td><%= data[s].Term_fee %> </td>
+              </tr>
+         <% } %>
+       </table>
+</div>
+<!--==================== Marksheet Layout ===============================  -->
+<!--=====================================================================  -->
+       <div class="">
+         <% for( i=1; i<data.cur_sem;i++){%>
+           <table border="1">
+             <thead>
+               <tr>
+                 <td rowspan="2" > Subject code</td>
+                 <td rowspan="2">Subject Name</td>
+                 <td colspan="3">Theory</td>
+                 <td colspan="3">Practical</td>
+                 <td rowspan="2">Total Grade</td>
+               </tr>
+               <tr>
+                 <td>Gtu</td>
+                 <td>Mid</td>
+                 <td>Total</td>
+                 <td>Gtu</td>
+                 <td>Mid</td>
+                 <td>Total</td>
+               </tr>
+             </thead>
+             <tbody>
+               <% for(j=1;j<=data.Tsubject;j++){
+                   var sem,sub;
+                   sem = "s_"+i;
+                   sub = "sub"+j;
+               %>
+                 <tr>
+                   <td>data[s].result[sub].code</td>
+                   <td>data[s].result[sub].name</td>
+                   <td>data[s].result[sub].these</td>
+                   <td>data[s].result[sub].thpa</td>
+                   <td>data[s].result[sub].thtot</td>
+                   <td>data[s].result[sub].prese</td>
+                   <td>data[s].result[sub].prpa</td>
+                   <td>data[s].result[sub].prtot</td>
+                   <td>data[s].result[sub].grade</td>
+                 </tr>
+               <% } %>
+                 <tr>
+                   <td></td>
+                   <td colspan="3">cpi :<%= data['s_'+i].cpi %></td>
+                   <td colspan="3">spi : <%= data['s_'+i].spi %></td>
+                   <td colspan="2">Status : <%= data['s_'+i].status %> </td>
+                 </tr>
+             </tbody>
+           </table>
+         <%}%>
+       </div>
+<!-- ====================================================================== -->
+<!--  ================    Term fees  ====================================== -->
+<!--======================================================================  -->
+
+    </div>
+  </body>
+</html>

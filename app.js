@@ -1,60 +1,44 @@
-//--------------------------------------Importing dependencies ----------------
-var express = require("express"),
-    app = express(),
+var express =require('express'),
+    bodyparser=require('body-parser')
     mongoose = require("mongoose"),
     mongoXlsx = require("mongo-xlsx"),
-    bodyParser = require("body-parser"),
     multer    = require("multer"),
-    models  = require('./models/student'),
-    storage = multer.diskStorage(
-      {
+    storage = multer.diskStorage({
         destination: function (req, file, cb) {cb(null, 'uploads/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
       });
-
 var upload = multer({ storage: storage });
-
-
-//--------------------------------------------------------------------------
-
-//==============Routes==========================
-var indexRoute = require('./routes/index'),
-    showRoute  = require('./routes/show');
-app.use(indexRoute);
-app.use(showRoute);
-//==============================================
-
-
-//+++++++++++++++Connecting to Database+++++++++
+//==============================================================================
+//======================  connecting database  ==================================
+//==============================================================================
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/demo3");
-//++++++++++++++++++++++++++++++++++++++++++++++
+mongoose.connect("mongodb://localhost/db1",function(err,data){
+  if(err){
+    console.log("db connection failed : ",err);
+  }
+  else{
+    console.log("connnection sucessful: ");
+  }
+});
 
-//--------------------Using body parser--------
-app.use(bodyParser.urlencoded({
-  extended: true
+//===================================================================================
+//========================= Starting Server =========================================
+//===================================================================================
+app=express();
+app.use(bodyparser.urlencoded({
+  extended:true
 }));
-//---------------------------------------------
 
-
-//======================Search Route==================
-app.get("/search",function(req,res){
-  var query = req.query.search_query;
-  models.Students.findById(query,function (err,data) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("show.ejs",{data:data});
-      console.log(data);
-    }
-  })
-
+app.listen(7777,function(){
+console.log("server started");
 })
 
-//======================================================
-
-
-
-app.listen(3823,function(){
-  console.log("server started");
-})
+//============================================================================
+//===================== acquiring router =====================================
+//============================================================================
+var rindex =require("./routes/rindex")
+    rview  =require("./routes/rview");
+app.use(rindex);
+app.use(rview);
+//============================================================================
+//=============================================================================
