@@ -1,245 +1,251 @@
-//=================================Importing all dependencies============
-var mongoose = require('mongoose'),
-    express  = require('express'),
-    router      = express.Router(),
+var express =require('express'),
+    bodyparser=require('body-parser')
+    mongoose = require("mongoose"),
     mongoXlsx = require("mongo-xlsx"),
-    bodyParser = require("body-parser"),
     multer    = require("multer"),
-    models  = require('../models/student'), //Importing multiple models and schemas
-    storage = multer.diskStorage(
-      {
+    storage = multer.diskStorage({
         destination: function (req, file, cb) {cb(null, 'uploads/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
       });
-
-var upload = multer({ storage: storage });
-//=======================================================================
-
-
-//======================================
-// GET Route
-//======================================
-router.get("/",function(req,res){
-  res.render("index.ejs")
-})
+var upload = multer({ storage: storage }),
+     router=express.Router();
 
 
-//======================================
-// PoST Route
-//======================================
-router.post("/",upload.single("file"),function (req,res){
-  console.log("File Path:",req.file.path);
-  console.log("File Category:",req.body.fc);
-  var model = null;
-  mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
+//===============================================================================
+//======================= Accuring Schemas ======================================
+//===============================================================================
+var Students   = require('../Schema/student.model');
+var model=null;
+//===================================================================================
+//======================  Reuest Routing ============================================
+//===================================================================================
+     router.get("/",function(req,res){
+       console.log("get req initiated");
+       res.render("index.ejs");
+     })
 
-    //==========================For TERM FEES =========================
-    if (req.body.fc=="TFee") {
-      console.log("Excel of Termfee is uploaded");
-      mongoData.forEach(elem => {
-         // console.log(elem);
-        var _id     = elem['Enrollment No.'],
-            cur_sem = elem.Semester,
-            sem     = "s_"+elem.Semester,
-            a  = +elem['Govt. Education fees']||0,
-            total  = a + elem['Govt. Workshop-Lab Fees'] +
-                      elem['Govt. Library Fees'] + elem['Govt. Locker Fees'] +
-                      elem['Non- Govt. Gymkhana Fees'] + elem['Non- Govt. Internal Exam fees'];
-        var obj = {[sem]:{Term_fee:total}}  //<<<<========To be noted
-        var obj1 = {_id,cur_sem:cur_sem,[sem]:{Term_fee:total}}  //<<<<========To be noted
-        console.log(_id);
-        models.Students.findById(_id,function (err,data) {
-          if (err) {
-            console.log(err);
-          } else {
-              if (!data) {
-                console.log("No pre existing data found of enrollment no.:"+_id);
-                models.Students.create(obj1); //<<===Temporary for testing purpose
-              } else {
-                models.Students.findByIdAndUpdate(_id,obj,{overwrite:false},function(err,updatedData){
-                  if (err) {
-                    console.log(err);
-                  } else {
-                    console.log("updated data: "+updatedData);
-                  }
-                })
-              }
-          }
-        })
-      });
-    }else if (req.body.fc=="result") {
-      console.log("Excel of Marksheet is uploaded");
-      mongoData.forEach(elem => {
+     router.post("/",upload.single("file"),function(req,res){                               //-1
+       console.log("post req initiated");
+       console.log(req.body.fc);
+       console.log(req.file.path);
+       //+++++++++++++++++++++ For Term Fee ===================================== #1
+       if(req.body.fc=="Tfee"){                                                          // -2
+         console.log("Term fee Excel intiated");
+         mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData){ //-3
+           if(err){                                                                       //-4
+             console.log("data conversion error");
+           }                                                                              //4-
+           else{                                                                          //-5
+             console.log("data converted ducessfully");
+             mongoData.forEach(ele =>{                                                    //-6
+               Students.findById(ele['Enrollment No.'],function(err,data){                //-7
+                 if(err){                                                                 //-8
+                   console.log("searching time error",err);
+                 }                                                                        //8-
+                 else{                                                                    //-9
+                   if(!data){                                                             //-10
 
-        var sem ="s_"+elem.sem,
-            abs = +elem.BCKAB||0,
-            obj = {     _id:elem.MAP_NUMBER,
-                        total_back:elem.TOTBACKL,
-                        backs:{
-                          sem1:elem.BCK1,
-                          sem2:elem.BCK2,
-                          sem3:elem.BCK3,
-                          sem4:elem.BCK4,
-                          sem5:elem.BCK5,
-                          sem6:elem.BCK6,
-                          sem7:elem.BCK7,
-                          sem8:elem.BCK8
-                        },
-                        [sem]:{
-                          result:{
-                            spi:elem.SPI,
-                            cpi:elem.CPI,
-                            result:elem.RESULT,
-                           cur_back:elem.CURBACKL,
-                           sub1:{
-                             code:elem.SUB1,
-                             name:elem.SUB1NA,
-                             sub_grade:elem.SUB1GR,
-                             absent:abs,
-                             these:elem.SUB1GRE,
-                             thpa:elem.SUB1GRM,
-                             thtot:elem.SUB1GRTH,
-                             prese:elem.SUB1GRV,
-                             prpa:elem.SUB1GRI,
-                             prtot:elem.SUB1GRPR
-                           },
-                           sub2:{
-                             code:elem.SUB2,
-                             name:elem.SUB2NA,
-                             sub_grade:elem.SUB2GR,
-                             absent:abs,
-                             these:elem.SUBG2RE,
-                             thpa:elem.SUB2GRM,
-                             thtot:elem.SUB2GRTH,
-                             prese:elem.SUB2GRV,
-                             prpa:elem.SUB2GRI,
-                             prtot:elem.SUB2GRPR
-                           },
-                           sub3:{
-                             code:elem.SUB3,
-                             name:elem.SUB3NA,
-                             sub_grade:elem.SUB3GR,
-                             absent:abs,
-                             these:elem.SUB3GRE,
-                             thpa:elem.SUB3GRM,
-                             thtot:elem.SUB3GRTH,
-                             prese:elem.SUB3GRV,
-                             prpa:elem.SUB3GRI,
-                             prtot:elem.SUB3GRPR
-                           },
-                           sub4:{
-                             code:elem.SUB4,
-                             name:elem.SUB4NA,
-                             sub_grade:elem.SUB4GR,
-                             absent:abs,
-                             these:elem.SUB4GRE,
-                             thpa:elem.SUB4GRM,
-                             thtot:elem.SUB4GRTH,
-                             prese:elem.SUB4GRV,
-                             prpa:elem.SUB4GRI,
-                             prtot:elem.SUB4GRPR
-                           },
-                           sub5:{
-                             code:elem.SUB5,
-                             name:elem.SUB5NA,
-                             sub_grade:elem.SUB5GR,
-                             absent:abs,
-                             these:elem.SUB5GRE,
-                             thpa:elem.SUB5GRM,
-                             thtot:elem.SUB5GRTH,
-                             prese:elem.SUB5GRV,
-                             prpa:elem.SUB5GRI,
-                             prtot:elem.SUB5GRPR
-                           },
-                           sub6:{
-                             code:elem.SUB6,
-                             name:elem.SUB6NA,
-                             sub_grade:elem.SUB6GR,
-                             absent:abs,
-                             these:elem.SUB6GRE,
-                             thpa:elem.SUB6GRM,
-                             thtot:elem.SUB6GRTH,
-                             prese:elem.SUB6GRV,
-                             prpa:elem.SUB6GRI,
-                             prtot:elem.SUB6GRPR
-                           },
-                           sub7:{
-                             code:elem.SUB7,
-                             name:elem.SUB7NA,
-                             sub_grade:elem.SUB7GR,
-                             absent:abs,
-                             these:elem.SUB7GRE,
-                             thpa:elem.SUB7GRM,
-                             thtot:elem.SUB7GRTH,
-                             prese:elem.SUB7GRV,
-                             prpa:elem.SUB7GRI,
-                             prtot:elem.SUB7GRPR
-                           },
-                           sub8:{
-                             code:elem.SUB8,
-                             name:elem.SUB8NA,
-                             sub_grade:elem.SUB8GR,
-                             absent:abs,
-                             these:elem.SUB8GRE,
-                             thpa:elem.SUB8GRM,
-                             thtot:elem.SUB8GRTH,
-                             prese:elem.SUB8GRV,
-                             prpa:elem.SUB8GRI,
-                             prtot:elem.SUB8GRPR
-                           },
-                           sub9:{
-                             code:elem.SUB9,
-                             name:elem.SUB9NA,
-                             sub_grade:elem.SUB9GR,
-                             absent:abs,
-                             these:elem.SUB9GRE,
-                             thpa:elem.SUB9GRM,
-                             thtot:elem.SUB9GRTH,
-                             prese:elem.SUB9GRV,
-                             prpa:elem.SUB9GRI,
-                             prtot:elem.SUB9GRPR
-                           },
-                           sub10:{
-                             code:elem.SUB10,
-                             name:elem.SUB10NA,
-                             sub_grade:elem.SUB10GR,
-                             absent:abs,
-                             these:elem.SUB10GRE,
-                             thpa:elem.SUB10GRM,
-                             thtot:elem.SUB10GRTH,
-                             prese:elem.SUB10GRV,
-                             prpa:elem.SUB10GRI,
-                             prtot:elem.SUB10GRPR
+                     ///////////////////////////////////////////////////////////
+                     var _id    = ele['Enrollment No.'],
+                         sem    = "s_"+ele.Semester,
+                         total  = 0;
+                         if(isNaN(ele['Govt. Education fees']))
+                           {
+                                         console.log(_id,"undefined");
+                           }else{
+                             total=total+ele['Govt. Education fees'];
                            }
 
-                          }
-                        }
-                      };
-        // console.log(obj.s_1.result);
-        models.Students.findById(elem.MAP_NUMBER,function (err,data) {
-          if (!data) {
-
-            models.Students.create(obj);
-          } else {
-            models.Students.findByIdAndUpdate(elem.MAP_NUMBER,obj,{overwrite:false})
-          }
-        })
+                         total=total+ ele['Govt. Workshop-Lab Fees'] +
+                                  ele['Govt. Library Fees'] + ele['Govt. Locker Fees'] +
+                                  ele['Non- Govt. Gymkhana Fees'] + ele['Non- Govt. Internal Exam fees'];
 
 
-      });
-    }
+                     var obj    = {_id:_id,[sem]:{Term_fee:total}};
+                     Students.create(obj,function(err,data){
+                       if(err){
+                         console.log("error",_id," type:-",ele['Bank Reference No']);
+                       }
+                       else{
+                       //  console.log("created",data);
+                       }
+                     })
+                     //////////////////////////////////////////////////////////
+                   }                                                                      //10-
+                   else{                                                                  //-11
+                     console.log("inserting fee data");
+                     var _id    = ele['Enrollment No.'],
+                         total  = ele['Govt. Education fees'] + ele['Govt. Workshop-Lab Fees'] +
+                                  ele['Govt. Library Fees'] + ele['Govt. Locker Fees'] +
+                                  ele['Non- Govt. Gymkhana Fees'] + ele['Non- Govt. Internal Exam fees'],
+                         sem    = "s_"+ele.Semester;
+                     console.log("_id : ",_id);
+                     var obj    = {[sem]:{Term_fee:total}};
+                     Students.findByIdAndUpdate(_id,obj,{overwrite: false},function(err, updatedItem){  //-12
+                       if(err){                                                                         //-13
+                         console.log("updating error",err);
+                       }                                                                                //13-
+                       else{                                                                            //-14
+                         console.log("updated",updatedItem);
+                       }                                                                                //14-
+                     })                                                                                 //12-
+                   }                                                                        //11-
+                 }                                                                          //9-
+               })                                                                           //7-
+             })                                                                             //6-
+           }                                                                                //5-
+         })                                                                                 //3-
+       }                                                                                    //2-
+       //============================= Term Fees Over ===============================
+       //++++++++++++++++++++++++++++++ Exaam Fee ================================== #2
+       else if(req.body.fc=="Efee"){
+         console.log("Exam Fee Excel initiated");
+         mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData){
+           if(err){
+             console.log("conversion error [exam Fee]");
+           }
+           else{
+             console.log("conversion Sucessful");
+             mongoData.forEach(ele =>{
+               Students.findById(ele['Enrollment No.'],function(err,data){
+                 if(err){
+                   console.log("searching Time error");
+                 }
+                 else{
+                   if(!data){
+                     console.log("no pre existing id",ele['Erollment No.']);
+                     var _id    = ele['Enrollment No.'],
+                         type   = ele['Exam Type'],
+                         total  = ele['Exam Fee as per form'],
+                         sem    = "s_"+ele['Current Semester'],
+                         csem   = ele['Current Semester']
+                         obj    = {};
+                         obj    = {_id:_id, cur_sem :csem,[sem]:{Exam_fee_Reg:total}};
+                     Students.create(obj)
+                   }
+                   else{
+                     console.log("inserting fee data");
+                     var _id    = ele['Enrollment No.'],
+                         type   = ele['Exam Type'],
+                         total  = ele['Exam Fee as per form']+ele['Late Fee if any'],
+                         sem    = "s_"+ele['Current Semester'],
+                         obj    = {};
+                     if(Detain(ele['Current Semester'],ele['Enrollment No.'])){
+                         sem    = "d_"+ele['Current Semester']
+                     }
+                     else{
+                       if(type=="Regular"){
+                          obj    = {[sem]:{Exam_fee_Reg:total}};
+                       }
+                       else if(type=="Remedial"){
+                          obj    = {[sem]:{Exam_fee_Rem:total}};
+                       }
+                       console.log("=>",obj);
+                       Students.findByIdAndUpdate(_id,obj,{overwrite: false},function(err, updatedItem){
+                         if(err){
+                           console.log("updating error",err);
+                         }
+                         else{
+                           console.log("updated",updatedItem);
+                         }
+                       })
+                     }
+                   }
+                 }
+               })
+             })
+           }
+         })
+       }
+     //============================== Exam Fee Over +++++++++++++++++++++++++++++++++ 1#
+     //++++++++++++++++++++++++++++++ Marksheet     +++++++++++++++++++++++++++++++++
+       else if(req.body.fc=="result"){
+         console.log("Marksheet Excel initiated");
+         mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData){
+           if(err){
+             console.log("excel conversion error",err);
+           }
+           else{
+             console.log("conversion sucessfully");
+             mongoData.forEach(ele =>{
+             Students.findById(ele['MAP_NUMBER'],function(error,data){
+               if(err){
+                 console.log("search Time error");
+               }
+               else{
+                 if(!data){
+                   console.log(" No records found with with this data",ele['MAP_NUMBER']);
+                 }
+                 else{
+                   /////////////////////////////////////////
+                   var sem = "s_"+ele.sem;
+                   Students.findByIdAndUpdate(ele['MAP_NUMBER'],{
+                     [sem]:{
+                       Tsubject:ele.TOTSUBCOUNT,
+                       result:{
+                         sub1:{
+                           code   :ele.SUB1,     name   :ele.SUB1NA,  these  :ele.SUB1GRE, thpa   : ele.SUB1GRM,
+                           thtot  :ele.SUB1GRTH, prese  :ele.SUB1GRV, prpa   :ele.SUB1GRI,
+                           prtot  :ele.SUB1GRPR, grade  :ele.SUB1GR,  absen  :ele.SUB1AB,  backlog: ele.BCK1 },
+                         sub2:{
+                           code   :ele.SUB2,     name   :ele.SUB2NA,  these  :ele.SUB2GRE, thpa   : ele.SUB2GRM,
+                           thtot  :ele.SUB2GRTH, prese  :ele.SUB2GRV, prpa   :ele.SUB2GRI,
+                           prtot  :ele.SUB2GRPR, grade  :ele.SUB2GR,  absen  :ele.SUB2AB,  backlog: ele.BCK2 },
+                         sub3:{
+                           code   :ele.SUB3,     name   :ele.SUB3NA,  these  :ele.SUB3GRE, thpa   : ele.SUB3GRM,
+                           thtot  :ele.SUB3GRTH, prese  :ele.SUB3GRV, prpa   :ele.SUB3GRI,
+                           prtot  :ele.SUB3GRPR, grade  :ele.SUB3GR,  absen  :ele.SUB3AB,  backlog: ele.BCK3 },
+                         sub4:{
+                           code   :ele.SUB4,     name   :ele.SUB4NA,  these  :ele.SUB4GRE, thpa   : ele.SUB4GRM,
+                           thtot  :ele.SUB4GRTH, prese  :ele.SUB4GRV, prpa   :ele.SUB4GRI,
+                           prtot  :ele.SUB4GRPR, grade  :ele.SUB4GR,  absen  :ele.SUB4AB,  backlog: ele.BCK4 },
+                         sub5:{
+                           code   :ele.SUB5,     name   :ele.SUB5NA,  these  :ele.SUB5GRE, thpa   : ele.SUB5GRM,
+                           thtot  :ele.SUB5GRTH, prese  :ele.SUB5GRV, prpa   :ele.SUB5GRI,
+                           prtot  :ele.SUB5GRPR, grade  :ele.SUB5GR,  absen  :ele.SUB5AB,  backlog: ele.BCK5 },
+                         sub6:{
+                           code   :ele.SUB6,     name   :ele.SUB6NA,  these  :ele.SUB6GRE, thpa   : ele.SUB6GRM,
+                           thtot  :ele.SUB6GRTH, prese  :ele.SUB6GRV, prpa   :ele.SUB6GRI,
+                           prtot  :ele.SUB6GRPR, grade  :ele.SUB6GR,  absen  :ele.SUB6AB,  backlog: ele.BCK6 },
+                         sub7:{
+                           code   :ele.SUB7,     name   :ele.SUB7NA,  these  :ele.SUB7GRE, thpa   : ele.SUB7GRM,
+                           thtot  :ele.SUB7GRTH, prese  :ele.SUB7GRV, prpa   :ele.SUB7GRI,
+                           prtot  :ele.SUB7GRPR, grade  :ele.SUB7GR,  absen  :ele.SUB7AB,  backlog: ele.BCK7 },
+                         sub8:{
+                           code   :ele.SUB8,     name   :ele.SUB8NA,  these  :ele.SUB8GRE, thpa   : ele.SUB8GRM,
+                           thtot  :ele.SUB8GRTH, prese  :ele.SUB8GRV, prpa   :ele.SUB8GRI,
+                           prtot  :ele.SUB8GRPR, grade  :ele.SUB8GR,  absen  :ele.SUB8AB,  backlog: ele.BCK8 },
+                         sub9:{
+                           code   :ele.SUB9,     name   :ele.SUB9NA,  these  :ele.SUB9GRE, thpa   : ele.SUB9GRM,
+                           thtot  :ele.SUB9GRTH, prese  :ele.SUB9GRV, prpa   :ele.SUB9GRI,
+                           prtot  :ele.SUB9GRPR, grade  :ele.SUB9GR,  absen  :ele.SUB9AB,  backlog: ele.BCK9 },
+                         sub10:{
+                           code   :ele.SUB10,     name   :ele.SUB10NA,  these  :ele.SUB10GRE, thpa   : ele.SUB10GRM,
+                           thtot  :ele.SUB10GRTH, prese  :ele.SUB10GRV, prpa   :ele.SUB10GRI,
+                           prtot  :ele.SUB10GRPR, grade  :ele.SUB10GR,  absen  :ele.SUB10AB,  backlog: ele.BCK1 },
 
-
-
-    //==========================================
-  })
-
-  res.redirect("/");
-})
-
-
-
-
-
-
+                       }
+                     }
+                   },
+                   ///////////////////////////////////////////
+                   {overwrite: false},function(err, updatedItem){
+                     if(err){
+                       console.log("updating error",err);
+                     }
+                     else{
+                       console.log("updated",updatedItem);
+                     }
+                   })
+                 }
+               }
+             })
+             })
+           }
+         })
+       }
+     //============================== Marksheet Over+++++++++++++++++++++++++++++++++
+       res.redirect("/");
+     })                                                                                           //1-
+//=====================================================================================================
+//=======================================================================================================
 module.exports = router;
