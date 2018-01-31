@@ -1,0 +1,15 @@
+ View page
+
+<% var curr_sem = data.cur_sem;  %>
+
+  <%  if(data=="NULL"){   %>
+    <h3>The data of this enrollment doesnot exist</h3>
+    <%  } else { %>
+      <h3>Term fees details:</h3>
+
+      for (var i = 0; i < <%= data.cur_sem%>; i++) {
+          console.log(i);
+      }
+
+
+      <%  }  %>
