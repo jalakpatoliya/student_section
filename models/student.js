@@ -531,8 +531,8 @@ var studentSchema = new mongoose.Schema({
 
 });
 
-
+var Students = mongoose.model('Students', studentSchema);
 
 
 //==========exporting multiple models ref:- https://stackoverflow.com/questions/13857203/cant-get-data-from-database-after-multiple-schema-declared-mongoose-express
-module.exports = studentSchema;
+module.exports = Students;
