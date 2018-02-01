@@ -1,19 +1,23 @@
-//=================================Importing all dependencies============
+//=====================Importing all dependencies============
 var mongoose = require('mongoose'),
     express  = require('express'),
-    router      = express.Router(),
     mongoXlsx = require("mongo-xlsx"),
     bodyParser = require("body-parser"),
     multer    = require("multer"),
-    models  = require('../models/student'), //Importing multiple models and schemas
+    Students  = require('../models/student'),
     storage = multer.diskStorage(
       {
         destination: function (req, file, cb) {cb(null, 'uploads/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
       });
+var upload = multer({ storage: storage }),
+    router      = express.Router();
 
-var upload = multer({ storage: storage });
-//=======================================================================
+//===============================================================================
+//======================= Accuring Schemas ======================================
+//===============================================================================
+var Students   = require('../models/student');
+var model=null;
 
 
 //======================================
@@ -41,22 +45,23 @@ router.post("/",upload.single("file"),function (req,res){
         var _id     = elem['Enrollment No.'],
             cur_sem = elem.Semester,
             sem     = "s_"+elem.Semester,
-            a  = +elem['Govt. Education fees']||0,
-            total  = a + elem['Govt. Workshop-Lab Fees'] +
-                      elem['Govt. Library Fees'] + elem['Govt. Locker Fees'] +
-                      elem['Non- Govt. Gymkhana Fees'] + elem['Non- Govt. Internal Exam fees'];
+
+            total  = +elem['Govt. Education fees']||0 + +elem['Govt. Workshop-Lab Fees']||0 +
+                      +elem['Govt. Library Fees']||0 + +elem['Govt. Locker Fees']||0 +
+                      +elem['Non- Govt. Gymkhana Fees']||0 + +elem['Non- Govt. Internal Exam fees']||0 +
+                      +elem['Exam Fees']||0;
         var obj = {[sem]:{Term_fee:total}}  //<<<<========To be noted
-        var obj1 = {_id:_id,cur_sem:cur_sem,[sem]:{Term_fee:total}}  //<<<<========To be noted
-        console.log(_id);
-        models.Students.findById(_id,function (err,data) {
+        var obj1 = {_id,cur_sem:cur_sem,[sem]:{Term_fee:total}}  //<<<<========To be noted
+        console.log("Term fees data of enrollment:"+_id+" fetched");
+        Students.findById(_id,function (err,data) {
           if (err) {
             console.log(err);
           } else {
               if (!data) {
                 console.log("No pre existing data found of enrollment no.:"+_id);
-                models.Students.create(obj1); //<<===Temporary for testing purpose
+                Students.create(obj1); //<<===Temporary for testing purpose
               } else {
-                models.Students.findByIdAndUpdate(obj1,{overwrite:false},function(err,updatedData){
+                Students.findByIdAndUpdate(_id,obj,{overwrite:false},function(err,updatedData){
                   if (err) {
                     console.log(err);
                   } else {
@@ -67,7 +72,10 @@ router.post("/",upload.single("file"),function (req,res){
           }
         })
       });
-    }else if (req.body.fc=="result") {
+    }
+    //============================= Term Fees Over ===============================
+    //++++++++++++++++++++++++++++++For Marksheet ================================== #2
+    else if (req.body.fc=="result") {
       console.log("Excel of Marksheet is uploaded");
       mongoData.forEach(elem => {
 
@@ -75,6 +83,8 @@ router.post("/",upload.single("file"),function (req,res){
             abs = +elem.BCKAB||0,
             obj = {     _id:elem.MAP_NUMBER,
                         total_back:elem.TOTBACKL,
+                        cpi:elem.CPI,
+                        cgpa:elem.CGPA,
                         backs:{
                           sem1:elem.BCK1,
                           sem2:elem.BCK2,
@@ -88,9 +98,9 @@ router.post("/",upload.single("file"),function (req,res){
                         [sem]:{
                           result:{
                             spi:elem.SPI,
-                            cpi:elem.CPI,
+
                             result:elem.RESULT,
-                           cur_back:elem.CURBACKL,
+
                            sub1:{
                              code:elem.SUB1,
                              name:elem.SUB1NA,
@@ -216,20 +226,74 @@ router.post("/",upload.single("file"),function (req,res){
                         }
                       };
         // console.log(obj.s_1.result);
-        models.Students.findById(elem.MAP_NUMBER,function (err,data) {
+        Students.findById(elem.MAP_NUMBER,function (err,data) {
           if (!data) {
-
-            models.Students.create(obj);
+            Students.create(obj); //<<== Temporary for creating data
           } else {
-            models.Students.findByIdAndUpdate(elem.MAP_NUMBER,obj,{overwrite:false})
+            Students.findByIdAndUpdate(elem.MAP_NUMBER,obj,{overwrite:false})
           }
         })
 
 
       });
     }
+    //++++++++++++++++++++++++++++++ Marksheet Over================================== #2
+    //=============================For Exam Fees  ===============================
+    else if (req.body.fc=="EFee") {
+        console.log("Excel of Exam fee uploaded");
+        mongoData.forEach(elem =>{
 
 
+          Students.findById(elem['Enrollment No.'],function(err,data){
+            if(err){
+              console.log(err);
+            }
+            else{
+              if(!data){
+                console.log("no pre existing data of Enrollment no.: ",elem['Enrollment No.']);
+                var _id    = elem['Enrollment No.'],
+                    type   = elem['Exam Type'],
+                    total  = +elem['Exam Fee as per form']||0  + +elem['Late Fee if any']||0,
+                    sem    = "s_"+elem['Current Semester'],
+                    csem   = elem['Current Semester']
+                    obj    = {};
+                    obj    = {_id:_id, cur_sem :csem,[sem]:{Exam_fee_Reg:total}};
+                Students.create(obj)
+              }
+              else{
+                console.log("inserting fee data");
+                var _id    = elem['Enrollment No.'],
+                    type   = elem['Exam Type'],
+                    total  = +elem['Exam Fee as per form']||0  + +elem['Late Fee if any']||0,
+                    sem    = "s_"+elem['Current Semester'],
+                    obj    = {};
+                if(Detain(elem['Current Semester'],elem['Enrollment No.'])){
+                    sem    = "d_"+elem['Current Semester']
+                }
+                else{
+                  if(type=="Regular"){
+                     obj    = {[sem]:{Exam_fee_Reg:total}};
+                  }
+                  else if(type=="Remedial"){
+                     obj    = {[sem]:{Exam_fee_Rem:total}};
+                  }
+                  console.log("=>",obj);
+                  Students.findByIdAndUpdate(_id,obj,{overwrite: false},function(err, updatedItem){
+                    if(err){
+                      console.log("updating error",err);
+                    }
+                    else{
+                      console.log("updated",updatedItem);
+                    }
+                  })
+                }
+              }
+            }
+          })
+        })
+
+
+    }
 
     //==========================================
   })
