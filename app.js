@@ -27,30 +27,15 @@ var Students  = require('./models/student');
 //===================== acquiring router =====================================
 //============================================================================
 var indexRoute = require('./routes/index'),
-    showRoute  = require('./routes/show');
+    searchRoute  = require('./routes/search');
 app.use(indexRoute);
-app.use(showRoute);
+app.use(searchRoute);
 //==============================================
 //--------------------Using body parser--------
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 //---------------------------------------------
-// //======================Search Route==================
-// app.get("/search",function(req,res){
-//   var query = req.query.search_query;
-//   Students.findById(query,function (err,data) {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       res.render("show.ejs",{data:data});
-//       console.log(data);
-//     }
-//   })
-//
-// })
-//
-// //======================================================
 
 
 

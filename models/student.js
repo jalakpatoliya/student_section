@@ -38,8 +38,9 @@ var studentSchema = new mongoose.Schema({
   },
 
   s_1:{
-    Term_fee    :Number,
-    Exam_fee_Reg:Number,
+    Term_fee     :Number,
+    Exam_fee_Reg :Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
@@ -99,6 +100,7 @@ var studentSchema = new mongoose.Schema({
   s_2:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
@@ -161,6 +163,7 @@ var studentSchema = new mongoose.Schema({
   s_3:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
@@ -223,6 +226,7 @@ var studentSchema = new mongoose.Schema({
   s_4:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
@@ -285,6 +289,7 @@ var studentSchema = new mongoose.Schema({
   s_5:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
@@ -347,6 +352,7 @@ var studentSchema = new mongoose.Schema({
   s_6:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
@@ -409,6 +415,7 @@ var studentSchema = new mongoose.Schema({
   s_7:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
@@ -471,6 +478,7 @@ var studentSchema = new mongoose.Schema({
   s_8:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Exam_fee_Rem :Number,
     Tsubject     :Number,
     result:{
       spi :Number,  res :String,
