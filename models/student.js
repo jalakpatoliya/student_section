@@ -1,14 +1,6 @@
 var mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/demo3");
 
-
-//==========================
-// Creating Schema and model
-//==========================
- // var studentSchema = new mongoose.Schema({}, { strict: false });
 var studentSchema = new mongoose.Schema({
-
   _id:Number,
   cur_sem:Number,
   total_back:Number,                                            //
@@ -31,17 +23,22 @@ var studentSchema = new mongoose.Schema({
     mode_of_adm     :String,
     mob_no          :Number,
     email           :String,
-    date_of_birth   :Date,
     add_t           :String,
     add_p           :String,
     tfw             :String,
     branch          :String,
-    dob             :String
+    dob             :String,
+    division        :String,
+    city            :String,
+    district        :String,
+    state           :String,
+    pincode         :String,
   },
 
   s_1:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -100,6 +97,7 @@ var studentSchema = new mongoose.Schema({
   s_2:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -154,10 +152,14 @@ var studentSchema = new mongoose.Schema({
       },
 
     }
+  },
+  D_2:{
+    Exam_fee_Rem :Number
   },
   s_3:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -212,10 +214,14 @@ var studentSchema = new mongoose.Schema({
       },
 
     }
+  },
+  D_3:{
+    Exam_fee_Rem :Number
   },
   s_4:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -270,10 +276,14 @@ var studentSchema = new mongoose.Schema({
       },
 
     }
+  },
+  D_4:{
+    Exam_fee_Rem :Number
   },
   s_5:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -328,10 +338,14 @@ var studentSchema = new mongoose.Schema({
       },
 
     }
+  },
+  D_5:{
+    Exam_fee_Rem :Number
   },
   s_6:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -386,10 +400,14 @@ var studentSchema = new mongoose.Schema({
       },
 
     }
+  },
+  D_6:{
+    Exam_fee_Rem :Number
   },
   s_7:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -445,9 +463,13 @@ var studentSchema = new mongoose.Schema({
 
     }
   },
+  D_7:{
+    Exam_fee_Rem :Number
+  },
   s_8:{
     Term_fee    :Number,
     Exam_fee_Reg:Number,
+    Tsubject     :Number,
     result:{
       spi :Number, cpi :Number, result :String, cur_back :Number,
       sub1:{
@@ -502,6 +524,9 @@ var studentSchema = new mongoose.Schema({
       },
 
     }
+  },
+  D_8:{
+    Exam_fee_Rem :Number
   },
 
 });
@@ -509,15 +534,5 @@ var studentSchema = new mongoose.Schema({
  var Students = mongoose.model("Students",studentSchema);
 
 
-
- // var abc = [{name:"jalak",age:22},{name:"parth",age:25}];
-// Students.create(abc);
-// var stud = new Students({name:"jalak",age:22});
-// stud.save();
-// Students.create({name:"jalak",age:22});
-
 //==========exporting multiple models ref:- https://stackoverflow.com/questions/13857203/cant-get-data-from-database-after-multiple-schema-declared-mongoose-express
-module.exports =  {
-  Students:Students,
-  studentSchema:studentSchema
-};
+module.exports = Students;
