@@ -46,7 +46,7 @@ router.post("/",upload.single("file"),function (req,res){
                       elem['Govt. Library Fees'] + elem['Govt. Locker Fees'] +
                       elem['Non- Govt. Gymkhana Fees'] + elem['Non- Govt. Internal Exam fees'];
         var obj = {[sem]:{Term_fee:total}}  //<<<<========To be noted
-        var obj1 = {_id,cur_sem:cur_sem,[sem]:{Term_fee:total}}  //<<<<========To be noted
+        var obj1 = {_id:_id,cur_sem:cur_sem,[sem]:{Term_fee:total}}  //<<<<========To be noted
         console.log(_id);
         models.Students.findById(_id,function (err,data) {
           if (err) {
@@ -56,7 +56,7 @@ router.post("/",upload.single("file"),function (req,res){
                 console.log("No pre existing data found of enrollment no.:"+_id);
                 models.Students.create(obj1); //<<===Temporary for testing purpose
               } else {
-                models.Students.findByIdAndUpdate(_id,obj,{overwrite:false},function(err,updatedData){
+                models.Students.findByIdAndUpdate(obj1,{overwrite:false},function(err,updatedData){
                   if (err) {
                     console.log(err);
                   } else {
