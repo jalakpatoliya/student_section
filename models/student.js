@@ -1,9 +1,11 @@
 var mongoose = require('mongoose');
 
 var studentSchema = new mongoose.Schema({
-  _id:Number,
-  cur_sem:Number,
-  total_back:Number,                                            //
+  _id         :Number,
+  cur_sem     :Number,
+  total_back  :Number,
+  cpi         :Number,
+  cgpa        :Number,
   backs:{
     sem1:Number,
     sem2:Number,
@@ -40,54 +42,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -99,54 +101,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -161,54 +163,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -223,54 +225,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -285,54 +287,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -347,54 +349,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -409,54 +411,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -471,54 +473,54 @@ var studentSchema = new mongoose.Schema({
     Exam_fee_Reg:Number,
     Tsubject     :Number,
     result:{
-      spi :Number, cpi :Number, result :String, cur_back :Number,
+      spi :Number,  res :String,
       sub1:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub2:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub3:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub4:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub5:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub6:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub7:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub8:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub9:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
       sub10:{
-        code   :Number,  name   :String,  sub_grade  :String,  absent :String,
+        code   :Number,  name   :String,  sub_grade  :String,  absent :String,  sub_back :String,
         these  :String,  thpa   :String,  thtot      :String,
         prese  :String,  prpa   :String,  prtot      :String,
       },
@@ -531,7 +533,7 @@ var studentSchema = new mongoose.Schema({
 
 });
 
-var Students = mongoose.model('Students', studentSchema);
+ var Students = mongoose.model("Students",studentSchema);
 
 
 //==========exporting multiple models ref:- https://stackoverflow.com/questions/13857203/cant-get-data-from-database-after-multiple-schema-declared-mongoose-express
