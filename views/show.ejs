@@ -1,108 +1,127 @@
-<a href="/"> Home </a>
-<br>
-<hr>
-<!--======================================================================  -->
-<!--====================== Basic Details Layout===================================  -->
-<!--======================================================================  -->
-<div>
-  <table border=1>
-    <thead>
+<% include ./partials/header %>
+  <br>
+  <div class="ui container">
 
-    </thead>
-    <tbody>
-      <tr>
-        <td> course </td>
-        <td></td>
-        <td> name </td>
-        <td></td>
-      </tr>
-      <tr>
-        <td> age </td>
-        <td></td>
-        <td> gender </td>
-        <td></td>
-      </tr>
-      <tr>
-        <td> category</td>
-        <td></td>
-        <td> mode_of_adm</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td> mob_no </td>
-        <td></td>
-        <td> email </td>
-        <td></td>
-      </tr>
-      <tr>
-        <td> add_t </td>
-        <td></td>
-        <td> add_p </td>
-        <td></td>
-      </tr>
-      <tr>
-        <td> twf </td>
-        <td></td>
-        <td> branch </td>
-        <td></td>
-      </tr>
-      <tr>
-        <td> dob </td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+    <!--======================================================================  -->
+    <!--====================== Basic Details Layout===================================  -->
+    <!--======================================================================  -->
+    <div class="ui grid">
+
+      <div class="eight wide column">
+        <table class="ui red table">
+          <thead>
+              <tr>
+                <th colspan="4">Basic Details</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td> Course </td>
+              <td></td>
+              <td> Name </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td> Age </td>
+              <td></td>
+              <td> Gender </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td> Category</td>
+              <td></td>
+              <td> Mode of Admission </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td> Mobile No. </td>
+              <td></td>
+              <td> Email ID </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>Address Temporary </td>
+              <td></td>
+              <td>Address Permanent </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td> TFW </td>
+              <td></td>
+              <td> Branch </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>D.O.B. </td>
+              <td></td>
+              <td>Current Semester</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
 
-</div>
 
-<!-- ====================================================================== -->
-<!-- ===================== Exam fee Layout ================================ -->
-<!-- ====================================================================== -->
-<div style="float:left">
-  <table border=1>
-    <thead>
-      <td>Semester</td>
-      <td>Exam Fee</td>
-    </thead>
-    <%
+      <!-- ====================================================================== -->
+      <!-- ===================== Exam fee Layout ================================ -->
+      <!-- ====================================================================== -->
+      <div class="four wide column">
+        <table class="ui celled table blue">
+          <thead>
+            <thead>
+                <tr>
+                  <th>Semester</th>
+                  <th>Exam Fees</th>
+                </tr>
+
+          </thead>
+          <%
           for( i=1;i<=data.cur_sem;i++){
             var s;
             s = 's_'+i;
             %>
-      <tr>
-        <td>
-          <%= i %>
-        </td>
-        <td>
-          <%= data[s].Exam_fee_Reg %>
-        </td>
-      </tr>
-      <% } %>
-  </table>
-</div>
-<!--====================================================================  -->
-<!--==================== Term fee Layout ===============================  -->
-<!--=====================================================================  -->
-<div style="">
-  <table border=1>
-    <thead>
-      <td>Semester</td>
-      <td>Term Fee</td>
-    </thead>
-    <%
+            <tr>
+              <td>
+                <%= i %>
+              </td>
+              <td>
+                <%= data[s].Exam_fee_Reg %>
+              </td>
+            </tr>
+            <% } %>
+        </table>
+
+      </div>
+      <!--====================================================================  -->
+      <!--==================== Term fee Layout ===============================  -->
+      <!--=====================================================================  -->
+      <div class="four wide column">
+        <table class="ui celled yellow table">
+          <thead>
+                <tr>
+                  <th >Semester</th>
+                  <th>Term Fee</th>
+                </tr>
+
+          </thead>
+          <%
          for( i=1;i<=data.cur_sem;i++){
            var s;
            s = 's_'+i;
            %>
-      <tr>
-        <td>
-          <%= i %>
-        </td>
-        <td>
-          <%= data[s].Term_fee %>
-        </td>
-      </tr>
-      <% } %>
-  </table>
-</div>
+            <tr>
+              <td>
+                <%= i %>
+              </td>
+              <td>
+                <%= data[s].Term_fee %>
+              </td>
+            </tr>
+            <% } %>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <% include ./partials/footer %>

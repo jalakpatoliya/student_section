@@ -37,6 +37,8 @@ router.post("/",upload.single("file"),function (req,res){
   var model = null;
   mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
 
+      // console.log(mongodata);
+
     //==========================For TERM FEES =========================
     if (req.body.fc=="TFee") {
       console.log("Excel of Termfee is uploaded");
@@ -55,15 +57,18 @@ router.post("/",upload.single("file"),function (req,res){
         console.log("Term fees data of enrollment:"+_id+" fetched");
         Students.findById(_id,function (err,data) {
           if (err) {
+            console.log("routes/index.js line 60 error");
             console.log(err);
           } else {
               if (!data) {
                 console.log("No pre existing data found of enrollment no.:"+_id);
                 Students.create(obj1); //<<===Temporary for testing purpose
               } else {
-                Students.findByIdAndUpdate(_id,obj,{overwrite:false},function(err,updatedData){
+                console.log("routes/index.js line 67 ");
+                Students.findByIdAndUpdate(_id,{$set:obj},function(err,updatedData){
                   if (err) {
-                    console.log(err);
+                    console.log("routes/index.js line 70 err",err);
+
                   } else {
                     console.log("updated data: "+updatedData);
                   }
@@ -246,7 +251,7 @@ router.post("/",upload.single("file"),function (req,res){
 
           Students.findById(elem['Enrollment No.'],function(err,data){
             if(err){
-              console.log(err);
+              console.log("routes/index.js line 254 ",err);
             }
             else{
               if(!data){
@@ -258,35 +263,38 @@ router.post("/",upload.single("file"),function (req,res){
                     csem   = elem['Current Semester']
                     obj    = {};
                     obj    = {_id:_id, cur_sem :csem,[sem]:{Exam_fee_Reg:total}};
+                    console.log("Created object: ",obj);
                 Students.create(obj)
               }
-              else{
+              else if(data){
                 console.log("inserting fee data");
                 var _id    = elem['Enrollment No.'],
                     type   = elem['Exam Type'],
                     total  = +elem['Exam Fee as per form']||0  + +elem['Late Fee if any']||0,
                     sem    = "s_"+elem['Current Semester'],
                     obj    = {};
-                if(Detain(elem['Current Semester'],elem['Enrollment No.'])){
-                    sem    = "d_"+elem['Current Semester']
-                }
-                else{
+                var objReg = {[sem]:{Exam_fee_Reg:total}},
+                    objRem = {[sem]:{Exam_fee_Rem:total}};
+                // if(Detain(elem['Current Semester'],elem['Enrollment No.'])){
+                //     sem    = "d_"+elem['Current Semester']
+                // }
+                // else{
                   if(type=="Regular"){
-                     obj    = {[sem]:{Exam_fee_Reg:total}};
+                     Students.findByIdAndUpdate(_id,{$set:objReg});
                   }
                   else if(type=="Remedial"){
-                     obj    = {[sem]:{Exam_fee_Rem:total}};
+                     Students.findByIdAndUpdate(_id,{$set:objRem});
                   }
                   console.log("=>",obj);
-                  Students.findByIdAndUpdate(_id,obj,{overwrite: false},function(err, updatedItem){
-                    if(err){
-                      console.log("updating error",err);
-                    }
-                    else{
-                      console.log("updated",updatedItem);
-                    }
-                  })
-                }
+                  // Students.findByIdAndUpdate(_id,{$set:obj},function(err, updatedItem){
+                  //   if(err){
+                  //     console.log("updating error",err);
+                  //   }
+                  //   else{
+                  //     console.log("updated",updatedItem);
+                  //   }
+                  // })
+                // }
               }
             }
           })
