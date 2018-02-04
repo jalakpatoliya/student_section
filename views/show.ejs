@@ -75,8 +75,10 @@
                 </tr>
 
           </thead>
-          <%
-          for( i=1;i<=data.cur_sem;i++){
+
+      <%   var cusem ;
+            cusem =  data.cur_sem;
+      for( i=1;i<= cusem  ;i++){
             var s;
             s = 's_'+i;
             %>
@@ -121,7 +123,130 @@
         </table>
       </div>
 
+
+
+  <% for(var i = 1;i< data.cur_sem;i++) {
+         var sem = "s_" + 1;
+         var total_sub = data[sem].Tsubject; %>
+
+         <div class="twelve wide column">
+
+         <table class="ui  celled green table">
+  <thead>
+    <tr>
+      <th colspan="9">Semester : <%= i %></th>
+    </tr>
+    <tr>
+      <th rowspan="2">Subject Code</th>
+      <th rowspan="2">Subject Name</th>
+      <th colspan="3">Theory</th>
+      <th colspan="3">Practical</th>
+      <th rowspan="2">Subject Grade</th>
+    </tr>
+    <tr>
+      <th>ESE</th>
+      <th>PA</th>
+      <th>Total</th>
+      <th>ESE</th>
+      <th>PA</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <%  for (var j = 1; j < total_sub; j++) {
+      var sub = "sub" +j;  %>
+
+  <tr>
+    <td><%= data[sem].result[sub].code %></td>
+    <td><%= data[sem].result[sub].name %></td>
+    <td><%= data[sem].result[sub].these %></td>
+    <td><%= data[sem].result[sub].thpa %></td>
+    <td><%= data[sem].result[sub].thtot %></td>
+    <td><%= data[sem].result[sub].prese %></td>
+    <td><%= data[sem].result[sub].prpa %></td>
+    <td><%= data[sem].result[sub].prtot %></td>
+    <td><%= data[sem].result[sub].sub_grade %></td>
+  </tr>
+
+
+  <% }  %>
+
+  <thead>
+  <tr>
+  <th colspan="9"><pre>  SPI: <%= data[sem].result.spi %>   CPI: <%= data.cpi %>   Result: <%= data[sem].result.res %>   </pre>   </th>
+
+  </tr>
+  </thead>
+</table>
+
+</div>
+    <% } %>
+
+
+
+
+
+
+             <div class="twelve wide column">
+
+             <table class="ui collapsed table">
+      <thead>
+        <tr>
+          <th colspan="9">Semester : <%= i %></th>
+        </tr>
+        <tr>
+          <th rowspan="2">Subject Code</th>
+          <th rowspan="2">Subject Name</th>
+          <th colspan="3">Theory</th>
+          <th colspan="3">Practical</th>
+          <th rowspan="2">Subject Grade</th>
+        </tr>
+        <tr>
+          <th>ESE</th>
+          <th>PA</th>
+          <th>Total</th>
+          <th>ESE</th>
+          <th>PA</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+
+      <tr>
+        <td><%= data[sem].result[sub].code %></td>
+        <td><%= data[sem].result[sub].name %></td>
+        <td><%= data[sem].result[sub].these %></td>
+        <td><%= data[sem].result[sub].thpa %></td>
+        <td><%= data[sem].result[sub].thtot %></td>
+        <td><%= data[sem].result[sub].prese %></td>
+        <td><%= data[sem].result[sub].prpa %></td>
+        <td><%= data[sem].result[sub].prtot %></td>
+        <td><%= data[sem].result[sub].sub_grade %></td>
+      </tr>
+
+
+
+
+    </table>
+
     </div>
-  </div>
+
+
+</div>
+</div>
+
+
+
+
+a &nbsp b
+
+
+
+
+
+
+
+
+
+
 
   <% include ./partials/footer %>
