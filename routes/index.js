@@ -18,7 +18,7 @@ var flatten = require('flat');
 //===============================================================================
 var Students   = require("../models/student");
 var model=null;
-var detain     = require('../validation/insertValidate')
+var validate     = require('../validation/insertValidate')
 
 //======================================
 // GET Route
@@ -42,18 +42,8 @@ router.post("/",upload.single("file"),function (req,res){
     if (req.body.fc=="TFee") {
       console.log("Excel of Termfee is uploaded");
       mongoData.forEach(elem => {
-        var _id     = elem['Enrollment No.'],
-            sem     = "s_"+elem.Semester,
-
-            total   =  +elem['Govt. Education fees']||0      +  +elem['Govt. Workshop-Lab Fees']||0       +
-                       +elem['Govt. Library Fees']||0        +  +elem['Govt. Locker Fees']||0             +
-                       +elem['Non- Govt. Gymkhana Fees']||0  +  +elem['Non- Govt. Internal Exam fees']||0 +
-                       +elem['Exam Fees']||0;
-
-        var obj = {[sem]:{Term_fee:total}} ;                     //<<<<== data to be updated
-
-        console.log("Term fees data of enrollment:"+_id+" fetched");
-        Students.findById(_id,function (err,data) {
+        if(validate.enrollmentFormat(elem['Enrollment No.'])){
+          Students.findById(elem['Enrollment No.'],function (err,data) {
           if (err) {
             console.log(err);
           }
@@ -62,6 +52,13 @@ router.post("/",upload.single("file"),function (req,res){
                 console.log("No pre existing data found of enrollment no.:"+_id);
               }
               else {
+                var _id     = elem['Enrollment No.'],
+                    sem     = "s_"+elem.Semester,
+                    total   =  +elem['Govt. Education fees']||0      +  +elem['Govt. Workshop-Lab Fees']||0       +
+                               +elem['Govt. Library Fees']||0        +  +elem['Govt. Locker Fees']||0             +
+                               +elem['Non- Govt. Gymkhana Fees']||0  +  +elem['Non- Govt. Internal Exam fees']||0 +
+                               +elem['Exam Fees']||0;
+                var obj = {[sem]:{Term_fee:total}} ;
                 Students.findByIdAndUpdate(_id,flatten(obj),{overwrite:false},function(err,updatedData){
                   if (err) { console.log("updating term fee error ",err);}
                   else     { console.log("updated data: "+updatedData);  }
@@ -69,6 +66,7 @@ router.post("/",upload.single("file"),function (req,res){
               }
           }
         })
+      }
       });
     }
     //============================= Term Fees Over ===============================
@@ -76,6 +74,7 @@ router.post("/",upload.single("file"),function (req,res){
     else if (req.body.fc=="result") {
       console.log("Excel of Marksheet is uploaded");
       mongoData.forEach(elem => {
+        if(validate.enrollmentFormat(elem.MAP_NUMBER)){
 
         var sem ="s_"+elem.sem,
             abs = +elem.BCKAB||0,
@@ -237,8 +236,7 @@ router.post("/",upload.single("file"),function (req,res){
             })
           }
         })
-
-
+      }
       });
     }
     //++++++++++++++++++++++++++++++ Marksheet Over================================== #2
@@ -247,17 +245,18 @@ router.post("/",upload.single("file"),function (req,res){
         console.log("Excel of Exam fee uploaded");
         mongoData.forEach(elem =>{
 
-
+          if(validate.enrollmentFormat(elem['Enrollment No.'])){
           Students.findById(elem['Enrollment No.'],function(err,data){
             if(err){
               console.log("searchingtime error :",err);
             }
             else{
-              console.log("data foud in excel");
-              if(!data){
+
+                console.log("data foud in excel");
+                if(!data){
                 console.log("no pre existing data of Enrollment no.: ",elem['Enrollment No.']);
-              }
-              else{
+                }
+                else{
                 console.log("data existed");
                 var _id    = elem['Enrollment No.'],
                     type   = elem['Exam Type'],
@@ -265,7 +264,7 @@ router.post("/",upload.single("file"),function (req,res){
                     sem    = "s_"+elem['Current Semester'],
                     obj    = {},
                     wholeField={};
-                if(detain.detain(_id)){
+                if(validate.detain(_id)){
 
                     sem    = "d_"+elem['Current Semester'];
                     obj    = {[sem]:{Exam_fee_Rem:total}};
@@ -292,8 +291,9 @@ router.post("/",upload.single("file"),function (req,res){
                   })
                 }
               }
-            }
+          }
           })
+        }
         })
     }
 
@@ -301,7 +301,15 @@ router.post("/",upload.single("file"),function (req,res){
 
   })//mongoXlsx
 
-  res.redirect("/");
+
+   if(validate.isError()){
+     res.redirect("/error");
+      }
+   else{     
+     res.redirect("/");
+   }
+
+
 })
 
 

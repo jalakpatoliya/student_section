@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
     multer    = require("multer"),
     Students  = require('../models/student');
 
-
+var error =[];
 
 module.exports={
   detain : function(enrollment){
@@ -29,7 +29,35 @@ module.exports={
     });
 
   },
-  preexist : function(data){
+  enrollmentFormat : function(enrollment){
     console.log("checking pre existence");
+    if(Number.isInteger(enrollment) ){
+        console.log("typechecked");
+      if(enrollment.toString().length==12){
+      return true;
+      }
+      else{
+        error.push(enrollment+"_not equal to 12 digit");
+        console.log("pushed");
+        return false;
+      }
+    }
+    else{
+      error.push(enrollment+"_not integer format")
+      return false;
+    }
+  },
+  isError : function(){
+    console.log("is error called");
+    if(error.length!=0)
+      return true;
+      return false;
+  },
+  toEmptyError : function(){
+    console.log("empty error called");
+    var errorList = error;
+    error=[];
+    return errorList;
   }
+
 }
