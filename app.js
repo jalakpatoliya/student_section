@@ -29,10 +29,13 @@ var Students  = require("./models/student");
 //============================================================================
 //===================== acquiring router =====================================
 //============================================================================
-var indexRoute = require('./routes/index'),
-    searchRoute  = require('./routes/search');
+var indexRoute   = require('./routes/index'),
+    searchRoute  = require('./routes/search'),
+    showError    = require('./routes/error');
+    
 app.use(indexRoute);
 app.use(searchRoute);
+app.use(showError);
 //==============================================
 //===================Using body parser==========
 //==============================================

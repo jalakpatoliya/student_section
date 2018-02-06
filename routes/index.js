@@ -11,24 +11,37 @@ var mongoose = require('mongoose'),
       });
 var upload = multer({ storage: storage }),
     router      = express.Router();
-var flatten = require('flat');
-
+var flatten = require('flat'),
+    sync = require('sync');
+//==============================================================================
+//==================== defining sunc.do ========================================
+//=============================================================================
+var sync = {
+    _deasync: require('deasync'),
+    _done: false,
+    do: function(callback, sleep) {
+        this._done = false;
+        callback();
+        while ( ! this._done) {
+            this._deasync.sleep(sleep ? sleep : 100);
+        }
+    },
+    done: function() {
+        this._done = true;
+    }
+}
 //===============================================================================
 //======================= Accuring internal module =============================
 //===============================================================================
 var Students   = require("../models/student");
 var model=null;
-var validate     = require('../validation/insertValidate')
-
+var validate     = require('../validation/insertValidate');
 //======================================
 // GET Route
 //======================================
 router.get("/",function(req,res){
-
   res.render("index.ejs");
 })
-
-
 //======================================
 // PoST Route
 //======================================
@@ -36,6 +49,8 @@ router.post("/",upload.single("file"),function (req,res){
   console.log("File Path:",req.file.path);
   console.log("File Category:",req.body.fc);
   var model = null;
+sync.do(function(){
+//=========================================================================
   mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
 
     //==========================For TERM FEES =========================
@@ -296,19 +311,22 @@ router.post("/",upload.single("file"),function (req,res){
         }
         })
     }
-
     //======================================================================
-
+  sync.done();
   })//mongoXlsx
-
-
+  
+//==========================================================================
+})
+//=========================================================================
+//=========================================================================
+//=========================================================================
    if(validate.isError()){
      res.redirect("/error");
       }
-   else{     
+   else{
      res.redirect("/");
    }
-
+//==================================================================================
 
 })
 

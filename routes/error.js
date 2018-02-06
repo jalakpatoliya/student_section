@@ -12,10 +12,12 @@ var mongoose = require('mongoose'),
 router.get("/error",function(req,res){
 
       var errorList = validate.toEmptyError();
-      res.render("showError.ejs",{errorList:erroList})
+      console.log('error req initiated');
+      res.render("showError.ejs",{errorList:errorList});
 
 
 })
+
 
 
 module.exports = router;

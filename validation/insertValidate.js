@@ -30,8 +30,9 @@ module.exports={
 
   },
   enrollmentFormat : function(enrollment){
-    console.log("checking pre existence");
+  
     if(Number.isInteger(enrollment) ){
+
         console.log("typechecked");
       if(enrollment.toString().length==12){
       return true;
