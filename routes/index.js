@@ -279,7 +279,9 @@ sync.do(function(){
                 console.log("data existed");
                 var _id    = elem['Enrollment No.'],
                     type   = elem['Exam Type'],
-                    total  = +elem['Exam Fee as per form']||0  + +elem['Late Fee if any']||0,
+                    a1     = +elem['Exam Fee as per form']||0,
+                    a2     = +elem['Late Fee if any']||0,
+                    total  = a1 +a2,
                     sem    = "s_"+elem['Current Semester'],
                     obj    = {},
                     wholeField={};
