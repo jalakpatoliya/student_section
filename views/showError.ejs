@@ -1,14 +1,20 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Error List</title>
-  </head>
-  <body>
-    <% include ./partials/header %>
-    <div class="">
-    <%=errorList %>
-    </div>
-    <% include ./partials/footer %>
-  </body>
-</html>
+  <% include ./partials/header %>
+<br>
+<div class="ui container">
+
+
+      <div class="ui error message">
+        <i class="close icon"></i>
+        <div class="header">
+          The following enrollment/s is/are incorrect:
+        </div>
+        <ul class="list">
+          <%    errorList.forEach(elem => {           %>
+          <li> <%=elem %> </li>
+          <%    });  %>
+        </ul>
+      </div>
+
+
+</div>
+<% include ./partials/footer %>
