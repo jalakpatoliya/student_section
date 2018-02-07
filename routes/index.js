@@ -69,11 +69,15 @@ sync.do(function(){
               else {
                 var _id     = elem['Enrollment No.'],
                     sem     = "s_"+elem.Semester,
-                    total   =  +elem['Govt. Education fees']||0      +  +elem['Govt. Workshop-Lab Fees']||0       +
-                               +elem['Govt. Library Fees']||0        +  +elem['Govt. Locker Fees']||0             +
-                               +elem['Non- Govt. Gymkhana Fees']||0  +  +elem['Non- Govt. Internal Exam fees']||0 +
-                               +elem['Exam Fees']||0;
-                var obj = {[sem]:{Term_fee:total}} ;
+                    a1      =+elem['Govt. Education fees']||0,
+                    a2      =+elem['Govt. Workshop-Lab Fees']||0,
+                    a3      =+elem['Govt. Library Fees']||0,
+                    a4      =+elem['Govt. Locker Fees']||0 ,
+                    a5      =+elem['Non- Govt. Gymkhana Fees']||0,
+                    a6      =+elem['Non- Govt. Internal Exam fees']||0,
+                    a7      =+elem['Exam Fees']||0,
+
+                    total   = a1+a2+a3+a4+a5+a6+a7;
                 Students.findByIdAndUpdate(_id,flatten(obj),{overwrite:false},function(err,updatedData){
                   if (err) { console.log("updating term fee error ",err);}
                   else     { console.log("updated data: "+updatedData);  }
