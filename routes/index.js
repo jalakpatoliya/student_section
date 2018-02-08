@@ -11,10 +11,9 @@ var mongoose = require('mongoose'),
       });
 var upload = multer({ storage: storage }),
     router      = express.Router();
-var flatten = require('flat'),
-    sync = require('sync');
+var flatten = require('flat');
 //==============================================================================
-//==================== defining sunc.do ========================================
+//==================== defining sync.do ========================================
 //=============================================================================
 var sync = {
     _deasync: require('deasync'),
@@ -52,11 +51,58 @@ router.post("/",upload.single("file"),function (req,res){
 sync.do(function(){
 //=========================================================================
   mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
+    //======================== basic detail ================================
+    //====================================================================
+    if(req.body.fc=="basic"){
+      console.log("basic uploaded");
+      mongoData.forEach(elem=>{
+      if(validate.enrollmentFormat(elem['Enrollment No.'])){
+        Students.findById(elem['Enrollment No.'],function (err,data) {
+          if(err){
+            console.log("element can't fiound");
+          }
+          else{
+            var obj = {
+          _id:    elem['Enrollment No.'],
+          basic:{
+      course:  elem['course'],
+      name:  elem['name'],
+      age:  elem['age'],
+      gender:  elem['gender'],
+      category:  elem['category'],
+      mode_of_adm:  elem['mode_of_adm'],
+      mob_no:  elem['mob_no'],
+      email:  elem['email'],
+      add_t:  elem['add_t'],
+      add_p:  elem['add_p'],
+      tfw:  elem['tfw'],
+      branch:  elem['branch'],
+      dob:  elem['dob'],
+      division:  elem['division'],
+      city:  elem['city'],
+      district:  elem['district'],
+      state:  elem['state'],
+      pincode:  elem['pincode']
+    }
+    };
+    Students.create(obj,function (err,data) {
+      if (err) {
+        console.log("New basic enty error",_id,err);
+      } else {
+        console.log("created basic details of ",data);
+      }
+    });
+  }//esle
+})
+       }
+      })
+    }
 
     //==========================For TERM FEES =========================
     if (req.body.fc=="TFee") {
       console.log("Excel of Termfee is uploaded");
       mongoData.forEach(elem => {
+
         if(validate.enrollmentFormat(elem['Enrollment No.'])){
           Students.findById(elem['Enrollment No.'],function (err,data) {
           if (err) {
@@ -67,7 +113,9 @@ sync.do(function(){
                 console.log("No pre existing data found of enrollment no.:"+_id);
               }
               else {
+
                 var _id     = elem['Enrollment No.'],
+                    cur_sem = elem.Semester,
                     sem     = "s_"+elem.Semester,
                     a1      =+elem['Govt. Education fees']||0,
                     a2      =+elem['Govt. Workshop-Lab Fees']||0,
@@ -76,11 +124,11 @@ sync.do(function(){
                     a5      =+elem['Non- Govt. Gymkhana Fees']||0,
                     a6      =+elem['Non- Govt. Internal Exam fees']||0,
                     a7      =+elem['Exam Fees']||0,
-
                     total   = a1+a2+a3+a4+a5+a6+a7;
+                var obj = {cur_sem:cur_sem,[sem]:{Term_fee:total}} ;
                 Students.findByIdAndUpdate(_id,flatten(obj),{overwrite:false},function(err,updatedData){
                   if (err) { console.log("updating term fee error ",err);}
-                  else     { console.log("updated data: "+updatedData);  }
+                  else     { console.log("updated data: "+updatedData); }
                 })
               }
           }
@@ -320,16 +368,18 @@ sync.do(function(){
     //======================================================================
   sync.done();
   })//mongoXlsx
-  
+
 //==========================================================================
-})
+})//sync close
 //=========================================================================
 //=========================================================================
 //=========================================================================
    if(validate.isError()){
+
      res.redirect("/error");
       }
    else{
+
      res.redirect("/");
    }
 //==================================================================================

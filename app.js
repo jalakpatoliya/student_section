@@ -32,7 +32,6 @@ var Students  = require("./models/student");
 var indexRoute   = require('./routes/index'),
     searchRoute  = require('./routes/search'),
     showError    = require('./routes/error');
-    
 app.use(indexRoute);
 app.use(searchRoute);
 app.use(showError);
@@ -45,13 +44,13 @@ app.use(bodyParser.urlencoded({
 //============================================================================
 //====================== rough data ==========================================
 //============================================================================
-Students.create({
-  _id:150160702013,
-  cur_sem:8
-},function(err,data){
-  if(err){console.log("insertio failed");}
-  else{console.log("sucessfully inserted");}
-})
+// Students.create({
+//   _id:150160702013,
+//   cur_sem:8
+// },function(err,data){
+//   if(err){console.log("insertio failed");}
+//   else{console.log("sucessfully inserted");}
+// })
 //============================================================================
 //============================================================================
 //===========================================================================

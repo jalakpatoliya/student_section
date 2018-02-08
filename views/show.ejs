@@ -9,6 +9,7 @@
 
       <div class="eight wide column">
         <table class="ui red table">
+
           <thead>
               <tr>
                 <th colspan="4">Basic Details</th>
@@ -16,45 +17,50 @@
           </thead>
           <tbody>
             <tr>
+              <td colspan="4">Enrollment No. : <%= data._id%></td>
+
+            </tr>
+            <tr>
               <td> Course </td>
-              <td></td>
+              <td><%=   data.basic.course %></td>
               <td> Name </td>
-              <td></td>
+              <td><%= data.basic.name %> </td>
             </tr>
             <tr>
               <td> Age </td>
-              <td></td>
+              <td><%= data.basic.age %>  </td>
               <td> Gender </td>
-              <td></td>
+              <td><%= data.basic.gender %></td>
             </tr>
             <tr>
               <td> Category</td>
-              <td></td>
+              <td><%= data.basic.category %></td>
               <td> Mode of Admission </td>
-              <td></td>
+              <td><%= data.basic.mode_of_adm %></td>
             </tr>
             <tr>
               <td> Mobile No. </td>
-              <td></td>
+              <td><%= data.basic.mob_no %></td>
               <td> Email ID </td>
-              <td></td>
+              <td><%= data.basic.email %></td>
             </tr>
             <tr>
               <td>Address Temporary </td>
-              <td></td>
+              <td><%= data.basic.add_t %></td>
               <td>Address Permanent </td>
-              <td></td>
+              <td><%= data.basic.add_p %></td>
             </tr>
             <tr>
               <td> TFW </td>
-              <td></td>
+              <td><%= data.basic.tfw %></td>
               <td> Branch </td>
-              <td></td>
+              <td><%= data.basic.branch %></td>
             </tr>
             <tr>
               <td>D.O.B. </td>
-              <td></td>
+              <td><%= data.basic.dob %></td>
               <td>Current Semester</td>
+              <td><%= data.cur_sem %></td>
             </tr>
           </tbody>
         </table>

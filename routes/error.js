@@ -13,6 +13,7 @@ router.get("/error",function(req,res){
 
       var errorList = validate.toEmptyError();
       console.log('error req initiated');
+    
       res.render("showError.ejs",{errorList:errorList});
 
 
