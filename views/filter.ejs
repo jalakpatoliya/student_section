@@ -1,0 +1,100 @@
+<% include ./partials/header %>
+
+  <div class="ui container">
+    <hr>
+    <form class="ui form" action="filter" enctype="multipart/form-data" method="post">
+      <div class="ui grid">
+        <div class="two wide column">
+          <div class="ui field">
+            <label for="field1"> File Category: </label>
+          </div>
+          <select class="dropdown-menu" name="field1">
+            <option value=""> choose   </option>
+            <option value="enroll"> Enrollment</option>
+            <option value="basic.name"> Name</option>
+            <option value="cur_sem">   Semester</option>
+            <option value="basic.branch">   Branch</option>
+            <option value="FeeUnhide">   fees</option>
+            <option value="ResultUnhide"> Result</option>
+          </select>
+        </div>
+        <div class="two wide column">
+          <div class="ui field">
+            <label for="field2"> File Category: </label>
+          </div>
+          <select class="dropdown-menu" name="field2">
+            <option value=""> choose   </option>
+            <option value="enroll"> Enrollment</option>
+            <option value="basic.name"> Name</option>
+            <option value="cur_sem">   Semester</option>
+            <option value="basic.branch">   Branch</option>
+            <option value="FeeUnhide">   fees</option>
+            <option value="ResultUnhide"> Result</option>
+          </select>
+        </div>
+        <div class="two wide column">
+          <div class="ui field">
+            <label for="fc"> File Category: </label>
+          </div>
+          <select class="dropdown-menu" name="field3">
+            <option value=""> choose   </option>
+            <option value="enroll"> Enrollment</option>
+            <option value="basic.name"> Name</option>
+            <option value="cur_sem">   Semester</option>
+            <option value="basic.branch">   Branch</option>
+            <option value="FeeUnhide">   fees</option>
+            <option value="ResultUnhide"> Result</option>
+          </select>
+        </div>
+        <div class="two wide column">
+          <div class="ui field">
+            <label for="fc"> File Category: </label>
+          </div>
+          <select class="dropdown-menu" name="field4">
+            <option value=""> choose   </option>
+            <option value="enroll"> Enrollment</option>
+            <option value="basic.name"> Name</option>
+            <option value="cur_sem">   Semester</option>
+            <option value="basic.branch">   Branch</option>
+            <option value="FeeUnhide">   fees</option>
+            <option value="ResultUnhide"> Result</option>
+          </select>
+        </div>
+        <div class="two wide column">
+          <div class="ui field">
+            <label for="fc"> File Category: </label>
+          </div>
+          <select class="dropdown-menu" name="field5">
+            <option value="">  choose  </option>
+            <option value="enroll"> Enrollment</option>
+            <option value="basic.name"> Name</option>
+            <option value="cur_sem">   Semester</option>
+            <option value="basic.branch">   Branch</option>
+            <option value="FeeUnhide">   fees</option>
+            <option value="ResultUnhide"> Result</option>
+          </select>
+        </div>
+        <div class="four wide column">
+
+        </div>
+        <div class="two wide column">
+          <br>
+          <button class="ui light green button" type="submit" name="button">filter</button>
+        </div>
+
+      </div>
+    </form>
+    <hr>
+    <!-- ================================================================================ -->
+    <!-- ================== preparing table for filter result =========================== -->
+    <!-- ================================================================================-->
+    <% if(data !=null){
+      %>
+      <%= data%>
+
+      <%
+    }%>
+    <!-- ================================================================================-->
+    <!-- ================================================================================ -->
+  </div>
+  <% include ./partials/footer %>

@@ -51,9 +51,9 @@ router.post("/",upload.single("file"),function (req,res){
 sync.do(function(){
 //=========================================================================
   mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
-    //======================== basic detail ================================
-    //====================================================================
-    if(req.body.fc=="basic"){
+    //======================== basic Detail D2D ================================
+    //==========================================================================
+    if(req.body.fc=="basic2"){
       console.log("basic uploaded");
       mongoData.forEach(elem=>{
       if(validate.enrollmentFormat(elem['Enrollment No.'])){
@@ -62,9 +62,60 @@ sync.do(function(){
             console.log("element can't fiound");
           }
           else{
-            var obj = {
-          _id:    elem['Enrollment No.'],
-          basic:{
+      var obj = {
+      start_sem     : 3,
+      _id           :    elem['Enrollment No.'],
+      basic:{
+      course:  elem['course'],
+      name:  elem['name'],
+      age:  elem['age'],
+      gender:  elem['gender'],
+      category:  elem['category'],
+      mode_of_adm:  elem['mode_of_adm'],
+      mob_no:  elem['mob_no'],
+      email:  elem['email'],
+      add_t:  elem['add_t'],
+      add_p:  elem['add_p'],
+      tfw:  elem['tfw'],
+      branch:  elem['branch'],
+      dob:  elem['dob'],
+      division:  elem['division'],
+      city:  elem['city'],
+      district:  elem['district'],
+      state:  elem['state'],
+      pincode:  elem['pincode']
+    }
+    };
+    Students.create(obj,function (err,data) {
+      if (err) {
+        console.log("New basic enty error",_id,err);
+      } else {
+        console.log("created basic details of ",data);
+      }
+    });
+  }//esle
+})
+       }
+      })
+    }
+
+
+
+    //======================== basic detail Regular      =======================
+    //==========================================================================
+    if(req.body.fc=="basic1"){
+      console.log("basic uploaded");
+      mongoData.forEach(elem=>{
+      if(validate.enrollmentFormat(elem['Enrollment No.'])){
+        Students.findById(elem['Enrollment No.'],function (err,data) {
+          if(err){
+            console.log("element can't fiound");
+          }
+          else{
+      var obj = {
+      start_sem     : 1,
+      _id           :    elem['Enrollment No.'],
+      basic:{
       course:  elem['course'],
       name:  elem['name'],
       age:  elem['age'],

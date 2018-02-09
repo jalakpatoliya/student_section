@@ -31,7 +31,9 @@ var Students  = require("./models/student");
 //============================================================================
 var indexRoute   = require('./routes/index'),
     searchRoute  = require('./routes/search'),
-    showError    = require('./routes/error');
+    showError    = require('./routes/error'),
+    filter       = require('./routes/filter');
+app.use(filter);
 app.use(indexRoute);
 app.use(searchRoute);
 app.use(showError);
