@@ -17,31 +17,51 @@ var upload = multer({ storage: storage });
 //======================  connecting database  ==================================
 //==============================================================================
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/demo3");
+mongoose.connect("mongodb://localhost/demo3",function(err,data){
+  if(err){console.log("connection error",err);}
+  else{console.log("connection sucessful");}
+});
 
 //==============================================================================
 //======================  Importing models  ==================================
 //==============================================================================
-var Students  = require('./models/student');
+var Students  = require("./models/student");
 //============================================================================
 //===================== acquiring router =====================================
 //============================================================================
-var indexRoute = require('./routes/index'),
-    searchRoute  = require('./routes/search');
+var indexRoute   = require('./routes/index'),
+    searchRoute  = require('./routes/search'),
+    showError    = require('./routes/error'),
+    filter       = require('./routes/filter'),
+    edit         = require('./routes/edit');
+app.use(filter);
 app.use(indexRoute);
 app.use(searchRoute);
-//============================================================================
-//===================== Using body parser=============================
-//============================================================================
+app.use(showError);
+app.use(edit);
+//==============================================
+//===================Using body parser==========
+//==============================================
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-//============================================================================
-//===================== To include /public folder=============================
-//============================================================================
+//==============================================
+//====Including public directory to get custom css file==========
+//==============================================
 app.use(express.static(__dirname + '/public'));
-
-
+//============================================================================
+//====================== rough data ==========================================
+//============================================================================
+// Students.create({
+//   _id:150160702013,
+//   cur_sem:8
+// },function(err,data){
+//   if(err){console.log("insertio failed");}
+//   else{console.log("sucessfully inserted");}
+// })
+//============================================================================
+//============================================================================
+//===========================================================================
 app.listen(3823,function(){
-  console.log("server started");
+  console.log("server started at 3823");
 })
