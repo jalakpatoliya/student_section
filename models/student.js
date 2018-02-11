@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 var studentSchema = new mongoose.Schema({
   _id         :Number,
+  start_sem   :Number,
   cur_sem     :Number,
   total_back  :Number,
   cpi         :Number,
@@ -17,8 +18,8 @@ var studentSchema = new mongoose.Schema({
     sem8:Number,
   },
   basic:{
-    course          :String,
     name            :String,
+    course          :String,
     age             :Number,
     gender          :String,
     category        :String,
