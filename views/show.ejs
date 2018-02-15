@@ -1,7 +1,35 @@
 <% include ./partials/header %>
   <br>
   <div class="ui container">
-   
+
+  <!--======================================================================  -->
+    <!--====================== Edit form ===================================  -->
+    <!--======================================================================  -->
+  <form  action="/edit" method="get">
+      <input type="hidden" name="searched_enroll" value="<%=data._id%>">
+      <button style="float:right;" class="ui  positive button" type="submit" value="">Edit</button>
+    </form>
+    <!--======================================================================  -->
+    <!--====================== User Profile layout  ===================================  -->
+    <!--======================================================================  -->
+    <br><br>
+    <div class="ui  cards">
+      <div class="image ui small rounded">
+        <img src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
+      </div>
+      <pre style="font-weight:bold;">
+        Name               : <%= data.basic.name %>
+        Enrollment No.     : <%= data._id %>
+        Branch             :<%= data.basic.branch %>
+        Mobile No.         : <%= data.basic.mob_no %>
+        Email ID           : <%= data.basic.email %>
+        Address Permanent  : <%= data.basic.add_p %>
+        Course             : <%=   data.basic.course %>
+      </pre>
+    </div>
+
+<br><br>
+
     <!--======================================================================  -->
     <!--====================== Basic Details Layout===================================  -->
     <!--======================================================================  -->
