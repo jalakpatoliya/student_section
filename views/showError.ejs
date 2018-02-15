@@ -1,0 +1,20 @@
+<% include ./partials/header %>
+<br>
+<div class="ui container">
+
+
+    <div class="ui error message">
+      <i class="close icon"></i>
+      <div class="header">
+        The following enrollment/s is/are incorrect:
+      </div>
+      <ul class="list">
+        <%    errorList.forEach(elem => {           %>
+        <li> <%=elem %> </li>
+        <%    });  %>
+      </ul>
+    </div>
+
+
+</div>
+<% include ./partials/footer %>

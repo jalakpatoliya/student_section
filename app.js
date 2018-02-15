@@ -26,29 +26,37 @@ mongoose.connect("mongodb://localhost/demo3",function(err,data){
 //======================  Importing models  ==================================
 //==============================================================================
 var Students  = require("./models/student");
-//============================================================================
-//===================== acquiring router =====================================
-//============================================================================
-var indexRoute = require('./routes/index'),
-    searchRoute  = require('./routes/search');
-app.use(indexRoute);
-app.use(searchRoute);
 //==============================================
 //===================Using body parser==========
 //==============================================
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 //============================================================================
+//===================== acquiring router =====================================
+//============================================================================
+var indexRoute   = require('./routes/index'),
+    searchRoute  = require('./routes/search'),
+    showError    = require('./routes/error'),
+    filt      = require('./routes/customsearch');
+
+
+app.use(indexRoute);
+app.use(searchRoute);
+app.use(showError);
+app.use(filt);
+
+//============================================================================
 //====================== rough data ==========================================
 //============================================================================
-Students.create({
-  _id:150160702013,
-  cur_sem:8
-},function(err,data){
-  if(err){console.log("insertio failed");}
-  else{console.log("sucessfully inserted");}
-})
+// Students.create({
+//   _id:150160702013,
+//   cur_sem:8
+// },function(err,data){
+//   if(err){console.log("insertio failed");}
+//   else{console.log("sucessfully inserted");}
+// })
 //============================================================================
 //============================================================================
 //===========================================================================
