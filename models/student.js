@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 var studentSchema = new mongoose.Schema({
   _id         :Number,
+  start_sem   :Number,
   cur_sem     :Number,
   total_back  :Number,
   cpi         :Number,
