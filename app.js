@@ -39,6 +39,7 @@ app.use(bodyParser.urlencoded({
 var indexRoute   = require('./routes/index'),
     searchRoute  = require('./routes/search'),
     showError    = require('./routes/error'),
+    edit         = require('./routes/edit'),
     filt      = require('./routes/customsearch');
 
 
@@ -46,6 +47,7 @@ app.use(indexRoute);
 app.use(searchRoute);
 app.use(showError);
 app.use(filt);
+app.use(edit);
 
 //============================================================================
 //====================== rough data ==========================================

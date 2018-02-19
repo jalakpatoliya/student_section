@@ -1,7 +1,34 @@
 <% include ./partials/header %>
   <br>
   <div class="ui container">
-   
+    <!--======================================================================  -->
+   <!--====================== Edit form ===================================  -->
+   <!--======================================================================  -->
+ <form  action="/edit" method="get">
+     <input type="hidden" name="searched_enroll" value="<%=data._id%>">
+     <button style="float:right;" class="ui  positive button" type="submit" value="">Edit</button>
+   </form>
+   <!--======================================================================  -->
+  <!--====================== User Profile layout  ===================================  -->
+  <!--======================================================================  -->
+  <br><br>
+  <div class="ui  cards">
+    <div class="image ui small rounded">
+      <img src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
+    </div>
+    <pre style="font-weight:bold;">
+      Name               : <%= data.basic.name %>
+      Enrollment No.     : <%= data._id %>
+      Branch             :<%= data.basic.branch %>
+      Mobile No.         : <%= data.basic.mob_no %>
+      Email ID           : <%= data.basic.email %>
+      Address Permanent  : <%= data.basic.add_p %>
+      Course             : <%=   data.basic.course %>
+    </pre>
+  </div>
+
+<br><br>
+
     <!--======================================================================  -->
     <!--====================== Basic Details Layout===================================  -->
     <!--======================================================================  -->
@@ -76,15 +103,20 @@
           <thead>
             <thead>
                 <tr>
-                  <th>Semester</th>
-                  <th>Exam Fees</th>
+                  <th rowspan="2">Semester</th>
+                  <th colspan="2">Exam Fees</th>
+                </tr>
+                <tr>
+                  <th>Regular</th>
+                  <th>Remedial</th>
                 </tr>
 
           </thead>
 
       <%   var cusem ;
             cusem =  data.cur_sem;
-      for( i=1;i<= cusem  ;i++){
+            var i=0;
+      for( i=1;i< cusem ;i++){
             var s;
             s = 's_'+i;
             %>
@@ -95,8 +127,46 @@
               <td>
                 <%= data[s].Exam_fee_Reg %>
               </td>
+              <td>
+                <%= data[s].Exam_fee_Rem %>
+              </td>
             </tr>
-            <% } %>
+            <% if(data['D_'+i].Exam_fee_Rem){ %>
+            <tr>
+              <td>
+                <%= i %> Detained
+              </td>
+              <td colspan="2">
+                <%= data[s].Exam_fee_Rem %>
+              </td>
+            </tr>
+            <% }
+             }
+             if(data['s_'+i].Exam_fee_Reg){
+               %>
+               <tr>
+                 <td>
+                   <%= i %>
+                 </td>
+                 <td>
+                   <%= data[s].Exam_fee_Reg %>
+                 </td>
+                 <td>
+                   <%= data[s].Exam_fee_Rem %>
+                 </td>
+               </tr>
+               <% if(data['D_'+i].Exam_fee_Rem){ %>
+               <tr>
+                 <td>
+                   <%= i %> Detained
+                 </td>
+                 <td colspan="2">
+                   <%= data[s].Exam_fee_Rem %>
+                 </td>
+               </tr>
+               <%
+             }
+           %>
         </table>
 
       </div>
@@ -110,9 +180,9 @@
                   <th >Semester</th>
                   <th>Term Fee</th>
                 </tr>
-
           </thead>
           <%
+          var i=0;
          for( i=1;i<=data.cur_sem;i++){
            var s;
            s = 's_'+i;
@@ -125,13 +195,29 @@
                 <%= data[s].Term_fee %>
               </td>
             </tr>
-            <% } %>
+            <% }
+            if(data['s_'+i].Term_fee){
+              %>
+              <tr>
+                <td>
+                  <%= i %>
+                </td>
+                <td>
+                  <%= data[s].Term_fee %>
+                </td>
+              </tr>
+
+              <%
+            }
+             %>
+
+
         </table>
       </div>
 
 
 
-  <% for(var i = 1;i<=data.cur_sem;i++) {
+  <% for(var i = 1;i< data.cur_sem;i++) {
          var sem ;
          sem = "s_" + i;
          var total_sub = data[sem].Tsubject; %>
