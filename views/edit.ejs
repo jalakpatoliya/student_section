@@ -1,0 +1,120 @@
+<% include ./partials/header %>
+
+<form class="ui form" action="/edit" method="post">
+  <input type="hidden" name="enroll" value="<%=data._id%>">
+  <div class="ui grid">
+
+    <div class="eight wide column">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" name="basic[name]"  value="<%=data.basic.name%>">
+      </div>
+    </div>
+
+    <div class="six wide column">
+      <div class="field">
+        <label>Email Id</label>
+        <input type="text" name="basic[email]" value="<%=data.basic.email%>">
+      </div>
+    </div>
+
+    <div class="eight wide column">
+      <div class="field">
+        <label>Address Permanent</label>
+        <input type="text" name="basic[add_p]" value="<%=data.basic.add_p%>">
+      </div>
+    </div>
+
+    <div class="eight wide column">
+      <div class="field">
+        <label>Address Temporary</label>
+        <input type="text" name="basic[add_t]" value="<%=data.basic.add_t%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>District</label>
+        <input type="text" name="basic[district]" value="<%=data.basic.district%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>City</label>
+        <input type="text" name="basic[city]" value="<%=data.basic.city%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>State</label>
+        <input type="text" name="basic[state]" value="<%=data.basic.state%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>Pincode</label>
+        <input type="text" name="basic[pincode]" value="<%=data.basic.pincode%>">
+      </div>
+    </div>
+
+
+      <div class="field">
+        <label>Mobile No.</label>
+        <input type="text" name="basic[mob_no]" value="<%=data.basic.mob_no%>">
+      </div>
+
+      <div class="four wide column">
+        <% if (data.basic.gender =="M"||data.basic.gender =="m") { %>
+          <div class="ui form" >
+          <div class="inline fields">
+          <label>Gender</label> <br>
+
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input  type="radio" name="basic[gender]" checked="checked" value="M">
+                <label>Male</label>
+              </div>
+            </div>
+            <div class="field">
+            <div class="ui radio checkbox">
+            <input  type="radio" name="basic[gender]"  value="f">
+            <label>Female</label>
+            </div>
+            </div>
+          </div>
+          </div>
+        <% } else if (data.basic.gender =="F"||data.basic.gender =="f") { %>
+          <div class="ui form" >
+          <div class="inline fields">
+          <label>Gender</label> <br>
+            <div class="field">
+            <div class="ui radio checkbox">
+            <input  type="radio" name="basic[gender]" checked="checked" value="f">
+            <label>Female</label>
+          </div>
+          </div>
+
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input  type="radio" name="basic[gender]"  value="M">
+                <label>Male</label>
+              </div>
+            </div>
+          </div>
+          </div>
+        <%}  %>
+      </div>
+
+
+    </div><br><br>
+  <button class="ui green button" type="submit">Submit</button>
+</form>
+
+
+
+
+
+<% include ./partials/footer %>
