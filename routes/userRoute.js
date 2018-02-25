@@ -12,7 +12,10 @@ var passport              = require("passport"),
     passport.serializeUser(User.serializeUser()); // it reades, decodes information in session,encodes it
     passport.deserializeUser(User.deserializeUser());
 
-    // Authorization ROUTES===============================
+
+    //=========================================================
+    //=============Sigh Up route================================
+    //=========================================================
     // Show sign up form
     router.get("/register",isLoggedIn,isAdmin,function(req,res){
       res.render("register.ejs");
@@ -26,13 +29,14 @@ var passport              = require("passport"),
             res.redirect("/register");
           } else {
             passport.authenticate("local")(req,res,function(){ // local can be replaced by twitter or fb
-              res.redirect("/secret");      //but here we are authenticating locally
+              res.redirect("/");      //but here we are authenticating locally
             })
           }
         })
     })
-
-    // LOGIN ROUTES=====================================
+    //=========================================================
+    //=============Login route================================
+    //=========================================================
     // Render login form
     router.get("/login",function(req,res){
       res.render("login.ejs")
@@ -41,9 +45,17 @@ var passport              = require("passport"),
     //login logic
     //MIDDLEWARE
     router.post("/login",passport.authenticate("local",{
-      successRedirect:"/secret",
+      successRedirect:"/",
       failureRedirect:"/login"
     }),function(req,res){console.log(req.body.username);});
+    //=========================================================
+    //=============Logout route================================
+    //=========================================================
+    router.get("/logout",function(req,res){
+      req.logout();
+      res.redirect("/");
+    })
+
 
     //=========================================================
     //================== isAdmin function =====================

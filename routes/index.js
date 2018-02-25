@@ -38,7 +38,7 @@ var validate     = require('../validation/insertValidate');
 //======================================
 // GET Route
 //======================================
-router.get("/",function(req,res){
+router.get("/",isLoggedIn,function(req,res){
   res.render("index.ejs");
 })
 //======================================
@@ -205,7 +205,7 @@ sync.do(function(){
             }
             else{
               console.log("preparing marksheet object");
-              
+
 
 
             }
@@ -295,7 +295,18 @@ sync.do(function(){
 
 })
 
-
+//=========================================================
+//=============== isLoggedIn function======================
+//=========================================================
+//authenticating if user is loggedin or not
+function isLoggedIn(req,res,next) {
+  if (req.isAuthenticated()){
+    console.log("user is logged in");
+    return next();
+  }
+  console.log("user is not logged in");
+    res.redirect("/login");
+}
 
 
 

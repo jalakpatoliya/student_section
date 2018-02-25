@@ -73,32 +73,8 @@ app.use(showError);
 app.use(filt);
 app.use(edit);
 app.use(userRoute);
-//=========================================================
-//============= Secret Routes =============================
-//=========================================================
-app.get("/secret",isLoggedIn,function(req,res){ //
-  console.log("user is logged in so,secret page is accessed");
-  res.render("secret.ejs");
-})
-//=========================================================
-//=============Authenticating function=====================
-//=========================================================
-// authenticating if user is loggedin or not
-function isLoggedIn(req,res,next) {
-  if (req.isAuthenticated()){
-    console.log("user is logged in");
-    return next();
-  }
-  console.log("user is not logged in");
-    res.redirect("/login");
-}
-//=========================================================
-//=============Logout route================================
-//=========================================================
-app.get("/logout",function(req,res){
-  req.logout();
-  res.redirect("/");
-})
+
+
 //=========================================================
 //============= To create Admin ===========================
 //=========================================================
