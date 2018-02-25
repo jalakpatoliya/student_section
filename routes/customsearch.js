@@ -31,8 +31,9 @@ router.post("/customsearch",function(req,res){
   //======================== spliting req.body parameters =============
   var f1  = req.body.Basic,
       f2  = req.body.Details,
-      f12 = f2.split(','),
-      f11 = f1.split(',');
+      f12 = f2.toString().split(','),
+      f11 = f1.toString().split(',');
+
   var qvar ='';
   for(l1=0;l1< f11.length;l1++){
     qvar= qvar+' '+f11[l1];

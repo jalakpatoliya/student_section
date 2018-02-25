@@ -7,6 +7,8 @@ var studentSchema = new mongoose.Schema({
   total_back  :Number,
   cpi         :Number,
   cgpa        :Number,
+  detain_history:[Number],
+  detain      :Boolean,
   backs:{
     sem1:Number,
     sem2:Number,
