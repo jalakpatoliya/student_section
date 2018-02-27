@@ -14,7 +14,7 @@ router.get("/show",function(req,res){
       console.log(err);
     } else {
       console.log(student);
-      res.render("show.ejs",{student:student})
+      res.render("show.ejs",{data:student})
     }
   })
 })

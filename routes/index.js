@@ -206,7 +206,8 @@ sync.do(function(){
             }//student.find by id call back if
             else{
               console.log("preparing marksheet object");
-              var sem = "s_"+elem.sem,
+              var _id = elem['MAP_NUMBER'],
+                  sem = "s_"+elem.sem,
                   subjectstring="",
                   resultstring = data[sem].result.res,
                   obj={};
@@ -288,17 +289,17 @@ sync.do(function(){
           var obj={},
               year=0,
               kt =0;
-              for(var i=1;i<data.cur_sem;i++){
-                kt = kt + data.backs["s_"+i];
+              for(var i=1;i<doc.cur_sem;i++){
+                kt = kt + doc.backs["s_"+i];
               }
               if(kt>4){
                    obj.detain = true;
-                   year = (data.cur_sem==3 || data.cur_sem==4) ? 2 :(data.cur_sem==5 || data.cur_sem==6) ? 3 : 4 ;
+                   year = (doc.cur_sem==3 || doc.cur_sem==4) ? 2 :(doc.cur_sem==5 || doc.cur_sem==6) ? 3 : 4 ;
                    obj.detain_history.push(year);
-                   obj.cur_sem = data.cur_sem+1;
+                   obj.cur_sem = doc.cur_sem+1;
               }//fi kt
               else{
-                obj.cur_sem = data.cur_sem+1;
+                obj.cur_sem = doc.cur_sem+1;
               }
               Students.findByIdAndUpdate(doc._id,flatten(obj),{overwrite:false},function(err, updatedItem){
                  if(err){
@@ -310,7 +311,7 @@ sync.do(function(){
                })//find and update
         })//collection.forEach
       })//studentsfind
-      //============================ detain currnt sem updating ===========================================================
+      //============================ detain currnt sem updated ===========================================================
     }//req.body
 
     //++++++++++++++++++++++++++++++ Marksheet Over================================== #2
