@@ -1,0 +1,47 @@
+<% include ./partials/header %>
+<% include ./customsearchForm %>
+<!-- Table logic -->
+<% if(key !=null ){
+  %>
+  <div class="ui container">
+
+<div class="ui grid">
+
+  <div class="sixteen wide column">
+    <table class="ui celled table blue">
+        <thead>
+            <tr>
+              <%
+              var keyLength = key.length;
+              for(x in key){
+                %>
+                <th><%=key[x].split('.').pop()%></th>
+                <%
+              }
+              %>
+            </tr>
+      </thead>
+      <tbody>
+      <%
+      for(i=0;i< data.length;i++){
+        %>
+        <tr><%
+          for(j=0;j< key.length;j++){
+            %>
+            <td><%=get(data[i],key[j])%></td>
+            <%
+          }
+          %>
+        </tr>
+        <%
+      }
+      %>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<%
+}%>
+<!-- Table logic over -->
+<% include ./partials/footer %>

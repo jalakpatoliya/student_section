@@ -1,0 +1,31 @@
+<% include ./partials/header %>
+
+  <div class="ui container">
+    <form class="ui form" action="/" enctype="multipart/form-data" method="post">
+      <br><br>
+      <div class="ui field">
+        <label for="fc"> File Category: </label>
+      </div>
+      <select class="dropdown-menu" name="fc">
+        <option value="">       Select file category</option>
+        <option value="basic1"> New Entry Regular</option>
+        <option value="basic2"> New Entry D2D</option>        
+        <option value="TFee">   Term Fees</option>
+        <option value="EFee">   Exam Fees</option>
+        <option value="HFee">   Hostel Fees</option>
+        <option value="result"> Result</option>
+
+  </select> <br>
+
+      <div class="ui input">
+        <input class="ui input  button" type="file" name="file" required>
+      </div>
+      <button class="ui green button" type="submit" name="button">upload</button>
+
+    </form><br><br>
+
+
+
+  </div>
+
+  <% include ./partials/footer %>
