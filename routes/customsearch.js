@@ -12,7 +12,9 @@ var mongoose = require('mongoose'),
       {
         destination: function (req, file, cb) {cb(null, 'uploads/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
-      });
+      }),
+  authFunctions  = require('../validation/authFunctions');
+
 var upload = multer({ storage: storage }),
     router      = express.Router();
 
@@ -21,18 +23,18 @@ var upload = multer({ storage: storage }),
 //======================
 // SHOW ROUTE
 //======================
-router.get("/customsearch",function(req,res){
+router.get("/customsearch",authFunctions.isLoggedIn,function(req,res){
   res.render("customsearch.ejs",{key:null})
 })
 
-router.post("/customsearch",function(req,res){
+router.post("/customsearch",authFunctions.isLoggedIn,function(req,res){
   console.log("customsearch post");
 
   //======================== spliting req.body parameters =============
   var f1  = req.body.Basic,
       f2  = req.body.Details,
-      f12 = f2.split(','),
-      f11 = f1.split(',');
+      f12 = f2.toString().split(','),
+      f11 = f1.toString().split(',');
   var qvar ='';
   for(l1=0;l1< f11.length;l1++){
     qvar= qvar+' '+f11[l1];
@@ -75,6 +77,5 @@ console.log("==>",keys(data[i]));
   });
 
 })
-
 
 module.exports = router;
