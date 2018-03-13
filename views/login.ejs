@@ -1,0 +1,21 @@
+<% include ./partials/header %>
+<h1 class="ui green header">Login as User</h1>
+
+<form class="ui form" action="/login" method="POST">
+  <div class="field">
+    <div class="five fields">
+      <div class="field">
+        <input type="text" name="username" placeholder="username">
+      </div>
+      <div class="field">
+        <input type="password" name="password" placeholder="password">
+      </div>
+      <div class="field">
+        <button class="ui  button" type="submit" name="button">login</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<% include ./partials/footer %>

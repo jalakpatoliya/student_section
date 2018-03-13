@@ -7,28 +7,7 @@ var mongoose = require('mongoose'),
 
 var error =[];
 
-module.exports={
-  detain : function(enrollment){
-    console.log("from detain ",enrollment);
-    Students.findById(enrollment,function(err,data){
-      if(data){
-        var csem=data.cut_sem,
-            semStr={},
-            kt   = 0;
-        for(l1=1;l1<csem-1;l1++){
-          semStr='sem'+l1;
-          kt    = kt + +data.backs[semStr]||0;
-        }
-        if(kt>=5){
-            return true;
-        }
-        else{
-            return false;
-        }
-      }
-    });
-
-  },
+module.exports={  
   enrollmentFormat : function(enrollment){
 
     if (enrollment !== undefined){

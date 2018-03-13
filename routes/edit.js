@@ -8,7 +8,8 @@ var mongoose = require('mongoose'),
       {
         destination: function (req, file, cb) {cb(null, 'uploads/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
-      });
+      }),
+    authFunctions  = require('../validation/authFunctions');
 var upload = multer({ storage: storage }),
     router      = express.Router();
 var flatten = require('flat');
@@ -27,7 +28,7 @@ router.use(bodyParser.urlencoded({
 //======================================
 // GET Route
 //======================================
-router.get("/edit",function(req,res){
+router.get("/edit",authFunctions.isLoggedIn,function(req,res){
   var enroll = req.query.searched_enroll;
   console.log(enroll);
   Students.findById(enroll,function (err,data) {
@@ -42,7 +43,7 @@ router.get("/edit",function(req,res){
 //======================================
 // PoST Route
 //======================================
-router.post("/edit",function (req,res) {
+router.post("/edit",authFunctions.isLoggedIn,function (req,res) {
   console.log(req.body.basic);
   console.log(req.body.enroll);
   var obj = {basic:req.body.basic};
@@ -66,6 +67,16 @@ console.log(obj);
 
 })
 
-
-
+//=========================================================
+//=============== isLoggedIn function======================
+//=========================================================
+//authenticating if user is loggedin or not
+function isLoggedIn(req,res,next) {
+  if (req.isAuthenticated()){
+    console.log("user is logged in");
+    return next();
+  }
+  console.log("user is not logged in");
+    res.redirect("/login");
+}
 module.exports = router;

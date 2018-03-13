@@ -35,16 +35,18 @@ var sync = {
 var Students   = require("../models/student");
 var model=null;
 var validate     = require('../validation/insertValidate');
+var authFunctions     = require('../validation/authFunctions');
+// var isLoggedIn     = require('../validation/authFunctions');
 //======================================
 // GET Route
 //======================================
-router.get("/",function(req,res){
+router.get("/",authFunctions.isLoggedIn,function(req,res){
   res.render("index.ejs");
 })
 //======================================
 // PoST Route
 //======================================
-router.post("/",upload.single("file"),function (req,res){
+router.post("/",authFunctions.isLoggedIn,upload.single("file"),function (req,res){
   console.log("File Path:",req.file.path);
   console.log("File Category:",req.body.fc);
   var model = null;
@@ -116,10 +118,11 @@ sync.do(function(){
           }
           else{
       var obj = {
+
+      _id           :    elem['Enrollment No.'],
       start_sem     :1,
       cur_sem       :1,
-      detain        :3,
-      _id           :    elem['Enrollment No.'],
+      detain        :false,
       basic:{
       course:  elem['course'],
       name:  elem['name'],
@@ -143,7 +146,7 @@ sync.do(function(){
     };
     Students.create(obj,function (err,data) {
       if (err) {
-        console.log("New basic enty error",_id,err);
+        console.log("New basic enty error");
       } else {
         console.log("created basic details of ",data);
       }
@@ -198,21 +201,120 @@ sync.do(function(){
     else if (req.body.fc=="result"){
       console.log("result uploading initiated");
       mongoData.forEach(elem=>{
-        if(validate.enrollmentFormat(elem['Enrollment No.'])){
-          Students.findById(elem['Enrollment No.'],function(err,data){
+        if(validate.enrollmentFormat(elem['MAP_NUMBER'])){
+          Students.findById(elem['MAP_NUMBER'],function(err,data){
             if(err){
               console.log("searching error :",err);
-            }
+            }//student.find by id call back if
             else{
               console.log("preparing marksheet object");
-              
+              var _id = elem['MAP_NUMBER'],
+                  sem = "s_"+elem.sem,
+                  subjectstring="",
+                  resultstring = data[sem].result.res,
+                  obj={};
 
+              //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+              //============   object creation ============================
+              obj={
+                total_back:elem.TOTBACKL,
+                      cpi:elem.CPI,
+                      cgpa:elem.CGPA,
+                      backs:{},
+                      s_1:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_2:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_3:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_4:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_5:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_6:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_7:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_8:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}}
+              };
 
-            }
-          })
-        }
-      })
-    }
+             if(resultstring != "FAIL"){
+               console.log("fail");
+                for(var i=1;i<=8;i++){
+                       obj.backs["s_"+i]=elem["BCK"+i],
+                       obj[sem].result["sub"+i].code       = +elem["SUB"+i]||null;
+                       obj[sem].result["sub"+i].name       = elem["SUB"+i+"NA"]   = elem["SUB"+i+"NA"]||null;
+                       obj[sem].result["sub"+i].sub_grade  = elem["SUB"+i+"GR"]   = elem["SUB"+i+"GR"]||null;
+                       obj[sem].result["sub"+i].absent     = elem["SUB"+i+"AB"]   = elem["SUB"+i+"AB"]||null;
+                       obj[sem].result["sub"+i].these      = elem["SUB"+i+"GRE"]  = elem["SUB"+i+"GRE"]||null;
+                       obj[sem].result["sub"+i].thpa       = elem["SUB"+i+"GRM"]  = elem["SUB"+i+"GRM"]||null;
+                       obj[sem].result["sub"+i].thtot      = elem["SUB"+i+"GRTH"] = elem["SUB"+i+"GRTH"]||null;
+                       obj[sem].result["sub"+i].prese      = elem["SUB"+i+"GRV"]  = elem["SUB"+i+"GRV"]||null ;
+                       obj[sem].result["sub"+i].prtot      = elem["SUB"+i+"GRPR"] = elem["SUB"+i+"GRPR"]||null;
+                       obj[sem].result["sub"+i].prpa       = elem["SUB"+i+"GRI"]  = elem["SUB"+i+"GRI"]||null;
+
+                }
+             }//fifail
+             else{
+               for(var i=1;i<=8;i++){
+                     obj.backs["s_"+i]=elem["BCK"+i]
+               }
+               for(var i=1;i<= data.backs[sem];i++){
+                      subjectstring = "SUB"+i;
+                      for(j=1;j<=data[sem].Tsubject;j++){
+                        if(elem[subjectstring]==data[sem].result["sub"+j].code){
+                          obj[sem].result["sub"+j].code       = +elem["SUB"+i]||null;
+                          obj[sem].result["sub"+j].name       = elem["SUB"+i+"NA"]   = elem["SUB"+i+"NA"]||null;
+                          obj[sem].result["sub"+j].sub_grade  = elem["SUB"+i+"GR"]   = elem["SUB"+i+"GR"]||null;
+                          obj[sem].result["sub"+j].absent     = elem["SUB"+i+"AB"]   = elem["SUB"+i+"AB"]||null;
+                          obj[sem].result["sub"+j].these      = elem["SUB"+i+"GRE"]  = elem["SUB"+i+"GRE"]||null;
+                          obj[sem].result["sub"+j].thpa       = elem["SUB"+i+"GRM"]  = elem["SUB"+i+"GRM"]||null;
+                          obj[sem].result["sub"+j].thtot      = elem["SUB"+i+"GRTH"] = elem["SUB"+i+"GRTH"]||null;
+                          obj[sem].result["sub"+j].prese      = elem["SUB"+i+"GRV"]  = elem["SUB"+i+"GRV"]||null ;
+                          obj[sem].result["sub"+j].prtot      = elem["SUB"+i+"GRPR"] = elem["SUB"+i+"GRPR"]||null;
+                          obj[sem].result["sub"+j].prpa       = elem["SUB"+i+"GRI"]  = elem["SUB"+i+"GRI"]||null;
+                          }
+                        }
+                      }
+                    }//esle fail
+              //-------------------- Object created ---------------------------
+              //--------------------------------------------------------------
+              Students.findByIdAndUpdate(_id,flatten(obj),{overwrite:false},function(err, updatedItem){
+                 if(err){
+                   console.log("updating error",err);
+                 }
+                 else{
+                   console.log("updated",updatedItem);
+                 }
+               })
+               //======================= object updated ======================
+            }//student.find by id call back else
+          })//student.find by id
+        }//fivalidate enroll
+      })//mongoData.foreach
+      //====================== finally after updating whole marksheet calculating and updating detain over whole database ===
+      Students.find(function(err,collection){
+        collection.forEach(doc=>{
+          var obj={},
+              year=0,
+              kt =0;
+              for(var i=1;i<doc.cur_sem;i++){
+                kt = kt + doc.backs["s_"+i];
+              }
+              if(kt>4){
+                   obj.detain = true;
+                   year = (doc.cur_sem==3 || doc.cur_sem==4) ? 2 :(doc.cur_sem==5 || doc.cur_sem==6) ? 3 : 4 ;
+                   obj.detain_history.push(year);
+                   obj.cur_sem = doc.cur_sem+1;
+              }//fi kt
+              else{
+                obj.cur_sem = doc.cur_sem+1;
+              }
+              Students.findByIdAndUpdate(doc._id,flatten(obj),{overwrite:false},function(err, updatedItem){
+                 if(err){
+                   console.log("updating error",err);
+                 }
+                 else{
+                   console.log("updated",updatedItem);
+                 }
+               })//find and update
+        })//collection.forEach
+      })//studentsfind
+      //============================ detain currnt sem updated ===========================================================
+    }//req.body
 
     //++++++++++++++++++++++++++++++ Marksheet Over================================== #2
     //===============================================================================
@@ -244,7 +346,7 @@ sync.do(function(){
                     wholeField={};
                 if(data.detain == true ){
 
-                    sem    = "d_"+elem['Current Semester'];
+                    sem    = "D_"+elem['Current Semester'];
                     obj    = {[sem]:{Exam_fee_Rem:total}};
                 }
                 else{
