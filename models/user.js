@@ -2,6 +2,11 @@ var mongoose               = require("mongoose"),
     passportLocalMongoose = require("passport-local-mongoose");
 
 var UserSchema = new mongoose.Schema({
+
+  temp : {
+    username : String,
+    password : String
+  },
   username : String,
   password : String,
   role: {
@@ -10,6 +15,7 @@ var UserSchema = new mongoose.Schema({
         enum: ["user", "admin"]
     }
 })
+
 
 UserSchema.plugin(passportLocalMongoose); // plugin connects all the passportLocalMongoose mehtods to UserSchema
 
