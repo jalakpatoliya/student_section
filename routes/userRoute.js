@@ -5,6 +5,7 @@ var passport              = require("passport"),
     passportLocalMongoose = require("passport-local-mongoose"),
     mongoose              = require("mongoose"),
     User                  = require("../models/user"),
+    TempUser              = require("../models/tempUser"),
     expressSession        = require("express-session"),
     authFunctions         = require('../validation/authFunctions');
 
@@ -55,6 +56,54 @@ var passport              = require("passport"),
     router.get("/logout",function(req,res){
       req.logout();
       res.redirect("/");
+    })
+
+    //=========================================================
+    //============= Request for an account ====================
+    //=========================================================
+    router.post("/registerRequest",function (req,res) {
+      TempUser.create({username:req.body.name,password:req.body.pass})
+      res.redirect("/")
+    })
+    //=========================================================
+    //============= Notifications of admin ====================
+    //=========================================================
+    router.get("/notifications",function(req,res){
+      TempUser.find({},function(err,data){
+        if (err) {
+          console.log(err);
+        } else {
+          res.render("notifications.ejs",{data:data});
+        }
+      })
+    })
+    //=========================================================
+    //============= Notifications of admin ====================
+    //=========================================================
+    router.post("/notifications",function(req,res){
+      console.log(req.body);
+      if (req.body.delete=="delete") {
+        console.log("del");
+        TempUser.findOneAndRemove({username:req.body.username,password:req.body.password},function(err) {
+          if (err) {
+            console.log(err);
+          }else {
+            res.redirect("/notifications")
+
+          }
+        })
+      }
+      else if(req.body.add=="add") {
+        console.log("add");
+        User.register(new User({username:req.body.username,role:"user"}),req.body.password,function(err,user){})
+        TempUser.findOneAndRemove({username:req.body.username,password:req.body.password},function(err) {
+          if (err) {
+            console.log(err);
+          }else {
+            res.redirect("/notifications")
+          }
+        })
+      }
     })
 
 module.exports = router;
