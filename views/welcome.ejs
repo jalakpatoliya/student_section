@@ -1,0 +1,31 @@
+<%
+if(currentUser.role=="user"){
+  %>
+  <% include ./user/partials/header %>
+<%}
+else if(currentUser.role=="admin"){
+  %>
+  <% include ./admin/partials/header %>
+<%}%>
+
+<div class="ui items">
+  <div class="item">
+    <div class="image">
+      <%if(currentUser=="admin"){%>
+        <img src="https://scontent.fbom1-2.fna.fbcdn.net/v/t1.0-9/28379556_1185814534884223_8879113593065262645_n.jpg?oh=9563786aab25506e260f6fa45b1f7f99&oe=5B32E795">
+        <%}%>
+    </div>
+    <div class="content">
+      <a class="header">HI</a>
+      <div class="meta">
+        <span><%=currentUser.username %></span>
+      </div>
+      <div class="description">
+        <p>Nice To see you</p>
+      </div>
+      <div class="extra">
+        have a great Experience
+      </div>
+    </div>
+  </div>
+<% include ./partials/footer %>
