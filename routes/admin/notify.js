@@ -67,17 +67,17 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
              }
 
            }else if(sem=="second"){
-             if(elem.cur_sem==1||elem.cur_sem==2){
+             if(elem.cur_sem==3||elem.cur_sem==4){
                listofemails.push((elem.basic.email).trim());
              }
 
            }else if(sem=="third"){
-             if(elem.cur_sem==1||elem.cur_sem==2){
+             if(elem.cur_sem==5||elem.cur_sem==6){
                listofemails.push((elem.basic.email).trim());
              }
 
            }else if(sem=="fourth"){
-             if(elem.cur_sem==1||elem.cur_sem==2){
+             if(elem.cur_sem==7||elem.cur_sem==8){
                listofemails.push((elem.basic.email).trim());
              }
 
