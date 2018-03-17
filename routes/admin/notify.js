@@ -38,10 +38,8 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
        if(req.body.branch=="all"){
          console.log("all");
          if(sem=="all"){
-           data.forEach(elem=>{
-             if((elem.basic.branch).trim()==(req.body.branch).trim()){
-               listofemails.push((elem.basic.email).trim());
-             }
+           data.forEach(elem=>{             
+               listofemails.push((elem.basic.email).trim());            
            });//data.foreach
          }//all sem
          else{
