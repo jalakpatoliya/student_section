@@ -30,23 +30,50 @@ var mongoose = require('mongoose'),
 router.post("/notify",authFunctions.isLoggedIn,function(req,res){
   ////////////////////////////////////////////////////////////////////////////////
   var to,sem,sub,content;
-  //listofemails=[];
-
-
         sub=req.body.sub;
         content=req.body.msg;
-
-
 
      Students.find().lean().exec(function(err,data){
           listofemails=[]
        if(req.body.branch=="all"){
          console.log("all");
+         if(sem=="all"){
+           data.forEach(elem=>{
+             if((elem.basic.branch).trim()==(req.body.branch).trim()){
+               listofemails.push((elem.basic.email).trim());
+             }
+           });//data.foreach
+         }//all sem
+         else{
 
-         data.forEach(elem=>{
-           listofemails.push((elem.basic.email).trim());
-         });data.forEcj
+           if(sem=="first"){
+             data.forEach(elem=>{
+             if(elem.cur_sem==1||elem.cur_sem==2){
+               listofemails.push((elem.basic.email).trim());
+             }
+               });//data.forEach
+           }else if(sem=="second"){
+             data.forEach(elem=>{
+             if(elem.cur_sem==3||elem.cur_sem==4){
+               listofemails.push((elem.basic.email).trim());
+             }
+               });//data.forEach
+           }else if(sem=="third"){
+             data.forEach(elem=>{
+             if(elem.cur_sem==5||elem.cur_sem==6){
+               listofemails.push((elem.basic.email).trim());
+             }
+               });//data.forEach
 
+           }else if(sem=="fourth"){
+             data.forEach(elem=>{
+             if(elem.cur_sem==7||elem.cur_sem==8){
+               listofemails.push((elem.basic.email).trim());
+             }
+               });//data.forEach
+           }
+
+       }//else
        }//if all
        else{
          console.log("Specific");
@@ -80,7 +107,6 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
              if(elem.cur_sem==7||elem.cur_sem==8){
                listofemails.push((elem.basic.email).trim());
              }
-
            }
          }//Branch
        });//data.foreach
@@ -105,7 +131,7 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
      async.waterfall([
        function(callback) {
           var mailOptions = {
-              from: 'GEC <fygecmodasa@gmail.com>',
+              from: 'GEC Modasa <fygecmodasa@gmail.com>',
               to: Email,
               subject: sub,
               text: content
