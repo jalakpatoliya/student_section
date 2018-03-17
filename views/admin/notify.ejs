@@ -2,14 +2,14 @@
 <hr>
 <p>Prepare Custom Event Notification</p>
 <hr>
-<form class="ui form">
+<form class="ui form" method="post" action="notify" onsubmit="return ValidationEvent()">
   <div class="field">
 
   </div>
   <div class="field">
     <label>To:</label>
     <div class="ui dropdown button"  name="to" id="sem">
-      <input name="branch" type="hidden" >
+      <input name="year" type="hidden" >
       <i class="filter icon"></i>
       <span class="text">Year</span>
       <div class="menu">
@@ -21,20 +21,20 @@
       </div><!-- menu -->
     </div><!-- OtherDropdown -->
     <div class="ui dropdown button"  name="to" id="to">
-      <input name="year" type="hidden" >
+      <input name="branch" type="hidden"  required>
       <i class="filter icon"></i>
       <span class="text">Select User</span>
       <div class="menu">
         <div class="item" data-value="all">All Branch</div>
         <div class="item">Specific Branch
           <div class="menu">
-            <div class="item" data-value="ec">EC</div>
-            <div class="item" data-value="comp">computer</div>
-            <div class="item" data-value="it">IT</div>
-            <div class="item" data-value="auto">Automobile</div>
-            <div class="item" data-value="mech">Mechanical</div>
+            <div class="item" data-value=" Electronics and Comm">EC</div>
+            <div class="item" data-value=" Computer">computer</div>
+            <div class="item" data-value=" IT">IT</div>
+            <div class="item" data-value="Automobile">Automobile</div>
+            <div class="item" data-value=" Mechanical">Mechanical</div>
             <div class="item" data-value="Civil">Civil</div>
-            <div class="item" data-value="ele">Electrical</div>
+            <div class="item" data-value=" Electrical">Electrical</div>
           </div>
         </div>
       </div><!-- menu -->
@@ -48,7 +48,7 @@
   </div>
   <div class="field">
     <label>Content:</label>
-    <textarea name="content" placeholder="Message.................!"></textarea>
+    <textarea name="msg" placeholder="Message.................!"></textarea>
   </div>
 
   <button class="ui button" type="submit">Send</button>
@@ -67,4 +67,18 @@ $('#to').dropdown({
   }
 });
 $('#sem').dropdown({ on: 'hover'}).hide();
+
+function ValidationEvent(){
+  if($('#to').dropdown('get value')!="all"){
+    if($('#sem').dropdown('get value')){
+      return true;
+    }
+    else{
+      alert('enter year')
+      return false;
+    }
+  }else{
+    return true;
+  }
+}
 </script>

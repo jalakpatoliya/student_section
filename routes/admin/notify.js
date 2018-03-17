@@ -27,54 +27,121 @@ var mongoose = require('mongoose'),
 //======================
 // SHOW ROUTE
 //======================
+router.post("/notify",authFunctions.isLoggedIn,function(req,res){
+  ////////////////////////////////////////////////////////////////////////////////
+  var to,sem,sub,content;
+  //listofemails=[];
+
+
+        sub=req.body.sub;
+        content=req.body.msg;
+
+
+
+     Students.find().lean().exec(function(err,data){
+          listofemails=[]
+       if(req.body.branch=="all"){
+         console.log("all");
+
+         data.forEach(elem=>{
+           listofemails.push((elem.basic.email).trim());
+         });data.forEcj
+
+       }//if all
+       else{
+         console.log("Specific");
+         sem = (req.body.year).trim();
+         if(sem=="all"){
+           data.forEach(elem=>{
+             if((elem.basic.branch).trim()==(req.body.branch).trim()){
+               listofemails.push((elem.basic.email).trim());
+             }
+           });//data.foreach
+         }//all sem
+         else{
+           data.forEach(elem=>{
+             if((elem.basic.branch).trim()==(req.body.branch).trim()){
+           if(sem=="first"){
+             if(elem.cur_sem==1||elem.cur_sem==2){
+               listofemails.push((elem.basic.email).trim());
+             }
+
+           }else if(sem=="second"){
+             if(elem.cur_sem==1||elem.cur_sem==2){
+               listofemails.push((elem.basic.email).trim());
+             }
+
+           }else if(sem=="third"){
+             if(elem.cur_sem==1||elem.cur_sem==2){
+               listofemails.push((elem.basic.email).trim());
+             }
+
+           }else if(sem=="fourth"){
+             if(elem.cur_sem==1||elem.cur_sem==2){
+               listofemails.push((elem.basic.email).trim());
+             }
+
+           }
+         }//Branch
+       });//data.foreach
+         }//else all sem
+       }//else specific
+       //=============================sending mail===========================
+       function massMailer() {
+         var self = this;
+      //   Fetch all the emails from database and push it in listofemails process remaining
+     self.invokeOperation();
+    };
+
+    massMailer.prototype.invokeOperation = function() {
+     var self = this;
+     async.each(listofemails,self.SendEmail);
+    }
+
+    massMailer.prototype.SendEmail = function(Email,callback) {
+     console.log("Sending email to " + Email);
+     var self = this;
+     self.status = false;
+     async.waterfall([
+       function(callback) {
+          var mailOptions = {
+              from: 'GEC <fygecmodasa@gmail.com>',
+              to: Email,
+              subject: sub,
+              text: content
+          }
+         transporter.sendMail(mailOptions, function(error, info) {
+           if(error) {
+             console.log(error)
+             failure_email.push(Email);
+           } else {
+             self.status = true;
+             success_email.push(Email);
+           }
+         });
+       },
+     ]);
+    }
+
+    new massMailer(); //lets begin
+
+       //====================================================================
+
+     });//.find
+
+
+ console.log(listofemails,"--",sem);
+
+
+       //===============================================================
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  res.render("./admin/notify.ejs")
+
+})
 router.get("/notify",authFunctions.isLoggedIn,function(req,res){
-
-////////////////////////////////////////////////////////////////////////////////
-  function massMailer() {
-  	var self = this;
-  	// Fetch all the emails from database and push it in listofemails process remaining
-    //writing continue
-     listofemails.push()
-     //===============================================================
-
-
-  	self.invokeOperation();
-  };
-
-  massMailer.prototype.invokeOperation = function() {
-  	var self = this;
-  	async.each(listofemails,self.SendEmail);
-  }
-
-
-  massMailer.prototype.SendEmail = function(Email,callback) {
-  	console.log("Sending email to " + Email);
-  	var self = this;
-  	self.status = false;
-  	async.waterfall([
-  		function(callback) {
-        var mailOptions = {
-            from: 'GEC <fygecmodasa@gmail.com>',
-            to: Email,
-            subject: 'bulk3',
-            text: 'ulk mail 1'
-        }
-  			transporter.sendMail(mailOptions, function(error, info) {
-  				if(error) {
-  					console.log(error)
-  					failure_email.push(Email);
-  				} else {
-  					self.status = true;
-  					success_email.push(Email);
-  				}
-  			});
-  		},
-  	]);
-  }
-
-  new massMailer(); //lets begin
-////////////////////////////////////////////////////////////////////////////////
-res.render("./admin/notify.ejs")
+  res.render("./admin/notify.ejs")
 })
 
 
