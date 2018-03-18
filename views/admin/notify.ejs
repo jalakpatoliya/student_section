@@ -1,11 +1,14 @@
 <% include ./partials/header %>
 <hr>
 <p>Prepare Custom Event Notification</p>
+<div class="ui  buttons" id="togglebut">
+  <button class="ui positive button" id="tooglebut1" onclick="togfun1()">Instant</button>
+  <div class="or"></div>
+  <button class="ui  button" id="tooglebut2" onclick="togfun2()">Time Event</button>
+</div>
 <hr>
-<form class="ui form" method="post" action="notify" onsubmit="return ValidationEvent()">
-  <div class="field">
-
-  </div>
+<form class="ui form" method="post" action="notify" >
+<input  name="eventoption" id="eventoption" type="hidden" value="instant">
   <div class="field">
     <label>To:</label>
     <div class="ui dropdown button"  name="to" id="sem">
@@ -40,7 +43,10 @@
       </div><!-- menu -->
     </div><!-- OtherDropdown -->
   </div>
-
+  <div class="field" id="togopt2">
+    <label>Event Ending Date/Time:</label>
+    <input type="datetime-local" name="dt" >
+  </div>
   <div class="field">
     <label>Subject:</label>
     <input type="text" name="sub" >
@@ -58,7 +64,7 @@
 <script type="text/javascript">
 $('#to').dropdown({
   onChange:function(){
-    if($('#to').dropdown('get value')!="all"){
+    if($('#to').dropdown('get value')!=null){
       $('#sem').dropdown().show();
     }
     else{
@@ -68,17 +74,22 @@ $('#to').dropdown({
 });
 $('#sem').dropdown({ on: 'hover'}).hide();
 
-function ValidationEvent(){
-  if($('#to').dropdown('get value')!="all"){
-    if($('#sem').dropdown('get value')){
-      return true;
-    }
-    else{
-      alert('enter year')
-      return false;
-    }
-  }else{
-    return true;
-  }
+
+
+// $('#tooglebut1').button().on("click",function(){alert("happening")})
+function togfun1(){
+document.getElementById("tooglebut2").className = "ui button";
+document.getElementById("tooglebut1").className = "ui positive button";
+document.getElementById("eventoption").value = "instant";
+$('#togopt2').hide();
 }
+function togfun2(){
+document.getElementById("tooglebut1").className = "ui button";
+document.getElementById("tooglebut2").className = "ui positive button";
+document.getElementById("eventoption").value = "timedriven";
+
+$('#togopt2').show();
+}
+
+$('#togopt2').hide();
 </script>
