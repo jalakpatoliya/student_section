@@ -22,5 +22,21 @@ router.get("/search",authFunctions.isLoggedIn,function(req,res){
   })
 
 })
+//======================
+// Search ROUTE FoR STUDENT
+//======================
+router.get("/search/student",authFunctions.isLoggedIn,function(req,res){
+  var query = req.user.username;
+  Students.findById(query,function (err,data) {
+    if (err) {
+      console.log(err);
+    } else {
+
+      res.render("show.ejs",{data:data});
+      // console.log(data);
+    }
+  })
+
+})
 
 module.exports = router;

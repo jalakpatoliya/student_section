@@ -63,20 +63,47 @@ console.log(obj);
       })
     }
   })
-
-
 })
 
-//=========================================================
-//=============== isLoggedIn function======================
-//=========================================================
-//authenticating if user is loggedin or not
-function isLoggedIn(req,res,next) {
-  if (req.isAuthenticated()){
-    console.log("user is logged in");
-    return next();
-  }
-  console.log("user is not logged in");
-    res.redirect("/login");
-}
+
+//======================================
+// GET Route For students
+//======================================
+router.get("/edit/student",authFunctions.isLoggedIn,function(req,res){
+  var enroll = req.user.username;
+  console.log(enroll);
+  Students.findById(enroll,function (err,data) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render("edit.ejs",{data:data});
+    }
+  })
+
+})
+//======================================
+// PoST Route  students
+//======================================
+router.post("/edit/student",authFunctions.isLoggedIn,function (req,res) {
+  console.log(req.body.basic);
+  console.log(req.body.enroll);
+  var obj = {basic:req.body.basic};
+console.log(obj);
+
+  Students.findByIdAndUpdate(req.body.enroll,flatten(obj),{overwrite:false},function (err,UpdatedData) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("UpdatedData:",UpdatedData);
+      Students.findById(req.body.enroll,function (err,data) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render("show.ejs",{data:data});
+        }
+      })
+    }
+  })
+})
+
 module.exports = router;

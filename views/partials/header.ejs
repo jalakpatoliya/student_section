@@ -34,9 +34,13 @@
                   <a class="item" href="/logout">Logout</a>
                   <% }else if (currentUser.role=="admin") { %>
                     <div class="ui top right attached label">Admin</div>
-                    <a class="item" href="#">Signed in as <%= currentUser.username%></a>                    
+                    <a class="item" href="#">Signed in as <%= currentUser.username%></a>
                     <a class="item" href="/logout">Logout</a>
-                    <% } %>
+                    <% } else if (currentUser.role=="student") { %>
+                      <div class="ui top right attached label">Student</div>
+                      <a class="item" href="#">Signed in as <%= currentUser.username%></a>
+                      <a class="item" href="/logout">Logout</a>
+                      <% } %>
                   </div>
                 </div>
         </div>

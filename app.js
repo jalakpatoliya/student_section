@@ -4,6 +4,7 @@
 var  express               = require("express"),
      app                   = express(),
      bodyParser            = require("body-parser"),
+     regexp                = require('node-regexp'),
      passport              = require("passport"),
      LocalStrategy         = require("passport-local"),
      passportLocalMongoose = require("passport-local-mongoose"),
@@ -45,6 +46,7 @@ app.use(express.static(__dirname+"/public"));
 //============================================================================
 var indexRoute   = require('./routes/index'),
     searchRoute  = require('./routes/search'),
+    show      = require('./routes/show'),
     showError    = require('./routes/error'),
     edit         = require('./routes/edit'),
     filt         = require('./routes/customsearch'),
@@ -78,7 +80,8 @@ app.use(edit);
 app.use(userRoute);
 app.use(notify);
 app.use(redirect);
-app.use(welcome)
+app.use(welcome);
+app.use(show);
 //=========================================================
 //============= To create Admin ===========================
 //=========================================================
@@ -93,6 +96,7 @@ User.register(new User({username:"jalak",role:"admin"}),"pass",function(err,user
 //   if(err){console.log("insertio failed");}
 //   else{console.log("sucessfully inserted");}
 // })
+
 //============================================================================
 //============================================================================
 //===========================================================================

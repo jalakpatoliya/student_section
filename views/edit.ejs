@@ -6,9 +6,20 @@ if(currentUser.role=="user"){
 else if(currentUser.role=="admin"){
   %>
   <% include ./admin/partials/header %>
+<%}else if(currentUser.role=="student"){
+  %>
+  <% include ./student/partials/header %>
 <%}%>
 
-<form class="ui form" action="/edit" method="post">
+
+<% if(currentUser.role=="user"||currentUser.role=="admin"){ %>
+  <form class="ui form" action="/edit" method="post">
+<%}
+else if(currentUser.role=="student"){
+  %>
+  <form class="ui form" action="/edit/student" method="post">
+<%}%>
+
   <input type="hidden" name="enroll" value="<%=data._id%>">
   <div class="ui grid">
 
@@ -75,11 +86,9 @@ else if(currentUser.role=="admin"){
       </div>
 
       <div class="four wide column">
-        <% if (data.basic.gender =="M"||data.basic.gender =="m") { %>
           <div class="ui form" >
           <div class="inline fields">
           <label>Gender</label> <br>
-
             <div class="field">
               <div class="ui radio checkbox">
                 <input  type="radio" name="basic[gender]" checked="checked" value="M">
@@ -94,35 +103,66 @@ else if(currentUser.role=="admin"){
             </div>
           </div>
           </div>
-        <% } else if (data.basic.gender =="F"||data.basic.gender =="f") { %>
-          <div class="ui form" >
-          <div class="inline fields">
-          <label>Gender</label> <br>
-            <div class="field">
-            <div class="ui radio checkbox">
-            <input  type="radio" name="basic[gender]" checked="checked" value="f">
-            <label>Female</label>
-          </div>
-          </div>
-
-            <div class="field">
-              <div class="ui radio checkbox">
-                <input  type="radio" name="basic[gender]"  value="M">
-                <label>Male</label>
-              </div>
-            </div>
-          </div>
-          </div>
-        <%}  %>
       </div>
 
+      <div class="two wide column">
+        <div class="field">
+          <label>Caste</label>
+          <input type="text" name="basic[category]" value="<%=data.basic.category%>">
+        </div>
+      </div>
+
+      <div class="three wide column">
+        <div class="field">
+          <label>Mode of admission</label>
+          <input type="text" name="basic[mod_of_adm]" value="<%=data.basic.mod_of_adm%>">
+        </div>
+      </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>TFW</label>
+          <input type="text" name="basic[tfw]" value="<%=data.basic.tfw%>">
+        </div>
+      </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>Branch</label>
+          <input type="text" name="basic[branch]" value="<%=data.basic.branch%>">
+        </div>
+      </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>Date of Birth</label>
+          <input type="text" name="basic[dob]" value="<%=data.basic.dob%>">
+        </div>
+      </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>Division</label>
+          <input type="text" name="basic[division]" value="<%=data.basic.division%>">
+        </div>
+      </div>
+
+      <div class="ui calendar" id="example1">
+        <div class="ui input left icon">
+          <i class="calendar icon"></i>
+          <input type="text" placeholder="Date/Time">
+        </div>
+      </div>
 
     </div><br><br>
   <button class="ui green button" type="submit">Submit</button>
 </form>
 
+<script type="text/javascript">
+  $('#example1').calendar();
+</script>
 
 
 
 
-<% include ./partials/footer %>
+ <% include ./partials/footer %>

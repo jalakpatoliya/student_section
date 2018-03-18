@@ -1,17 +1,33 @@
 //=====================Importing all dependencies============
-var mongoose = require('mongoose'),
-    express  = require('express'),
-    mongoXlsx = require("mongo-xlsx"),
-    bodyParser = require("body-parser"),
-    multer    = require("multer"),
-    storage = multer.diskStorage(
+var mongoose        = require('mongoose'),
+    express         = require('express'),
+    mongoXlsx       = require("mongo-xlsx"),
+    bodyParser      = require("body-parser"),
+    multer          = require("multer"),
+    storage         = multer.diskStorage(
       {
         destination: function (req, file, cb) {cb(null, 'uploads/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
-      });
-var upload = multer({ storage: storage }),
-    router      = express.Router();
-var flatten = require('flat');
+      }),
+     upload        = multer({ storage: storage }),
+     router        = express.Router(),
+     flatten       = require('flat');
+
+    //==============================================================================
+    //==================== Importin auth dependencies ==============================
+    //=============================================================================
+var passport              = require("passport"),
+    LocalStrategy         = require("passport-local"),
+    passportLocalMongoose = require("passport-local-mongoose"),
+    User                  = require("../models/user"),
+    TempUser              = require("../models/tempUser"),
+    expressSession        = require("express-session"),
+    authFunctions         = require('../validation/authFunctions');
+
+    //====================================================
+    passport.use(new LocalStrategy(User.authenticate()));
+    passport.serializeUser(User.serializeUser()); // it reades, decodes information in session,encodes it
+    passport.deserializeUser(User.deserializeUser());
 //==============================================================================
 //==================== defining sync.do ========================================
 //=============================================================================
@@ -32,9 +48,9 @@ var sync = {
 //===============================================================================
 //======================= Accuring internal module =============================
 //===============================================================================
-var Students   = require("../models/student");
+var Students          = require("../models/student");
 var model=null;
-var validate     = require('../validation/insertValidate');
+var validate          = require('../validation/insertValidate');
 var authFunctions     = require('../validation/authFunctions');
 // var isLoggedIn     = require('../validation/authFunctions');
 //======================================
@@ -58,38 +74,20 @@ sync.do(function(){
     if(req.body.fc=="basic2"){
       console.log("basic uploaded");
       mongoData.forEach(elem=>{
-      if(validate.enrollmentFormat(elem['Enrollment No.'])){
-        Students.findById(elem['Enrollment No.'],function (err,data) {
+      if(validate.enrollmentFormat(elem['ENROLMENT'])){
+        Students.findById(elem['ENROLMENT'],function (err,data) {
           if(err){
             console.log("element can't fiound");
           }
           else{
-      var obj = {
-      start_sem     :3,
-      cur_sem       :3,
-      detain        :false,
-      _id           :    elem['Enrollment No.'],
-      basic:{
-      course:  elem['course'],
-      name:  elem['name'],
-      age:  elem['age'],
-      gender:  elem['gender'],
-      category:  elem['category'],
-      mode_of_adm:  elem['mode_of_adm'],
-      mob_no:  elem['mob_no'],
-      email:  elem['email'],
-      add_t:  elem['add_t'],
-      add_p:  elem['add_p'],
-      tfw:  elem['tfw'],
-      branch:  elem['branch'],
-      dob:  elem['dob'],
-      division:  elem['division'],
-      city:  elem['city'],
-      district:  elem['district'],
-      state:  elem['state'],
-      pincode:  elem['pincode']
-    }
-    };
+              var obj = {
+                    start_sem     :3,
+                    cur_sem       :3,
+                    detain        :false,
+                    _id           :elem['ENROLMENT'],
+                    basic:{course:"B.E."}
+                  };
+
     Students.create(obj,function (err,data) {
       if (err) {
         console.log("New basic enty error",_id,err);
@@ -106,49 +104,33 @@ sync.do(function(){
 
 
 
-    //======================== basic detail Regular      =======================
+    //======================== basic detail Regular  ===========================
     //==========================================================================
     if(req.body.fc=="basic1"){
       console.log("basic uploaded");
       mongoData.forEach(elem=>{
-      if(validate.enrollmentFormat(elem['Enrollment No.'])){
-        Students.findById(elem['Enrollment No.'],function (err,data) {
+      if(validate.enrollmentFormat(elem['ENROLMENT'])){
+        var enrol  = elem['ENROLMENT'];
+        var reversed_enrol = reverse_a_number(enrol);
+        Students.findById(enrol,function (err,data) {
           if(err){
             console.log("element can't fiound");
           }
           else{
       var obj = {
 
-      _id           :    elem['Enrollment No.'],
+      _id           :    enrol,
       start_sem     :1,
       cur_sem       :1,
       detain        :false,
-      basic:{
-      course:  elem['course'],
-      name:  elem['name'],
-      age:  elem['age'],
-      gender:  elem['gender'],
-      category:  elem['category'],
-      mode_of_adm:  elem['mode_of_adm'],
-      mob_no:  elem['mob_no'],
-      email:  elem['email'],
-      add_t:  elem['add_t'],
-      add_p:  elem['add_p'],
-      tfw:  elem['tfw'],
-      branch:  elem['branch'],
-      dob:  elem['dob'],
-      division:  elem['division'],
-      city:  elem['city'],
-      district:  elem['district'],
-      state:  elem['state'],
-      pincode:  elem['pincode']
-    }
+      basic:{course:"B.E."}
     };
     Students.create(obj,function (err,data) {
       if (err) {
         console.log("New basic enty error");
       } else {
         console.log("created basic details of ",data);
+        User.register(new User({username:enrol,role:"student"}),reversed_enrol,function(err,user){})
       }
     });
   }//esle
@@ -396,8 +378,14 @@ sync.do(function(){
 //==================================================================================
 
 })
-
-
+//=========================================================================
+//==================== function to Reverse a number =======================
+//=========================================================================
+function reverse_a_number(n)
+{
+	n = n + "";
+	return n.split("").reverse().join("");
+}
 
 
 

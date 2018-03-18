@@ -8,7 +8,6 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js">
   </script>
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
   <link rel="stylesheet" href="/stylesheets/main.css">
 
@@ -20,12 +19,15 @@
         <a class="active item" href="/" >
         Home
       </a>
-        <a class="item" href="customsearch" tabindex="0">
-        View Data
+        <a class="item" href="/search/student" tabindex="0">
+          Profile
       </a>
-      <a class="item" href="notifications">
-         Notifications
-         <div class="ui label">51</div>
+      <a class="item" href="/edit/student">
+         Change Profile Details
+     </a>
+     <a class="item" href="#">
+       Notifications
+       <div class="ui label">51</div>
      </a>
         <div class="right menu">
           <div class="item">
@@ -49,10 +51,12 @@
                 <% }else if (currentUser.role=="admin") { %>
                   <div class="ui top right attached label">Admin</div>
                   <a class="item" href="#">Signed in as <%= currentUser.username%></a>
-                  <a class="item" href="/register">Sign Up a user</a>
-                  <a class="item" href="/login">Login as user</a>
                   <a class="item" href="/logout">Logout</a>
-                  <% } %>
+                  <% }else if (currentUser.role=="student") { %>
+                    <div class="ui top right attached label">student</div>
+                    <a class="item" href="#">Signed in as <%= currentUser.username%></a>
+                    <a class="item" href="/logout">Logout</a>
+                    <% } %>
           </div>
         </div>
       </div>
