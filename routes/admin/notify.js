@@ -37,6 +37,7 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
   var to,sem,sub,content;
         sub=req.body.sub;
         content=req.body.msg;
+        sem=req.body.year;
 
      Students.find().lean().exec(function(err,data){
           listofemails=[]
@@ -166,12 +167,13 @@ console.log(req.body.eventoption);
   d1=(d[2].split("T",2))[0],
   t =(((req.body.dt).split("-",3))[2].split("T",2))[1].split(":",2);
   var date = new Date(d[0], d[1]-1, d1, t[0], t[1], 0);
-
+   sem = (req.body.year).trim();
 Students.find().lean().exec(function(err,data){
   //////////////finding list of email//////////////////////////
   listofemails=[]
 if(req.body.branch=="all"){
  console.log("all");
+ console.log(sem);
  if(sem=="all"){
    data.forEach(elem=>{
        listofemails.push((elem.basic.email).trim());
