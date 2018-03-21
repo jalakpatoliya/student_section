@@ -79,10 +79,98 @@ else if(currentUser.role=="student"){
       </div>
     </div>
 
-
+    <div class="three wide column">
       <div class="field">
         <label>Mobile No.</label>
         <input type="text" name="basic[mob_no]" value="<%=data.basic.mob_no%>">
+      </div>
+    </div>
+ 
+
+      <div class="two wide column">
+        <div class="field">
+      <label>Caste</label>
+        <select name="basic[category]" class="ui fluid search dropdown" id="ab">
+          <% if (!data.basic.category) { %>
+            <option value="">Select</option>
+          <%}else {%>
+            <option value="<%=data.basic.category%>"><%=data.basic.category%></option>
+          <%}%>
+          <% if (data.basic.category!="Open") { %>
+            <option value="Open">Open</option>
+          <%}%>
+          <% if (data.basic.category!="SEBC") { %>
+            <option value="SEBC">SEBC</option>
+          <%}%>
+          <% if (data.basic.category!="ST") { %>
+            <option value="ST">ST</option>
+          <%}%>
+          <% if (data.basic.category!="SC") { %>
+            <option value="SC">SC</option>
+          <%}%>
+        </select>
+      </div>
+    </div>
+
+      <div class="two wide column">
+        <div class="field">
+      <label>Mode of Admission</label>
+        <select name="basic[mode_of_adm]" class="ui fluid search dropdown" id="ab">
+          <% if (!data.basic.mode_of_adm) { %>
+            <option value="">Select</option>
+          <%}else {%>
+            <option value="<%=data.basic.mode_of_adm%>"><%=data.basic.mode_of_adm%></option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="General") { %>
+            <option value="General">General</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="D to D") { %>
+            <option value="D to D">D to D</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="J and k") { %>
+            <option value="J and k">J and k</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="Ex-servicemen") { %>
+            <option value="Ex-servicemen">Ex-servicemen</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="GN") { %>
+            <option value="GN">GN</option>
+          <%}%>
+        </select>
+      </div>
+    </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>TFW</label>
+          <input type="text" name="basic[tfw]" value="<%=data.basic.tfw%>">
+        </div>
+      </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>Branch</label>
+          <input type="text" name="basic[branch]" value="<%=data.basic.branch%>">
+        </div>
+      </div>
+
+      <div class="three wide column">
+        <div class="field">
+          <label>Date of Birth</label>
+          <div class="ui calendar" id="example1">
+            <div class="ui input left icon">
+              <i class="calendar icon"></i>
+              <input type="text" name="basic[dob]" value="<%=data.basic.dob%>" placeholder="Date">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>Division</label>
+          <input type="text" name="basic[division]" value="<%=data.basic.division%>">
+        </div>
       </div>
 
       <div class="four wide column">
@@ -105,61 +193,19 @@ else if(currentUser.role=="student"){
           </div>
       </div>
 
-      <div class="two wide column">
-        <div class="field">
-          <label>Caste</label>
-          <input type="text" name="basic[category]" value="<%=data.basic.category%>">
-        </div>
-      </div>
-
-      <div class="three wide column">
-        <div class="field">
-          <label>Mode of admission</label>
-          <input type="text" name="basic[mod_of_adm]" value="<%=data.basic.mod_of_adm%>">
-        </div>
-      </div>
-
-      <div class="two wide column">
-        <div class="field">
-          <label>TFW</label>
-          <input type="text" name="basic[tfw]" value="<%=data.basic.tfw%>">
-        </div>
-      </div>
-
-      <div class="two wide column">
-        <div class="field">
-          <label>Branch</label>
-          <input type="text" name="basic[branch]" value="<%=data.basic.branch%>">
-        </div>
-      </div>
-
-      <div class="two wide column">
-        <div class="field">
-          <label>Date of Birth</label>
-          <input type="text" name="basic[dob]" value="<%=data.basic.dob%>">
-        </div>
-      </div>
-
-      <div class="two wide column">
-        <div class="field">
-          <label>Division</label>
-          <input type="text" name="basic[division]" value="<%=data.basic.division%>">
-        </div>
-      </div>
-
-      <div class="ui calendar" id="example1">
-        <div class="ui input left icon">
-          <i class="calendar icon"></i>
-          <input type="text" placeholder="Date/Time">
-        </div>
-      </div>
-
     </div><br><br>
   <button class="ui green button" type="submit">Submit</button>
 </form>
 
 <script type="text/javascript">
-  $('#example1').calendar();
+  $('#example1').calendar({type: 'date'});
+  $('#BasicDropdown').dropdown({ on: 'hover'});
+  $('abc').dropdown({ on: 'click'});
+  $('ab')
+  .dropdown({
+    allowAdditions: true
+  })
+;
 </script>
 
 

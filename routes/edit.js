@@ -44,8 +44,10 @@ router.get("/edit",authFunctions.isLoggedIn,function(req,res){
 // PoST Route
 //======================================
 router.post("/edit",authFunctions.isLoggedIn,function (req,res) {
-  console.log(req.body.basic);
-  console.log(req.body.enroll);
+//   console.log(req.body.basic);
+// //  console.log("=>",req.body.basic.mod_of_adm);
+//   console.log(req.body.enroll);
+  console.log("==========================");
   var obj = {basic:req.body.basic};
 console.log(obj);
 
@@ -53,7 +55,7 @@ console.log(obj);
     if (err) {
       console.log(err);
     } else {
-      console.log("UpdatedData:",UpdatedData);
+      console.log("UpdatedData:");
       Students.findById(req.body.enroll,function (err,data) {
         if (err) {
           console.log(err);
