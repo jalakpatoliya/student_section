@@ -4,7 +4,6 @@
 var  express               = require("express"),
      app                   = express(),
      bodyParser            = require("body-parser"),
-     regexp                = require('node-regexp'),
      passport              = require("passport"),
      LocalStrategy         = require("passport-local"),
      passportLocalMongoose = require("passport-local-mongoose"),
@@ -32,28 +31,31 @@ mongoose.connect("mongodb://localhost/demo3",function(err,data){
 //==============================================================================
 var Students  = require("./models/student"),
     User       = require("./models/user"),
-    TempUser   = require('./models/tempUser');
+    TempUser   = require('./models/tempUser'),
+    Scheme     = require('./models/Scheme');
 //==============================================
 //===================Using body parser==========
 //==============================================
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(bodyParser.json());
 app.use(express.static(__dirname+"/public"));
 //============================================================================
 //===================== acquiring router =====================================
 //============================================================================
 var indexRoute   = require('./routes/index'),
     searchRoute  = require('./routes/search'),
-    show      = require('./routes/show'),
+    show         = require('./routes/show'),
     showError    = require('./routes/error'),
     edit         = require('./routes/edit'),
     filt         = require('./routes/customsearch'),
     userRoute    = require('./routes/userRoute')
     notify       = require('./routes/admin/notify'),
     redirect     = require('./routes/redirect'),
-    welcome      = require("./routes/welcome");
+    welcome      = require("./routes/welcome"),
+    uploads      = require('./routes/uploads');
+    insertScheme = require('./routes/user/insertScheme');
 //=========================================================
 //=============Initializing Session & Passport=============
 //=========================================================
@@ -82,6 +84,8 @@ app.use(notify);
 app.use(redirect);
 app.use(welcome);
 app.use(show);
+app.use(uploads);
+app.use(insertScheme);
 //=========================================================
 //============= To create Admin ===========================
 //=========================================================
