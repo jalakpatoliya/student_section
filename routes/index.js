@@ -69,46 +69,13 @@ router.post("/",authFunctions.isLoggedIn,upload.single("file"),function (req,res
 sync.do(function(){
 //=========================================================================
   mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
-    //======================== basic Detail D2D ================================
-    //==========================================================================
-    if(req.body.fc=="basic2"){
-      console.log("basic uploaded");
-      mongoData.forEach(elem=>{
-      if(validate.enrollmentFormat(elem['ENROLMENT'])){
-        Students.findById(elem['ENROLMENT'],function (err,data) {
-          if(err){
-            console.log("element can't fiound");
-          }
-          else{
-              var obj = {
-                    start_sem     :3,
-                    cur_sem       :3,
-                    detain        :false,
-                    _id           :elem['ENROLMENT'],
-                    basic:{course:"B.E."}
-                  };
-
-    Students.create(obj,function (err,data) {
-      if (err) {
-        console.log("New basic enty error",_id,err);
-      } else {
-        console.log("created basic details of ",data);
-
-      }
-    });
-  }//esle
-})
-       }
-      })
-    }
-
-
-
     //======================== basic detail Regular  ===========================
     //==========================================================================
-    if(req.body.fc=="basic1"){
+    if(req.body.fc=="basic"){
       console.log("basic uploaded");
-      mongoData.forEach(elem=>{
+      mongoData.forEach(arrval=>{
+              arrval.forEach(elem=>{
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if(validate.enrollmentFormat(elem['ENROLMENT'])){
         var enrol  = elem['ENROLMENT'];
         var reversed_enrol = reverse_a_number(enrol);
@@ -117,26 +84,47 @@ sync.do(function(){
             console.log("element can't fiound");
           }
           else{
-      var obj = {
+              var obj ={};
+        if((enrol.toString()).charAt(5)=='0'){
+           obj = {_id : enrol, start_sem : 1, cur_sem : 1, detain : false, basic : {course : "B.E."} };
 
-      _id           :    enrol,
-      start_sem     :1,
-      cur_sem       :1,
-      detain        :false,
-      basic:{course:"B.E."}
-    };
-    Students.create(obj,function (err,data) {
-      if (err) {
-        console.log("New basic enty error");
-      } else {
-        console.log("created basic details of ",data);
-        User.register(new User({username:enrol,role:"student"}),reversed_enrol,function(err,user){})
-      }
-    });
+           Students.create(obj,function (err,data) {
+             if (err) {
+               console.log("New basic enty error");
+             } else {
+               console.log("created basic details of ",data);
+               User.register(new User({username:enrol,role:"student"}),reversed_enrol,function(err,user){})
+             }
+           });
+
+        }
+        
+        else if ((enrol.toString()).charAt(5)=='3') {
+           obj = {_id : enrol, start_sem : 3, cur_sem : 3, detain : false, basic : {course : "B.E."} };
+
+           Students.create(obj,function (err,data) {
+             if (err) {
+               console.log("New basic enty error");
+             } else {
+               console.log("created basic details of ",data);
+               User.register(new User({username:enrol,role:"student"}),reversed_enrol,function(err,user){})
+             }
+           });
+
+        }
+        else {
+          console.log("WATCH OUT <wrong enrolmnnt sequence> ",enrol);
+        }
+
+
+
   }//esle
 })
        }
-      })
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+})//arrval.foreach
+
+     })//mongo.foreach
     }
 
     //==========================For TERM FEES =========================
