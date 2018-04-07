@@ -1,17 +1,33 @@
 //=====================Importing all dependencies============
-var mongoose = require('mongoose'),
-    express  = require('express'),
-    mongoXlsx = require("mongo-xlsx"),
-    bodyParser = require("body-parser"),
-    multer    = require("multer"),
-    storage = multer.diskStorage(
+var mongoose        = require('mongoose'),
+    express         = require('express'),
+    mongoXlsx       = require("mongo-xlsx"),
+    bodyParser      = require("body-parser"),
+    multer          = require("multer"),
+    storage         = multer.diskStorage(
       {
         destination: function (req, file, cb) {cb(null, 'uploads/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
-      });
-var upload = multer({ storage: storage }),
-    router      = express.Router();
-var flatten = require('flat');
+      }),
+     upload        = multer({ storage: storage }),
+     router        = express.Router(),
+     flatten       = require('flat');
+
+    //==============================================================================
+    //==================== Importin auth dependencies ==============================
+    //=============================================================================
+var passport              = require("passport"),
+    LocalStrategy         = require("passport-local"),
+    passportLocalMongoose = require("passport-local-mongoose"),
+    User                  = require("../models/user"),
+    TempUser              = require("../models/tempUser"),
+    expressSession        = require("express-session"),
+    authFunctions         = require('../validation/authFunctions');
+
+    //====================================================
+    passport.use(new LocalStrategy(User.authenticate()));
+    passport.serializeUser(User.serializeUser()); // it reades, decodes information in session,encodes it
+    passport.deserializeUser(User.deserializeUser());
 //==============================================================================
 //==================== defining sync.do ========================================
 //=============================================================================
@@ -32,124 +48,83 @@ var sync = {
 //===============================================================================
 //======================= Accuring internal module =============================
 //===============================================================================
-var Students   = require("../models/student");
+var Students          = require("../models/student");
 var model=null;
-var validate     = require('../validation/insertValidate');
+var validate          = require('../validation/insertValidate');
+var authFunctions     = require('../validation/authFunctions');
+// var isLoggedIn     = require('../validation/authFunctions');
 //======================================
 // GET Route
 //======================================
-router.get("/",function(req,res){
+router.get("/",authFunctions.isLoggedIn,function(req,res){
   res.render("index.ejs");
 })
 //======================================
 // PoST Route
 //======================================
-router.post("/",upload.single("file"),function (req,res){
+router.post("/",authFunctions.isLoggedIn,upload.single("file"),function (req,res){
   console.log("File Path:",req.file.path);
   console.log("File Category:",req.body.fc);
   var model = null;
 sync.do(function(){
 //=========================================================================
   mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
-    //======================== basic Detail D2D ================================
+    //======================== basic detail Regular  ===========================
     //==========================================================================
-    if(req.body.fc=="basic2"){
+    if(req.body.fc=="basic"){
       console.log("basic uploaded");
-      mongoData.forEach(elem=>{
-      if(validate.enrollmentFormat(elem['Enrollment No.'])){
-        Students.findById(elem['Enrollment No.'],function (err,data) {
+      mongoData.forEach(arrval=>{
+              arrval.forEach(elem=>{
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      if(validate.enrollmentFormat(elem['ENROLMENT'])){
+        var enrol  = elem['ENROLMENT'];
+        var reversed_enrol = reverse_a_number(enrol);
+        Students.findById(enrol,function (err,data) {
           if(err){
             console.log("element can't fiound");
           }
           else{
-      var obj = {
-      start_sem     :3,
-      cur_sem       :3,
-      _id           :    elem['Enrollment No.'],
-      basic:{
-      course:  elem['course'],
-      name:  elem['name'],
-      age:  elem['age'],
-      gender:  elem['gender'],
-      category:  elem['category'],
-      mode_of_adm:  elem['mode_of_adm'],
-      mob_no:  elem['mob_no'],
-      email:  elem['email'],
-      add_t:  elem['add_t'],
-      add_p:  elem['add_p'],
-      tfw:  elem['tfw'],
-      branch:  elem['branch'],
-      dob:  elem['dob'],
-      division:  elem['division'],
-      city:  elem['city'],
-      district:  elem['district'],
-      state:  elem['state'],
-      pincode:  elem['pincode']
-    }
-    };
-    Students.create(obj,function (err,data) {
-      if (err) {
-        console.log("New basic enty error",_id,err);
-      } else {
-        console.log("created basic details of ",data);
+              var obj ={};
+        if((enrol.toString()).charAt(5)=='0'){
+           obj = {_id : enrol, start_sem : 1, cur_sem : 1, detain : false, basic : {course : "B.E."} };
 
-      }
-    });
+           Students.create(obj,function (err,data) {
+             if (err) {
+               console.log("New basic enty error");
+             } else {
+               console.log("created basic details of ",data);
+               User.register(new User({username:enrol,role:"student"}),reversed_enrol,function(err,user){})
+             }
+           });
+
+        }
+        
+        else if ((enrol.toString()).charAt(5)=='3') {
+           obj = {_id : enrol, start_sem : 3, cur_sem : 3, detain : false, basic : {course : "B.E."} };
+
+           Students.create(obj,function (err,data) {
+             if (err) {
+               console.log("New basic enty error");
+             } else {
+               console.log("created basic details of ",data);
+               User.register(new User({username:enrol,role:"student"}),reversed_enrol,function(err,user){})
+             }
+           });
+
+        }
+        else {
+          console.log("WATCH OUT <wrong enrolmnnt sequence> ",enrol);
+        }
+
+
+
   }//esle
 })
        }
-      })
-    }
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+})//arrval.foreach
 
-
-
-    //======================== basic detail Regular      =======================
-    //==========================================================================
-    if(req.body.fc=="basic1"){
-      console.log("basic uploaded");
-      mongoData.forEach(elem=>{
-      if(validate.enrollmentFormat(elem['Enrollment No.'])){
-        Students.findById(elem['Enrollment No.'],function (err,data) {
-          if(err){
-            console.log("element can't fiound");
-          }
-          else{
-      var obj = {
-      start_sem     : 1,
-      cur_sem       :1,
-      _id           :    elem['Enrollment No.'],
-      basic:{
-      course:  elem['course'],
-      name:  elem['name'],
-      age:  elem['age'],
-      gender:  elem['gender'],
-      category:  elem['category'],
-      mode_of_adm:  elem['mode_of_adm'],
-      mob_no:  elem['mob_no'],
-      email:  elem['email'],
-      add_t:  elem['add_t'],
-      add_p:  elem['add_p'],
-      tfw:  elem['tfw'],
-      branch:  elem['branch'],
-      dob:  elem['dob'],
-      division:  elem['division'],
-      city:  elem['city'],
-      district:  elem['district'],
-      state:  elem['state'],
-      pincode:  elem['pincode']
-    }
-    };
-    Students.create(obj,function (err,data) {
-      if (err) {
-        console.log("New basic enty error",_id,err);
-      } else {
-        console.log("created basic details of ",data);
-      }
-    });
-  }//esle
-})
-       }
-      })
+     })//mongo.foreach
     }
 
     //==========================For TERM FEES =========================
@@ -190,178 +165,130 @@ sync.do(function(){
       }
       });
     }
-    //============================= Term Fees Over ===============================
+    //============================= Term Fees Over =================================
+    //===============================================================================
     //++++++++++++++++++++++++++++++For Marksheet ================================== #2
-    else if (req.body.fc=="result") {
-      console.log("Excel of Marksheet is uploaded");
-      mongoData.forEach(elem => {
-        if(validate.enrollmentFormat(elem.MAP_NUMBER)){
+    else if (req.body.fc=="result"){
+      console.log("result uploading initiated");
+      mongoData.forEach(elem=>{
+        if(validate.enrollmentFormat(elem['MAP_NUMBER'])){
+          Students.findById(elem['MAP_NUMBER'],function(err,data){
+            if(err){
+              console.log("searching error :",err);
+            }//student.find by id call back if
+            else{
+              console.log("preparing marksheet object");
+              var _id = elem['MAP_NUMBER'],
+                  sem = "s_"+elem.sem,
+                  subjectstring="",
+                  resultstring = data[sem].result.res,
+                  obj={};
 
-        var sem ="s_"+elem.sem,
-            abs = +elem.BCKAB||0,
-            //================================================================
-            //================== obejectcreation=============================
-            obj = {
-                        total_back:elem.TOTBACKL,
-                        cpi:elem.CPI,
-                        cgpa:elem.CGPA,
-                        backs:{
-                          sem1:elem.BCK1,
-                          sem2:elem.BCK2,
-                          sem3:elem.BCK3,
-                          sem4:elem.BCK4,
-                          sem5:elem.BCK5,
-                          sem6:elem.BCK6,
-                          sem7:elem.BCK7,
-                          sem8:elem.BCK8
-                        },
-                        [sem]:{
-                          Tsubject:elem.TOTSUBCOUNT,
-                          result:{
-                            spi:elem.SPI,
-                            res:elem.RESULT,
-                           sub1:{
-                             code:elem.SUB1,
-                             name:elem.SUB1NA,
-                             sub_grade:elem.SUB1GR,
-                             absent:abs,
-                             these:elem.SUB1GRE,
-                             thpa:elem.SUB1GRM,
-                             thtot:elem.SUB1GRTH,
-                             prese:elem.SUB1GRV,
-                             prpa:elem.SUB1GRI,
-                             prtot:elem.SUB1GRPR
-                           },
-                           sub2:{
-                             code:elem.SUB2,
-                             name:elem.SUB2NA,
-                             sub_grade:elem.SUB2GR,
-                             absent:abs,
-                             these:elem.SUBG2RE,
-                             thpa:elem.SUB2GRM,
-                             thtot:elem.SUB2GRTH,
-                             prese:elem.SUB2GRV,
-                             prpa:elem.SUB2GRI,
-                             prtot:elem.SUB2GRPR
-                           },
-                           sub3:{
-                             code:elem.SUB3,
-                             name:elem.SUB3NA,
-                             sub_grade:elem.SUB3GR,
-                             absent:abs,
-                             these:elem.SUB3GRE,
-                             thpa:elem.SUB3GRM,
-                             thtot:elem.SUB3GRTH,
-                             prese:elem.SUB3GRV,
-                             prpa:elem.SUB3GRI,
-                             prtot:elem.SUB3GRPR
-                           },
-                           sub4:{
-                             code:elem.SUB4,
-                             name:elem.SUB4NA,
-                             sub_grade:elem.SUB4GR,
-                             absent:abs,
-                             these:elem.SUB4GRE,
-                             thpa:elem.SUB4GRM,
-                             thtot:elem.SUB4GRTH,
-                             prese:elem.SUB4GRV,
-                             prpa:elem.SUB4GRI,
-                             prtot:elem.SUB4GRPR
-                           },
-                           sub5:{
-                             code:elem.SUB5,
-                             name:elem.SUB5NA,
-                             sub_grade:elem.SUB5GR,
-                             absent:abs,
-                             these:elem.SUB5GRE,
-                             thpa:elem.SUB5GRM,
-                             thtot:elem.SUB5GRTH,
-                             prese:elem.SUB5GRV,
-                             prpa:elem.SUB5GRI,
-                             prtot:elem.SUB5GRPR
-                           },
-                           sub6:{
-                             code:elem.SUB6,
-                             name:elem.SUB6NA,
-                             sub_grade:elem.SUB6GR,
-                             absent:abs,
-                             these:elem.SUB6GRE,
-                             thpa:elem.SUB6GRM,
-                             thtot:elem.SUB6GRTH,
-                             prese:elem.SUB6GRV,
-                             prpa:elem.SUB6GRI,
-                             prtot:elem.SUB6GRPR
-                           },
-                           sub7:{
-                             code:elem.SUB7,
-                             name:elem.SUB7NA,
-                             sub_grade:elem.SUB7GR,
-                             absent:abs,
-                             these:elem.SUB7GRE,
-                             thpa:elem.SUB7GRM,
-                             thtot:elem.SUB7GRTH,
-                             prese:elem.SUB7GRV,
-                             prpa:elem.SUB7GRI,
-                             prtot:elem.SUB7GRPR
-                           },
-                           sub8:{
-                             code:elem.SUB8,
-                             name:elem.SUB8NA,
-                             sub_grade:elem.SUB8GR,
-                             absent:abs,
-                             these:elem.SUB8GRE,
-                             thpa:elem.SUB8GRM,
-                             thtot:elem.SUB8GRTH,
-                             prese:elem.SUB8GRV,
-                             prpa:elem.SUB8GRI,
-                             prtot:elem.SUB8GRPR
-                           },
-                           sub9:{
-                             code:elem.SUB9,
-                             name:elem.SUB9NA,
-                             sub_grade:elem.SUB9GR,
-                             absent:abs,
-                             these:elem.SUB9GRE,
-                             thpa:elem.SUB9GRM,
-                             thtot:elem.SUB9GRTH,
-                             prese:elem.SUB9GRV,
-                             prpa:elem.SUB9GRI,
-                             prtot:elem.SUB9GRPR
-                           },
-                           sub10:{
-                             code:elem.SUB10,
-                             name:elem.SUB10NA,
-                             sub_grade:elem.SUB10GR,
-                             absent:abs,
-                             these:elem.SUB10GRE,
-                             thpa:elem.SUB10GRM,
-                             thtot:elem.SUB10GRTH,
-                             prese:elem.SUB10GRV,
-                             prpa:elem.SUB10GRI,
-                             prtot:elem.SUB10GRPR
-                           }
+              //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+              //============   object creation ============================
+              obj={
+                total_back:elem.TOTBACKL,
+                      cpi:elem.CPI,
+                      cgpa:elem.CGPA,
+                      backs:{},
+                      s_1:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_2:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_3:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_4:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_5:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_6:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_7:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}},
+                      s_8:{result:{sub1:{},sub2:{},sub3:{},sub4:{},sub5:{},sub6:{},sub7:{},sub8:{},sub9:{},sub10:{}}}
+              };
 
+             if(resultstring != "FAIL"){
+               console.log("fail");
+                for(var i=1;i<=8;i++){
+                       obj.backs["s_"+i]=elem["BCK"+i],
+                       obj[sem].result["sub"+i].code       = +elem["SUB"+i]||null;
+                       obj[sem].result["sub"+i].name       = elem["SUB"+i+"NA"]   = elem["SUB"+i+"NA"]||null;
+                       obj[sem].result["sub"+i].sub_grade  = elem["SUB"+i+"GR"]   = elem["SUB"+i+"GR"]||null;
+                       obj[sem].result["sub"+i].absent     = elem["SUB"+i+"AB"]   = elem["SUB"+i+"AB"]||null;
+                       obj[sem].result["sub"+i].these      = elem["SUB"+i+"GRE"]  = elem["SUB"+i+"GRE"]||null;
+                       obj[sem].result["sub"+i].thpa       = elem["SUB"+i+"GRM"]  = elem["SUB"+i+"GRM"]||null;
+                       obj[sem].result["sub"+i].thtot      = elem["SUB"+i+"GRTH"] = elem["SUB"+i+"GRTH"]||null;
+                       obj[sem].result["sub"+i].prese      = elem["SUB"+i+"GRV"]  = elem["SUB"+i+"GRV"]||null ;
+                       obj[sem].result["sub"+i].prtot      = elem["SUB"+i+"GRPR"] = elem["SUB"+i+"GRPR"]||null;
+                       obj[sem].result["sub"+i].prpa       = elem["SUB"+i+"GRI"]  = elem["SUB"+i+"GRI"]||null;
+
+                }
+             }//fifail
+             else{
+               for(var i=1;i<=8;i++){
+                     obj.backs["s_"+i]=elem["BCK"+i]
+               }
+               for(var i=1;i<= data.backs[sem];i++){
+                      subjectstring = "SUB"+i;
+                      for(j=1;j<=data[sem].Tsubject;j++){
+                        if(elem[subjectstring]==data[sem].result["sub"+j].code){
+                          obj[sem].result["sub"+j].code       = +elem["SUB"+i]||null;
+                          obj[sem].result["sub"+j].name       = elem["SUB"+i+"NA"]   = elem["SUB"+i+"NA"]||null;
+                          obj[sem].result["sub"+j].sub_grade  = elem["SUB"+i+"GR"]   = elem["SUB"+i+"GR"]||null;
+                          obj[sem].result["sub"+j].absent     = elem["SUB"+i+"AB"]   = elem["SUB"+i+"AB"]||null;
+                          obj[sem].result["sub"+j].these      = elem["SUB"+i+"GRE"]  = elem["SUB"+i+"GRE"]||null;
+                          obj[sem].result["sub"+j].thpa       = elem["SUB"+i+"GRM"]  = elem["SUB"+i+"GRM"]||null;
+                          obj[sem].result["sub"+j].thtot      = elem["SUB"+i+"GRTH"] = elem["SUB"+i+"GRTH"]||null;
+                          obj[sem].result["sub"+j].prese      = elem["SUB"+i+"GRV"]  = elem["SUB"+i+"GRV"]||null ;
+                          obj[sem].result["sub"+j].prtot      = elem["SUB"+i+"GRPR"] = elem["SUB"+i+"GRPR"]||null;
+                          obj[sem].result["sub"+j].prpa       = elem["SUB"+i+"GRI"]  = elem["SUB"+i+"GRI"]||null;
                           }
                         }
-                      };
-        //===============================================================
-        //===============================================================
+                      }
+                    }//esle fail
+              //-------------------- Object created ---------------------------
+              //--------------------------------------------------------------
+              Students.findByIdAndUpdate(_id,flatten(obj),{overwrite:false},function(err, updatedItem){
+                 if(err){
+                   console.log("updating error",err);
+                 }
+                 else{
+                   console.log("updated",updatedItem);
+                 }
+               })
+               //======================= object updated ======================
+            }//student.find by id call back else
+          })//student.find by id
+        }//fivalidate enroll
+      })//mongoData.foreach
+      //====================== finally after updating whole marksheet calculating and updating detain over whole database ===
+      Students.find(function(err,collection){
+        collection.forEach(doc=>{
+          var obj={},
+              year=0,
+              kt =0;
+              for(var i=1;i<doc.cur_sem;i++){
+                kt = kt + doc.backs["s_"+i];
+              }
+              if(kt>4){
+                   obj.detain = true;
+                   year = (doc.cur_sem==3 || doc.cur_sem==4) ? 2 :(doc.cur_sem==5 || doc.cur_sem==6) ? 3 : 4 ;
+                   obj.detain_history.push(year);
+                   obj.cur_sem = doc.cur_sem+1;
+              }//fi kt
+              else{
+                obj.cur_sem = doc.cur_sem+1;
+              }
+              Students.findByIdAndUpdate(doc._id,flatten(obj),{overwrite:false},function(err, updatedItem){
+                 if(err){
+                   console.log("updating error",err);
+                 }
+                 else{
+                   console.log("updated",updatedItem);
+                 }
+               })//find and update
+        })//collection.forEach
+      })//studentsfind
+      //============================ detain currnt sem updated ===========================================================
+    }//req.body
 
-        Students.findById(elem.MAP_NUMBER,function (err,data) {
-          if (!data) {
-            console.log("no existing data is found ",elem.MAP_NUMBER);
-          } else {
-            Students.findByIdAndUpdate(elem.MAP_NUMBER,flatten(obj),{overwrite:false},function(err,data){
-              if(err){console.log("updating error Marksheet",err);}
-              else{console.log("updated ",data);}
-            })
-          }
-        })
-      }
-      });
-    }
     //++++++++++++++++++++++++++++++ Marksheet Over================================== #2
-    //=============================For Exam Fees  ===============================
+    //===============================================================================
+    //=============================For Exam Fees  ===================================
     else if (req.body.fc=="EFee") {
         console.log("Excel of Exam fee uploaded");
         mongoData.forEach(elem =>{
@@ -387,9 +314,9 @@ sync.do(function(){
                     sem    = "s_"+elem['Current Semester'],
                     obj    = {},
                     wholeField={};
-                if(validate.detain(_id)){
+                if(data.detain == true ){
 
-                    sem    = "d_"+elem['Current Semester'];
+                    sem    = "D_"+elem['Current Semester'];
                     obj    = {[sem]:{Exam_fee_Rem:total}};
                 }
                 else{
@@ -439,8 +366,14 @@ sync.do(function(){
 //==================================================================================
 
 })
-
-
+//=========================================================================
+//==================== function to Reverse a number =======================
+//=========================================================================
+function reverse_a_number(n)
+{
+	n = n + "";
+	return n.split("").reverse().join("");
+}
 
 
 
