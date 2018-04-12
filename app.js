@@ -31,7 +31,7 @@ mongoose.connect("mongodb://localhost/demo3",function(err,data){
 //==============================================================================
 var Students  = require("./models/student"),
     User       = require("./models/user"),
-    TempUser   = require('./models/tempUser'),
+    TempUser   = require('./models/tempUser');
     Scheme     = require('./models/Scheme');
 //==============================================
 //===================Using body parser==========
@@ -55,7 +55,7 @@ var indexRoute   = require('./routes/index'),
     redirect     = require('./routes/redirect'),
     welcome      = require("./routes/welcome"),
     uploads      = require('./routes/uploads');
-    insertScheme = require('./routes/user/insertScheme');
+   insertScheme = require('./routes/admin/insertSchema');
 //=========================================================
 //=============Initializing Session & Passport=============
 //=========================================================
