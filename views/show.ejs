@@ -1,13 +1,28 @@
-<% include ./partials/header %>
+<%
+if(currentUser.role=="user"){
+  %>
+  <% include ./user/partials/header %>
+<%}
+else if(currentUser.role=="admin"){
+  %>
+  <% include ./admin/partials/header %>
+<%}else if(currentUser.role=="student"){
+  %>
+  <% include ./student/partials/header %>
+<%}%>
   <br>
   <div class="ui container">
     <!--======================================================================  -->
    <!--====================== Edit form ===================================  -->
    <!--======================================================================  -->
- <form  action="/edit" method="get">
+
+   <% if(currentUser.role=="user"||currentUser.role=="admin"){ %>
+     <form  action="/edit" method="get">
      <input type="hidden" name="searched_enroll" value="<%=data._id%>">
      <button style="float:right;" class="ui  positive button" type="submit" value="">Edit</button>
-   </form>
+     </form>
+   <%}%>
+
    <!--======================================================================  -->
   <!--====================== User Profile layout  ===================================  -->
   <!--======================================================================  -->
@@ -19,11 +34,11 @@
     <pre style="font-weight:bold;">
       Name               : <%= data.basic.name %>
       Enrollment No.     : <%= data._id %>
-      Branch             :<%= data.basic.branch %>
+      Branch             : <%= data.basic.branch %>
       Mobile No.         : <%= data.basic.mob_no %>
       Email ID           : <%= data.basic.email %>
       Address Permanent  : <%= data.basic.add_p %>
-      Course             : <%=   data.basic.course %>
+      Course             : <%= data.basic.course %>
     </pre>
   </div>
 
@@ -44,14 +59,14 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="4">Enrollment No. : <%= data._id%></td>
+              <td colspan="4">Enrollment No. : <%=data._id%></td>
 
             </tr>
             <tr>
               <td> Course </td>
               <td><%=data.basic.course %></td>
               <td> Name </td>
-              <td><%= data.basic.name %> </td>
+              <td><%=data.basic.name %> </td>
             </tr>
             <tr>
               <td> Age </td>
@@ -103,27 +118,47 @@
           <thead>
             <thead>
                 <tr>
-                  <th>Semester</th>
-                  <th>Exam Fees</th>
+                  <th rowspan="2">Semester</th>
+                  <th colspan="2">Exam Fees</th>
+                </tr>
+                <tr>
+                  <th>Regular</th>
+                  <th>Remedial</th>
                 </tr>
 
           </thead>
+          <tbody>
 
-      <%   var cusem ;
-            cusem =  data.cur_sem;
-      for( i=1;i<= cusem  ;i++){
-            var s;
-            s = 's_'+i;
-            %>
-            <tr>
-              <td>
-                <%= i %>
-              </td>
-              <td>
-                <%= data[s].Exam_fee_Reg %>
-              </td>
-            </tr>
-            <% } %>
+            <%   var cusem = 0 ;
+          cusem =  data.cur_sem;
+          var i=0;
+    for( i=1;i<= cusem ;i++){
+          %>
+          <tr>
+            <td>
+              <%=i %>
+            </td>
+            <td>
+              <%=data['s_'+i].Exam_fee_Reg %>
+            </td>
+            <td>
+              <%=data['s_'+i].Exam_fee_Rem %>
+            </td>
+          </tr>
+          <% if(data.hasOwnProperty(['D_'+i].Exam_fee_Rem) ){ %>
+          <tr>
+            <td>
+              <%=i %> Detained
+            </td>
+            <td colspan="2">
+              <%=data['D_'+i].Exam_fee_Rem %>
+            </td>
+          </tr>
+          <% }
+           }
+         %>
+
+          </tbody>
         </table>
 
       </div>
@@ -137,34 +172,47 @@
                   <th >Semester</th>
                   <th>Term Fee</th>
                 </tr>
-
           </thead>
           <%
+          var i=0;
          for( i=1;i<=data.cur_sem;i++){
            var s;
            s = 's_'+i;
            %>
             <tr>
               <td>
-                <%= i %>
+                <%=i %>
               </td>
               <td>
-                <%= data[s].Term_fee %>
+                <%=data[s].Term_fee %>
               </td>
             </tr>
-            <% } %>
+            <% }
+            if(data['s_'+i].Term_fee){
+              %>
+              <tr>
+                <td>
+                  <%=i %>
+                </td>
+                <td>
+                  <%=data[s].Term_fee %>
+                </td>
+              </tr>
+              <%
+            }
+             %>
+
+
         </table>
       </div>
 
 
 
-  <% for(var i = 1;i<=data.cur_sem;i++) {
+  <% for(var i = 1;i<= data.cur_sem;i++) {
          var sem ;
          sem = "s_" + i;
          var total_sub = data[sem].Tsubject; %>
-
          <div class="twelve wide column">
-
 <table class="ui  celled green table">
   <thead>
     <tr>
@@ -186,51 +234,28 @@
       <th>Total</th>
     </tr>
   </thead>
-
   <%  for (var j = 1; j < total_sub; j++) {
       var sub = "sub" +j;  %>
-
   <tr>
-    <td><%= data[sem].result[sub].code %></td>
-    <td><%= data[sem].result[sub].name %></td>
-    <td><%= data[sem].result[sub].these %></td>
-    <td><%= data[sem].result[sub].thpa %></td>
-    <td><%= data[sem].result[sub].thtot %></td>
-    <td><%= data[sem].result[sub].prese %></td>
-    <td><%= data[sem].result[sub].prpa %></td>
-    <td><%= data[sem].result[sub].prtot %></td>
-    <td><%= data[sem].result[sub].sub_grade %></td>
+    <td><%=data[sem].result[sub].code %></td>
+    <td><%=data[sem].result[sub].name %></td>
+    <td><%=data[sem].result[sub].these %></td>
+    <td><%=data[sem].result[sub].thpa %></td>
+    <td><%=data[sem].result[sub].thtot %></td>
+    <td><%=data[sem].result[sub].prese %></td>
+    <td><%=data[sem].result[sub].prpa %></td>
+    <td><%=data[sem].result[sub].prtot %></td>
+    <td><%=data[sem].result[sub].sub_grade %></td>
   </tr>
-
-
   <% }  %>
-
   <thead>
   <tr>
-  <th colspan="9"><pre>  SPI: <%= data[sem].result.spi %>   CPI: <%= data.cpi %>   Result: <%= data[sem].result.res %>   </pre>   </th>
-
+  <th colspan="9"><pre>  SPI: <%= data[sem].result.spi %>   CPI: <%=data.cpi %>   Result: <%=data[sem].result.res %>   </pre>   </th>
   </tr>
   </thead>
 </table>
-
 </div>
     <% } %>
 </div><%# container %>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <% include ./partials/footer %>

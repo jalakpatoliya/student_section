@@ -1,0 +1,57 @@
+<% include ./partials/header %>
+
+<form class="ui form" action="/student/uploads/pdf" enctype="multipart/form-data" method="post">
+  <br><br>
+
+  <div class="field">
+    <label for="fc"> File  Category : </label>
+  </div>
+  <div class="four fields">
+    <div class="field">
+      <select class="ui dropdown-menu" name="fc" required>
+        <option value="">       Select file category</option>
+        <option value="E"> Exam Fees Receipt</option>
+        <option value="T"> Term Fees Receipt</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="file"> Select file : </label>
+  </div>
+
+  <div class="four fields">
+    <div class="field">
+      <input type="file" name="file" >
+    </div>
+  </div>
+
+  <div class="four fields">
+    <div class="field">
+      <div class="ui input">
+        <button class="ui green button" type="submit" name="button">upload</button>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<hr>
+
+<% if(files){
+  files.forEach(file => { %>
+  <%  if (file.contentType==='application/pdf') { %>
+        <iframe src="/student/file/<%= file.filename%>" width="450" height="450"  ></iframe>
+    <% } %>
+
+    <form  action="/student/file/<%=file._id%>?_method=DELETE" method="post">
+    <button type="submit"  class="ui button red">delete</button>
+    </form>
+
+    </div>
+<% });
+}else { %>
+  No files to show
+<% }%>
+
+<% include ../partials/footer %>
