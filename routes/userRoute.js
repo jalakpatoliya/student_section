@@ -5,35 +5,15 @@ var passport              = require("passport"),
     passportLocalMongoose = require("passport-local-mongoose"),
     mongoose              = require("mongoose"),
     User                  = require("../models/user"),
-    expressSession        = require("express-session");
+    TempUser              = require("../models/tempUser"),
+    expressSession        = require("express-session"),
+    authFunctions         = require('../validation/authFunctions');
 
     //====================================================
     passport.use(new LocalStrategy(User.authenticate()));
     passport.serializeUser(User.serializeUser()); // it reades, decodes information in session,encodes it
     passport.deserializeUser(User.deserializeUser());
 
-
-    //=========================================================
-    //=============Sigh Up route================================
-    //=========================================================
-    // Show sign up form
-    router.get("/register",isLoggedIn,isAdmin,function(req,res){
-      res.render("register.ejs");
-    })
-
-    // handling user sign up
-    router.post("/register",function(req,res){
-        User.register(new User({username: req.body.username}),req.body.password,function(err,user){
-          if (err) { // password is hashed by resiter and then saved in DB
-            res.send(err);
-            res.redirect("/register");
-          } else {
-            passport.authenticate("local")(req,res,function(){ // local can be replaced by twitter or fb
-              res.redirect("/");      //but here we are authenticating locally
-            })
-          }
-        })
-    })
     //=========================================================
     //=============Login route================================
     //=========================================================
@@ -45,7 +25,7 @@ var passport              = require("passport"),
     //login logic
     //MIDDLEWARE
     router.post("/login",passport.authenticate("local",{
-      successRedirect:"/",
+      successRedirect:"/welcome",
       failureRedirect:"/login"
     }),function(req,res){console.log(req.body.username);});
     //=========================================================
@@ -56,41 +36,52 @@ var passport              = require("passport"),
       res.redirect("/");
     })
 
-
     //=========================================================
-    //================== isAdmin function =====================
+    //============= Request for an account ====================
     //=========================================================
-    function isAdmin(req,res,next) {
-      console.log(req.user.username);
-      if (req.isAuthenticated()){
-         console.log("isAdmin: user is logged in");
-        User.findOne({'username':req.user.username},function (err,data) {
+    router.post("/registerRequest",function (req,res) {
+      TempUser.create({username:req.body.name,password:req.body.pass})
+      res.redirect("/")
+    })
+    //=========================================================
+    //============= Notifications of admin ====================
+    //=========================================================
+    router.get("/notifications",function(req,res){
+      TempUser.find({},function(err,data){
+        if (err) {
+          console.log(err);
+        } else {
+          res.render("./admin/notifications.ejs",{data:data});
+        }
+      })
+    })
+    //=========================================================
+    //============= Notifications of admin ====================
+    //=========================================================
+    router.post("/notifications",function(req,res){
+      console.log(req.body);
+      if (req.body.delete=="delete") {
+        console.log("del");
+        TempUser.findOneAndRemove({username:req.body.username,password:req.body.password},function(err) {
           if (err) {
-            console.log("findOne error");
             console.log(err);
-          } else if(data.role=='admin'){
-            console.log(data.role);
-            return next();
-          }else{res.redirect("/login");}
+          }else {
+            res.redirect("/notifications")
+
+          }
         })
-      }else{
-        console.log("isAdmin: is authenticated is false");
-          res.redirect("/login");
       }
-    }
-
-    //=========================================================
-    //=============== isLoggedIn function======================
-    //=========================================================
-    //authenticating if user is loggedin or not
-    function isLoggedIn(req,res,next) {
-      if (req.isAuthenticated()){
-        console.log("user is logged in");
-        return next();
+      else if(req.body.add=="add") {
+        console.log("add");
+        User.register(new User({username:req.body.username,role:"user"}),req.body.password,function(err,user){})
+        TempUser.findOneAndRemove({username:req.body.username,password:req.body.password},function(err) {
+          if (err) {
+            console.log(err);
+          }else {
+            res.redirect("/notifications")
+          }
+        })
       }
-      console.log("user is not logged in");
-        res.redirect("/login");
-    }
-
+    })
 
 module.exports = router;

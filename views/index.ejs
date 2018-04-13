@@ -1,29 +1,65 @@
-<% include ./partials/header %>
-
-    <form class="ui form" action="/" enctype="multipart/form-data" method="post">
+<%
+if(currentUser.role=="user"){
+  %>
+  <% include ./user/partials/header %>
+<%}
+else if(currentUser.role=="admin"){
+  %>
+  <% include ./admin/partials/header %>
+<%}else if(currentUser.role=="student"){
+  %>
+  <% include ./student/partials/header %>
+<%}%>
+<div class="ui tab" data-tab="tab-name">
+  <div class="ui active dimmer">
+    <div class="ui text loader">Uploading</div>
+  </div>
+</div>
+<!-- ------------------------------------------------------------------------- -->
+    <form class="ui form" action="/" enctype="multipart/form-data" method="post" onsubmit="myFunction()">
       <br><br>
-      <div class="ui field">
-        <label for="fc"> File Category: </label>
+      <div class="field">
+        <label for="fc"> File  Category : </label>
       </div>
-      <select class="ui dropdown-menu" name="fc">
-        <option value="">       Select file category</option>
-        <option value="basic1"> New Entry Regular</option>
-        <option value="basic2"> New Entry D2D</option>
-        <option value="TFee">   Term Fees</option>
-        <option value="EFee">   Exam Fees</option>
-        <option value="HFee">   Hostel Fees</option>
-        <option value="result"> Result</option>
-
-  </select> <br>
-
-      <div class="ui input">
-        <input class="ui input  button" type="file" name="file" required>
+      <div class="four fields">
+        <div class="field">
+          <select class="ui dropdown-menu" name="fc">
+            <option value="">       Select file category</option>
+            <option value="basic"> New Entry Regular</option>
+            <option value="TFee">   Term Fees</option>
+            <option value="EFee">   Exam Fees</option>
+            <option value="HFee">   Hostel Fees</option>
+            <option value="result"> Result</option>
+          </select>
+        </div>
       </div>
-      <button class="ui green button" type="submit" name="button">upload</button>
+
+      <div class="field">
+        <label for="file"> File    Path   : </label>
+      </div>
+      <div class="four fields">
+        <div class="field">
+          <div class="ui input">
+            <input class="ui input  button" type="file" name="file" required>
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui input">
+            <button class="ui green button" type="submit" name="button" id="tog" >upload</button>
+          </div>
+        </div>
+      </div>
 
     </form><br><br>
 
-
-
-
+<!-- -------------------------------------------------------------------------------------- -->
   <% include ./partials/footer %>
+  <script type="text/javascript">
+  function myFunction(){
+    $.tab('change tab', 'tab-name');
+  }
+  // $('#tog').on('submit', function() {
+  //   $.tab('change tab', 'tab-name');
+  // });
+
+  </script>

@@ -1,4 +1,4 @@
-//==============================================================================
+ //==============================================================================
 //======================  Importing dependencies  ==================================
 //==============================================================================
 var  express               = require("express"),
@@ -7,7 +7,7 @@ var  express               = require("express"),
      passport              = require("passport"),
      LocalStrategy         = require("passport-local"),
      passportLocalMongoose = require("passport-local-mongoose"),
-     expressSession        = require("express-session");
+     expressSession        = require("express-session"),
      mongoose              = require("mongoose"),
      mongoXlsx             = require("mongo-xlsx"),
      multer                = require("multer"),
@@ -29,25 +29,35 @@ mongoose.connect("mongodb://localhost/demo3",function(err,data){
 //==============================================================================
 //======================  Importing models  ==================================
 //==============================================================================
-var Students   = require("./models/student"),
-    User       = require("./models/user");
+var Students  = require("./models/student"),
+    User       = require("./models/user"),
+    TempUser   = require('./models/tempUser');
+    // Scheme     = require('./models/Scheme');
 //==============================================
 //===================Using body parser==========
 //==============================================
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(bodyParser.json());
 app.use(express.static(__dirname+"/public"));
 //============================================================================
 //===================== acquiring router =====================================
 //============================================================================
 var indexRoute   = require('./routes/index'),
     searchRoute  = require('./routes/search'),
+    show         = require('./routes/show'),
     showError    = require('./routes/error'),
     edit         = require('./routes/edit'),
     filt         = require('./routes/customsearch'),
-    userRoute    = require('./routes/userRoute');
+    userRoute    = require('./routes/userRoute')
+    notify       = require('./routes/admin/notify'),
+    redirect     = require('./routes/redirect'),
+    welcome      = require("./routes/welcome"),
+    uploads      = require('./routes/uploads'),
+    receipts     = require('./routes/receipts');
+
+    // insertScheme = require('./routes/user/insertScheme');
 //=========================================================
 //=============Initializing Session & Passport=============
 //=========================================================
@@ -66,15 +76,19 @@ app.use(function (req,res,next) {
   res.locals.currentUser = req.user;
   next();
 });
-
 app.use(indexRoute);
 app.use(searchRoute);
 app.use(showError);
 app.use(filt);
 app.use(edit);
 app.use(userRoute);
-
-
+app.use(notify);
+app.use(redirect);
+app.use(welcome);
+app.use(show);
+app.use(uploads);
+app.use(receipts);
+// app.use(insertScheme);
 //=========================================================
 //============= To create Admin ===========================
 //=========================================================
