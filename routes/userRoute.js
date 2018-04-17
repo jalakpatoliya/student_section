@@ -39,7 +39,12 @@ var passport              = require("passport"),
     //=========================================================
     //============= Request for an account ====================
     //=========================================================
-    router.post("/registerRequest",function (req,res) {
+    // Render signup form
+    router.get("/signup",function(req,res){
+      res.render("signup.ejs")
+    })
+    //  Sign up logic
+      router.post("/registerRequest",function (req,res) {
       TempUser.create({username:req.body.name,password:req.body.pass})
       res.redirect("/")
     })

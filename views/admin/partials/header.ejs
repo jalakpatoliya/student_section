@@ -47,16 +47,19 @@
             <%  if (!currentUser) {  %>
               <a class="item" href="/login">Login </a>
               <% } else if(currentUser.role=="user"){ %>
-                <a class="item" href="#">Signed in as <%= currentUser.username%></a>
-                <a class="item" href="/logout">Logout</a>
+                <a class="item" href="#" style="text-align:center;">Signed in as:</a>
+                <h2 class="item" style="text-align:center;"><%= currentUser.username%></h2>
+                <a class="item" href="/logout" style="text-align:center;">Logout</a>
                 <% }else if (currentUser.role=="admin") { %>
                   <div class="ui top right attached label">Admin</div>
-                  <a class="item" href="#">Signed in as <%= currentUser.username%></a>
-                  <a class="item" href="/logout">Logout</a>
-                  <% } else if (currentUser.role=="student") { %>
-                    <div class="ui top right attached label">Student</div>
-                    <a class="item" href="#">Signed in as <%= currentUser.username%></a>
-                    <a class="item" href="/logout">Logout</a>
+                  <a class="item" href="#" style="text-align:center;">Signed in as:</a>
+                  <h2 class="item"style="text-align:center;"><%= currentUser.username%></h2>
+                  <a class="item" href="/logout" style="text-align:center;">Logout</a>
+                  <% }else if (currentUser.role=="student") { %>
+                    <div class="ui top right attached label">student</div>
+                    <a class="item" href="#" style="text-align:center;">Signed in as: </a>
+                    <h2 class="item"style="text-align:center;"><%= currentUser.username%></h2>
+                    <a class="item" href="/logout" style="text-align:center;">Logout</a>
                     <% } %>
           </div>
         </div>
