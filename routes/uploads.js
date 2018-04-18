@@ -37,7 +37,7 @@ const storage = new  GridFsStorage({
         if (err) {
           return reject(err);
         }
-        const filename = "E140160107090" + path.extname(file.originalname);
+        const filename = req.body.fc + req.user.username + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
           bucketName: 'uploads'
@@ -75,10 +75,12 @@ router.get("/student/uploads/pdf",function(req,res){
 router.post('/student/uploads/pdf',upload.single('file'),function(req,res){
   // res.json({file: req.file});
 
-  console.log(req.body.abc);
+  console.log(req.user.username);
   res.redirect("/student/uploads/pdf");
 }
 );
+
+
 
 
 // @route GET /pdf/:filename

@@ -2,6 +2,20 @@
 
 <form class="ui form" action="/student/uploads/pdf" enctype="multipart/form-data" method="post">
   <br><br>
+
+  <div class="field">
+    <label for="fc"> File  Category : </label>
+  </div>
+  <div class="four fields">
+    <div class="field">
+      <select class="ui dropdown-menu" name="fc" required>
+        <option value="">       Select file category</option>
+        <option value="E"> Exam Fees Receipt</option>
+        <option value="T"> Term Fees Receipt</option>
+      </select>
+    </div>
+  </div>
+  
   <div class="field">
     <label for="file"> Select file : </label>
   </div>
@@ -12,7 +26,6 @@
     </div>
   </div>
 
-  <input type="text" name="abc" >
   <div class="four fields">
     <div class="field">
       <div class="ui input">
