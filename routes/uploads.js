@@ -1,15 +1,15 @@
-//=================================Importing all dependencies============
+//=================================Importing all dependencies============r
 var mongoose = require('mongoose'),
     express  = require('express'),
     router   = express.Router(),
-    Students  = require('../models/student'); //Importing multiple models and schemas
+    Students  = require('../models/student'), //Importing multiple models and schemas
     authFunctions = require('../validation/authFunctions'),
     path                  = require('path'),
     crypto                = require('crypto'),
     multer                = require("multer"),
     GridFsStorage         = require('multer-gridfs-storage'),
     Grid                  = require('gridfs-stream'),
-    methodOverride        = require('method-override'),
+    methodOverride        = require('method-override');
 
 // Middleware
 router.use(methodOverride('_method'));
@@ -74,8 +74,28 @@ router.get("/student/uploads/pdf",function(req,res){
 // @desc Uploads file to DB    ,upload.single('file')
 router.post('/student/uploads/pdf',upload.single('file'),function(req,res){
   // res.json({file: req.file});
+  if (req.body.fc=='E') {
+    Students.findByIdAndUpdate(req.user.username,{EFee_pdf:true},{overwrite:false},function(err, updatedItem){
+       if(err){
+         console.log("updating error",err);
+       }
+       else{
+         console.log("Tfee:",updatedItem.TFee_pdf);
+         console.log("Efee:",updatedItem.EFee_pdf);
+       }
+     })
+  } else if(req.body.fc=='T') {
+    Students.findByIdAndUpdate(req.user.username,{TFee_pdf:true},{overwrite:false},function(err, updatedItem){
+       if(err){
+         console.log("updating error",err);
+       }
+       else{
+         console.log("Tfee:",updatedItem.TFee_pdf);
+         console.log("Efee:",updatedItem.EFee_pdf);
+       }
+     })
+  }
 
-  console.log(req.user.username);
   res.redirect("/student/uploads/pdf");
 }
 );
@@ -104,6 +124,22 @@ router.get('/student/file/:filename',function(req,res){
 // @route DELETE /files/:id
 // @desc delete file
 router.delete('/student/file/:id',function(req,res){
+
+  //Changing the database of deleted file
+  if (('E'+req.user.username+'.pdf')==req.body.filename) {
+    Students.findByIdAndUpdate(req.user.username,{EFee_pdf:false},{overwrite:false},function(err, updatedItem){
+       if(err){
+         console.log("updating error",err);
+       }
+     })
+  }else if (('T'+req.user.username+'.pdf')==req.body.filename) {
+    Students.findByIdAndUpdate(req.user.username,{TFee_pdf:false},{overwrite:false},function(err, updatedItem){
+       if(err){
+         console.log("updating error",err);
+       }
+     })
+  }
+
   gfs.remove({_id:req.params.id, root:'uploads'}, function (err, gridStore) {
   if (err) return handleError(err);
   console.log('success');

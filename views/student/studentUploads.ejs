@@ -15,7 +15,7 @@
       </select>
     </div>
   </div>
-  
+
   <div class="field">
     <label for="file"> Select file : </label>
   </div>
@@ -38,19 +38,19 @@
 
 <hr>
 
-<% if(files){
-  files.forEach(file => { %>
+<% if(files){ %>
+  <%files.forEach(file => { %>
   <%  if (file.contentType==='application/pdf') { %>
-        <iframe src="/student/file/<%= file.filename%>" width="450" height="450"  ></iframe>
+    <div style='float:left;'>
+      <iframe  src="/student/file/<%= file.filename%>"  width="450" height="450" ></iframe>
     <% } %>
-
     <form  action="/student/file/<%=file._id%>?_method=DELETE" method="post">
-    <button type="submit"  class="ui button red">delete</button>
+        <input type="hidden" name="filename" value="<%=file.filename%>">
+        <button type="submit"   class="ui button red">delete</button>
     </form>
-
-    </div>
-<% });
-}else { %>
+  </div>
+<% });%>
+<%}else { %>
   No files to show
 <% }%>
 

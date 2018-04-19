@@ -1,14 +1,16 @@
 var mongoose = require('mongoose');
 
 var studentSchema = new mongoose.Schema({
-  _id         :Number,
-  start_sem   :Number,
-  cur_sem     :Number,
-  total_back  :Number,
-  cpi         :Number,
-  cgpa        :Number,
-  detain_history:[Number],
-  detain      :Boolean,
+  _id             :Number,
+  start_sem       :Number,
+  cur_sem         :Number,
+  total_back      :Number,
+  cpi             :Number,
+  cgpa            :Number,
+  detain_history  :[Number],
+  detain          :Boolean,
+  TFee_pdf        :Boolean,
+  EFee_pdf        :Boolean,
   backs:{
     s_1:Number,
     s_2:Number,

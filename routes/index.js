@@ -86,7 +86,7 @@ sync.do(function(){
           else{
               var obj ={};
         if((enrol.toString()).charAt(5)=='0'){
-           obj = {_id : enrol, start_sem : 1, cur_sem : 1, detain : false, basic : {course : "B.E."} };
+           obj = {_id : enrol, start_sem : 1, cur_sem : 1, detain : false,TFee_pdf:false,EFee_pdf:false, basic : {course : "B.E."} };
 
            Students.create(obj,function (err,data) {
              if (err) {
@@ -98,9 +98,9 @@ sync.do(function(){
            });
 
         }
-        
+
         else if ((enrol.toString()).charAt(5)=='3') {
-           obj = {_id : enrol, start_sem : 3, cur_sem : 3, detain : false, basic : {course : "B.E."} };
+           obj = {_id : enrol, start_sem : 3, cur_sem : 3, detain : false,TFee_pdf:false,EFee_pdf:false, basic : {course : "B.E."} };
 
            Students.create(obj,function (err,data) {
              if (err) {
