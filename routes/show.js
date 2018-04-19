@@ -20,6 +20,19 @@ router.get("/show",authFunctions.isLoggedIn,function(req,res){
   })
 })
 
+//======================
+// SHOW RECEIPTS ROUTE
+//======================
+router.get("/showReceiptsForm",authFunctions.isLoggedIn,function(req,res){
+  res.render("./user/showReceiptsForm.ejs")
+})
+
+router.post("/showReceiptsForm",authFunctions.isLoggedIn,function(req,res){
+  console.log(req.body);
+  res.render("./user/showReceipts.ejs")
+})
+
+
 
 
 module.exports = router;

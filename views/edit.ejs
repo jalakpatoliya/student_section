@@ -140,19 +140,59 @@ else if(currentUser.role=="student"){
       </div>
     </div>
 
-      <div class="two wide column">
-        <div class="field">
-          <label>TFW</label>
-          <input type="text" name="basic[tfw]" value="<%=data.basic.tfw%>">
-        </div>
-      </div>
+    <div class="two wide column">
+      <div class="field">
+    <label>TFW</label>
+      <select name="basic[tfw]" class="ui fluid search dropdown" id="ab">
+        <% if (!data.basic.tfw) { %>
+          <option value="">Select</option>
+        <%}else {%>
+          <option value="<%=data.basic.tfw%>"><%=data.basic.tfw%></option>
+        <%}%>
+        <% if (data.basic.tfw!="Yes") { %>
+          <option value="Yes">Yes</option>
+        <%}%>
+        <% if (data.basic.tfw!="No") { %>
+          <option value="No">No</option>
+        <%}%>
+      </select>
+    </div>
+  </div>
+
 
       <div class="two wide column">
         <div class="field">
-          <label>Branch</label>
-          <input type="text" name="basic[branch]" value="<%=data.basic.branch%>">
-        </div>
+      <label>Branch</label>
+        <select name="basic[branch]" class="ui fluid search dropdown" id="ab">
+          <% if (!data.basic.mode_of_adm) { %>
+            <option value="">Select</option>
+          <%}else {%>
+            <option value="<%=data.basic.branch%>"><%=data.basic.branch%></option>
+          <%}%>
+          <% if (data.basic.branch!="Computer") { %>
+            <option value="Computer">Computer</option>
+          <%}%>
+          <% if (data.basic.branch!="Information Technology") { %>
+            <option value="Information Technology">Information Technology</option>
+          <%}%>
+          <% if (data.basic.branch!="Electronics & Communication") { %>
+            <option value="Electronics & Communication">Electronics & Communication</option>
+          <%}%>
+          <% if (data.basic.branch!="Electrical") { %>
+            <option value="Electrical">Electrical</option>
+          <%}%>
+          <% if (data.basic.branch!="Civil") { %>
+            <option value="Civil">Civil</option>
+          <%}%>
+          <% if (data.basic.branch!="Automobile") { %>
+            <option value="Automobile">Automobile</option>
+          <%}%>
+          <% if (data.basic.branch!="Mechanical") { %>
+            <option value="Mechanical">Mechanical</option>
+          <%}%>
+        </select>
       </div>
+    </div>
 
       <div class="three wide column">
         <div class="field">

@@ -39,6 +39,29 @@ function isAdmin(req,res,next) {
       res.redirect("/login");
   }
 }
+//=========================================================
+//================== isUser function =====================
+//=========================================================
+function isUser(req,res,next) {
+  console.log(req.user.username);
+  if (req.isAuthenticated()){
+     console.log("isAdmin: user is logged in");
+    User.findOne({'username':req.user.username},function (err,data) {
+      if (err) {
+        console.log("findOne error");
+        console.log(err);
+      } else if(data.role=='user'){
+        console.log(data.role);
+        return next();
+      }else{res.redirect("/login");}
+    })
+  }else{
+    console.log("isUser: is authenticated is false");
+      res.redirect("/login");
+  }
+}
+
 
 module.exports.isLoggedIn = isLoggedIn;
 module.exports.isAdmin = isAdmin;
+module.exports.isUser = isUser;

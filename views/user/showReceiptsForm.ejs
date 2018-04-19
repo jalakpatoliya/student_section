@@ -1,0 +1,145 @@
+<% include ./partials/header %>
+
+
+<hr>
+
+<br>
+  <form class="ui form" action="/showReceiptsForm" method="post" id="abc">
+
+      <div class="ui seven column grid" >
+          <div class="field">
+          <div class="column" >
+            <div class="ui  dropdown button"  id="BasicDropdown">
+              <input name="branch" type="hidden" id="aaa">
+              <span class="text">Select Branch</span>
+              <div class="menu">
+                <div class="item" data-value="Computer">Computer </div>
+                <div class="item" data-value="Information Technology">Information Technology </div>
+                <div class="item" data-value="Electronics & Communication">Electronics & Communication </div>
+                <div class="item" data-value="Electrical">Electrical </div>
+                <div class="item" data-value="Civil">Civil </div>
+                <div class="item" data-value="Automobile">Automobile </div>
+                <div class="item" data-value="Mechanical">Mechanical </div>
+              </div> <!--menu -->
+            </div><!-- BasicDropdown -->
+          </div><!-- c1Internalcolumn1 -->
+          </div>
+
+          <div class="field">
+          <div class="column" >
+            <div class="ui  dropdown button"  id="QueryDropdown">
+              <input name="sem" type="hidden" id="bbb">
+              <span class="text">Select Sem</span>
+              <div class="menu">
+                <div class="item" data-value="1">Sem 1</div>
+                <div class="item" data-value="2">Sem 2</div>
+                <div class="item" data-value="3">Sem 3</div>
+                <div class="item" data-value="4">Sem 4</div>
+                <div class="item" data-value="5">Sem 5</div>
+                <div class="item" data-value="6">Sem 6</div>
+                <div class="item" data-value="7">Sem 7</div>
+                <div class="item" data-value="8">Sem 8</div>
+                <div class="item" data-value="all">Sem All</div>
+              </div><!-- menu -->
+            </div><!-- OtherDropdown -->
+          </div><!-- c1Internalcolumn2 -->
+          </div>
+
+          <div class="field">
+          <div class="column" >
+            <div class="ui  dropdown button"  id="OtherDropdown">
+              <input name="ReceiptType" type="hidden" id="ccc">
+              <span class="text">Receipt Type</span>
+              <div class="menu">
+                <div class="item" data-value="TFee_pdf">Term Fee</div>
+                <div class="item" data-value="EFee_pdf">Exam Fee</div>
+              </div><!-- menu -->
+            </div><!-- OtherDropdown -->
+          </div><!-- c1Internalcolumn2 -->
+          </div>
+
+
+        </div>
+
+<br>
+        <div class="column">
+          <button class="ui basic green button"type="submit" >Search</button>
+        </div>
+
+
+<br><hr>
+
+
+</form>
+
+</div>
+
+
+
+<%# <form class="ui form" id="abc">
+  <div class="field">
+    <label>Empty</label>
+    <input name="empty" type="text">
+  </div>
+  <div class="field">
+    <label>Dropdown</label>
+    <select class="ui dropdown" name="dropdown">
+      <option value="">Select</option>
+      <option value="male">Choice 1</option>
+      <option value="female">Choice 2</option>
+    </select>
+  </div>
+  <div class="inline field">
+    <div class="ui checkbox">
+      <input type="checkbox" name="checkbox">
+      <label>Checkbox</label>
+    </div>
+  </div>
+  <div class="ui submit button">Submit</div>
+  <div class="ui error message"></div>
+</form> %>
+
+
+<script type="text/javascript">
+$('#BasicDropdown').dropdown({ on: 'hover'});
+$('#OtherDropdown').dropdown({ on: 'hover'});
+$('#QueryDropdown').dropdown({ on: 'hover'});
+
+$('#abc')
+  .form({
+    on: 'blur',
+    fields: {
+      aaa: {
+        identifier  : 'aaa',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      },
+      bbb: {
+        identifier  : 'bbb',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      },
+      ccc: {
+        identifier  : 'ccc',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      }
+    }
+  })
+;
+</script>
+
+
+<% include ../partials/footer %>
