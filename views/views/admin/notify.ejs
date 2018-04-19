@@ -1,0 +1,95 @@
+<% include ./partials/header %>
+<hr>
+<p>Prepare Custom Event Notification</p>
+<div class="ui  buttons" id="togglebut">
+  <button class="ui positive button" id="tooglebut1" onclick="togfun1()">Instant</button>
+  <div class="or"></div>
+  <button class="ui  button" id="tooglebut2" onclick="togfun2()">Time Event</button>
+</div>
+<hr>
+<form class="ui form" method="post" action="notify" >
+<input  name="eventoption" id="eventoption" type="hidden" value="instant">
+  <div class="field">
+    <label>To:</label>
+    <div class="ui dropdown button"  name="to" id="sem">
+      <input name="year" type="hidden" >
+      <i class="filter icon"></i>
+      <span class="text">Year</span>
+      <div class="menu">
+        <div class="item" data-value="all">All four years</div>
+        <div class="item" data-value="first">1 YEAR</div>
+        <div class="item" data-value="second">2 YEAR</div>
+        <div class="item" data-value="third">3 YEAR</div>
+        <div class="item" data-value="fourth">4 YEAR</div>
+      </div><!-- menu -->
+    </div><!-- OtherDropdown -->
+    <div class="ui dropdown button"  name="to" id="to">
+      <input name="branch" type="hidden"  required>
+      <i class="filter icon"></i>
+      <span class="text">Select User</span>
+      <div class="menu">
+        <div class="item" data-value="all">All Branch</div>
+        <div class="item">Specific Branch
+          <div class="menu">
+            <div class="item" data-value=" Electronics and Comm">EC</div>
+            <div class="item" data-value=" Computer">computer</div>
+            <div class="item" data-value=" IT">IT</div>
+            <div class="item" data-value="Automobile">Automobile</div>
+            <div class="item" data-value=" Mechanical">Mechanical</div>
+            <div class="item" data-value="Civil">Civil</div>
+            <div class="item" data-value=" Electrical">Electrical</div>
+          </div>
+        </div>
+      </div><!-- menu -->
+    </div><!-- OtherDropdown -->
+  </div>
+  <div class="field" id="togopt2">
+    <label>Event Ending Date/Time:</label>
+    <input type="datetime-local" name="dt" >
+  </div>
+  <div class="field">
+    <label>Subject:</label>
+    <input type="text" name="sub" >
+
+  </div>
+  <div class="field">
+    <label>Content:</label>
+    <textarea name="msg" placeholder="Message.................!"></textarea>
+  </div>
+
+  <button class="ui button" type="submit">Send</button>
+</form>
+
+<%include ../partials/footer%>
+<script type="text/javascript">
+$('#to').dropdown({
+  onChange:function(){
+    if($('#to').dropdown('get value')!=null){
+      $('#sem').dropdown().show();
+    }
+    else{
+      $('#sem').dropdown({ on: 'hover'}).hide();
+    }
+  }
+});
+$('#sem').dropdown({ on: 'hover'}).hide();
+
+
+
+// $('#tooglebut1').button().on("click",function(){alert("happening")})
+function togfun1(){
+document.getElementById("tooglebut2").className = "ui button";
+document.getElementById("tooglebut1").className = "ui positive button";
+document.getElementById("eventoption").value = "instant";
+$('#togopt2').hide();
+}
+function togfun2(){
+document.getElementById("tooglebut1").className = "ui button";
+document.getElementById("tooglebut2").className = "ui positive button";
+document.getElementById("eventoption").value = "timedriven";
+
+$('#togopt2').show();
+}
+
+$('#togopt2').hide();
+</script>

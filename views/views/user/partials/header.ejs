@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js">
+  </script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+  <link rel="stylesheet" href="/stylesheets/main.css">
+
+  <body>
+    <br>
+    <div class="ui container">
+
+      <div class="ui secondary  menu" >
+        <a class="active item" href="/" >
+        Home
+      </a>
+        <a class="item" href="customsearch" tabindex="0">
+        View Data
+      </a>
+      <a class="item" href="insertScheme" tabindex="0">
+      New Scheme
+    </a>
+     </a>
+        <div class="right menu">
+          <div class="item">
+            <div class="ui icon input">
+              <form action="/search" method="get">
+                <input type="text" placeholder="Search..." name="search_query">
+              </form>
+              <i class="search link icon"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="ui  dropdown item " id="LoginDropdown">
+          <i class="user icon large"></i>
+          <div class="menu">
+            <%  if (!currentUser) {  %>
+              <a class="item" href="/login">Login </a>
+              <% } else if(currentUser.role=="user"){ %>
+                <a class="item" href="#" style="text-align:center;">Signed in as:</a>
+                <h2 class="item" style="text-align:center;"><%= currentUser.username%></h2>
+                <a class="item" href="/logout" style="text-align:center;">Logout</a>
+                <% }else if (currentUser.role=="admin") { %>
+                  <div class="ui top right attached label">Admin</div>
+                  <a class="item" href="#" style="text-align:center;">Signed in as:</a>
+                  <h2 class="item"style="text-align:center;"><%= currentUser.username%></h2>
+                  <a class="item" href="/logout" style="text-align:center;">Logout</a>
+                  <% }else if (currentUser.role=="student") { %>
+                    <div class="ui top right attached label">student</div>
+                    <a class="item" href="#" style="text-align:center;">Signed in as: </a>
+                    <h2 class="item"style="text-align:center;"><%= currentUser.username%></h2>
+                    <a class="item" href="/logout" style="text-align:center;">Logout</a>
+                    <% } %>
+          </div>
+        </div>
+      </div>
+      <div class="ui hidden divider"></div>
+
+      <script type="text/javascript">
+        $('#LoginDropdown')
+          .dropdown({
+            action: 'hide'
+          });
+
+       $('#men').state();
+      </script>
