@@ -1,11 +1,36 @@
 <% include ./partials/header %>
 
+<% if (EFee) { %>
+  <h2> Students who have not submitted their Exam Fees Receipts: </h2>
+<% }else { %>
+  <h2> Students who have not submitted their Term Fees Receipts: </h2>
+<%} %>
 
+<table class="ui red table">
+  <thead>
+    <tr>
+      <th>Enrollment No.</th>
+      <th>Name</th>
+      <th>Branch</th>
+      <th>Sem</th>
+      <th>Mob. no.</th>
+      <th>Email Id</th>
+    </tr>
+  </thead>
 
-
-
-
-
+  <%studs_not.forEach(function(stud_not){%>
+ <tbody>
+    <tr>
+      <td><%=stud_not._id%></td>
+      <td><%=stud_not.basic.name%></td>
+      <td><%=stud_not.basic.branch%></td>
+      <td><%=stud_not.cur_sem%></td>
+      <td><%=stud_not.basic.mob_no%></td>
+      <td><%=stud_not.basic.email%></td>
+    </tr>
+  <%})%>
+  </tbody>
+</table>
 
 
 
