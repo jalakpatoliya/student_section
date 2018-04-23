@@ -51,6 +51,7 @@
       <th>Sem</th>
       <th>Mob. no.</th>
       <th>Email Id</th>
+      <th>Open Receipt</th>
     </tr>
   </thead>
 
@@ -65,9 +66,24 @@
       <td><%=stud_had.cur_sem%></td>
       <td><%=stud_had.basic.mob_no%></td>
       <td><%=stud_had.basic.email%></td>
+      <td><button class="ui  basic blue button" onclick="myFunction()">Open</button></td>
     </tr>
+    <% if (EFee) { %>
+      <script type="text/javascript">
+      function myFunction() {
+        window.open("/receipts/E<%=stud_had._id%>.pdf");
+      }
+      </script>
+    <% }else { %>
+      <script type="text/javascript">
+      function myFunction() {
+        window.open("/receipts/T<%=stud_had._id%>.pdf");
+      }
+      </script>
+    <%} %>
   <%})%>
   </tbody>
 </table>
+
 
 <% include ../partials/footer %>
