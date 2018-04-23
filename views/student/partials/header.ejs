@@ -19,7 +19,7 @@
     <div class="ui container">
 
       <div class="ui secondary  menu" >
-        <a class="active item" href="/" >
+        <a class=" item" href="/index" >
         Home
       </a>
         <a class="item" href="/search/student" tabindex="0">
@@ -79,4 +79,7 @@
           });
 
        $('#men').state();
+       $(function() {
+        $('a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+      });
       </script>

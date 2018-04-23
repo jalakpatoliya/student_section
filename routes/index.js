@@ -56,13 +56,13 @@ var authFunctions     = require('../validation/authFunctions');
 //======================================
 // GET Route
 //======================================
-router.get("/",authFunctions.isLoggedIn,function(req,res){
+router.get("/index",authFunctions.isLoggedIn,function(req,res){
   res.render("index.ejs");
 })
 //======================================
 // PoST Route
 //======================================
-router.post("/",authFunctions.isLoggedIn,upload.single("file"),function (req,res){
+router.post("/index",authFunctions.isLoggedIn,upload.single("file"),function (req,res){
   console.log("File Path:",req.file.path);
   console.log("File Category:",req.body.fc);
   var model = null;
@@ -361,7 +361,7 @@ sync.do(function(){
       }
    else{
 
-     res.redirect("/");
+     res.redirect("/index");
    }
 //==================================================================================
 

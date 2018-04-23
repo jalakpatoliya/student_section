@@ -33,7 +33,7 @@ var passport              = require("passport"),
     //=========================================================
     router.get("/logout",function(req,res){
       req.logout();
-      res.redirect("/");
+      res.redirect("/index");
     })
 
     //=========================================================
@@ -46,7 +46,7 @@ var passport              = require("passport"),
     //  Sign up logic
       router.post("/registerRequest",function (req,res) {
       TempUser.create({username:req.body.name,password:req.body.pass})
-      res.redirect("/")
+      res.redirect("/index")
     })
     //=========================================================
     //============= Notifications of admin ====================

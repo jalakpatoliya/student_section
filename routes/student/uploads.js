@@ -2,8 +2,8 @@
 var mongoose = require('mongoose'),
     express  = require('express'),
     router   = express.Router(),
-    Students  = require('../models/student'), //Importing multiple models and schemas
-    authFunctions = require('../validation/authFunctions'),
+    Students  = require('../../models/student'), //Importing multiple models and schemas
+    authFunctions = require('../../validation/authFunctions'),
     path                  = require('path'),
     crypto                = require('crypto'),
     multer                = require("multer"),

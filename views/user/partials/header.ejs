@@ -17,13 +17,13 @@
     <div class="ui container">
 
       <div class="ui secondary  menu" >
-        <a class="active item" href="/" >
+        <a class=" item" href="/index" >
           Home
         </a>
-        <a class="item" href="customsearch" tabindex="0">
+        <a class="item" href="/customsearch" tabindex="0">
           View Data
         </a>
-        <a class="item" href="insertScheme" tabindex="0">
+        <a class="item" href="/insertScheme" tabindex="0">
           New Scheme
         </a>
         <a class="item" href="/showReceiptsForm" >
@@ -72,4 +72,7 @@
           });
 
        $('#men').state();
+       $(function() {
+        $('a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
+      });
       </script>
