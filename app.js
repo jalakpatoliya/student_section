@@ -54,7 +54,7 @@ var indexRoute   = require('./routes/index'),
     notify       = require('./routes/admin/notify'),
     redirect     = require('./routes/redirect'),
     welcome      = require("./routes/welcome"),
-    uploads      = require('./routes/uploads'),
+    uploads      = require('./routes/student/uploads'),
    insertScheme = require('./routes/admin/insertSchema'),
    receipts      =require('./routes/user/receipts');
 
