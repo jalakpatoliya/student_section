@@ -1,5 +1,5 @@
 <% include ./partials/header %>
-
+<% var i=j=0; %>
 <% if (EFee) { %>
   <h2> Students who have not submitted their Exam Fees Receipts: </h2>
 <% }else { %>
@@ -9,6 +9,7 @@
 <table class="ui red table">
   <thead>
     <tr>
+      <th>Sr. No.</th>
       <th>Enrollment No.</th>
       <th>Name</th>
       <th>Branch</th>
@@ -19,8 +20,10 @@
   </thead>
 
   <%studs_not.forEach(function(stud_not){%>
+    <%  i++; %>
  <tbody>
     <tr>
+      <td><%=i%>.</td>
       <td><%=stud_not._id%></td>
       <td><%=stud_not.basic.name%></td>
       <td><%=stud_not.basic.branch%></td>
@@ -32,16 +35,39 @@
   </tbody>
 </table>
 
+<% if (EFee) { %>
+  <h2> Students who had submitted their Exam Fees Receipts: </h2>
+<% }else { %>
+  <h2> Students who had submitted their Term Fees Receipts: </h2>
+<%} %>
 
+<table class="ui green table">
+  <thead>
+    <tr>
+      <th>Sr. No.</th>
+      <th>Enrollment No.</th>
+      <th>Name</th>
+      <th>Branch</th>
+      <th>Sem</th>
+      <th>Mob. no.</th>
+      <th>Email Id</th>
+    </tr>
+  </thead>
 
-
-
-
-
-
-
-
-
-
+  <%studs_had.forEach(function(stud_had){%>
+    <%  j++; %>
+ <tbody>
+    <tr>
+      <td><%=j%>.</td>
+      <td><%=stud_had._id%></td>
+      <td><%=stud_had.basic.name%></td>
+      <td><%=stud_had.basic.branch%></td>
+      <td><%=stud_had.cur_sem%></td>
+      <td><%=stud_had.basic.mob_no%></td>
+      <td><%=stud_had.basic.email%></td>
+    </tr>
+  <%})%>
+  </tbody>
+</table>
 
 <% include ../partials/footer %>

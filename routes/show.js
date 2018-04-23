@@ -54,11 +54,7 @@ router.post("/showReceiptsForm",authFunctions.isLoggedIn,function(req,res){
       })
     })
   }
-
-
 })
-
-
 
 
 module.exports = router;
