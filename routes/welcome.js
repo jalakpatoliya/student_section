@@ -15,5 +15,9 @@ router.get("/welcome",authFunctions.isLoggedIn,function(req,res){
    res.redirect("/index");
  })
 
+router.post("/welcome",function(req,res){
+  console.log(req.body.students);
+    res.redirect("/welcome")
+})
 
 module.exports = router;
