@@ -9,11 +9,11 @@ var mongoose = require('mongoose'),
 // SHOW ROUTE
 //======================
 router.get("/welcome",authFunctions.isLoggedIn,function(req,res){
-
       res.render("welcome.ejs")
-
 })
-
+ router.get("/",function(req,res){
+   res.redirect("/index");
+ })
 
 
 module.exports = router;

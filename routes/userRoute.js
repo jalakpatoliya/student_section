@@ -56,7 +56,12 @@ var passport              = require("passport"),
         if (err) {
           console.log(err);
         } else {
-          res.render("./admin/notifications.ejs",{data:data});
+          var n=0;
+          data.forEach(function(element){
+            n=n+1;
+          })
+          console.log("total notifications:",n);
+          res.render("./admin/notifications.ejs",{data:data,n:n});
         }
       })
     })
