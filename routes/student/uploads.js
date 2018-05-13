@@ -56,14 +56,17 @@ const upload = multer({ storage });
 // @route GET /
 // @desc Loads form
 router.get("/student/uploads/pdf",function(req,res){
-  gfs.files.find().toArray(function(err,files){
-    // Check if files
-    if (!files||files.length ===0) {
-      res.render("./student/studentUploads.ejs",{files:false});
-    }else {
-      res.render('./student/studentUploads.ejs',{files:files})
-    }
 
+  gfs.files.find({filename:"E"+req.user.username+".pdf"}).toArray(function(err,files1){
+      gfs.files.find({filename:"T"+req.user.username+".pdf"}).toArray(function(err,files2){
+        var files = files1.concat(files2);
+        // Check if files
+        if (!files||files.length === 0) {
+          res.render("./student/studentUploads.ejs",{files:false});
+        }else {
+          res.render('./student/studentUploads.ejs',{files:files})
+        }
+      })
   })
   // res.render("./student/studentUploads.ejs");
 })
