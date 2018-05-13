@@ -19,7 +19,7 @@
     <div class="ui container">
 
       <div class="ui secondary  menu" >
-        <a class=" item" href="/index" >
+        <a class=" item" href="/welcome" >
         Home
       </a>
         <a class="item" href="/search/student" tabindex="0">
@@ -65,6 +65,7 @@
                     <div class="ui top right attached label">student</div>
                     <a class="item" href="#" style="text-align:center;">Signed in as: </a>
                     <h2 class="item"style="text-align:center;"><%= currentUser.username%></h2>
+                    <a class="item" href="/changePassword" style="text-align:center;">Change Password</a>
                     <a class="item" href="/logout" style="text-align:center;">Logout</a>
                     <% } %>
           </div>
