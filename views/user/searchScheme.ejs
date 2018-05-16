@@ -1,0 +1,40 @@
+<% include ./partials/header %>
+<div class="ui inverted divider"></div>
+  <form class="ui form" action="searchScheme" method="post">
+    <div class="ui grid">
+      <div class="six wide column">
+        <label><h4>Scholarship for</h4> </label>
+        <br>
+        <div class="ui search">
+          <div class="ui icon input">
+            <input class="prompt"name="enroll" type="text" placeholder="Enrollment">
+            <i class="search icon"></i>
+          </div>
+          <div class="results"></div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="ui inverted divider"></div>
+  <%if(data){%>
+  <table class="ui teal table">
+    <thead>
+      <tr>
+        <th>Scheme Name</th>
+        <th>Category</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <%data.forEach(elem=>{%>
+        <tr>
+          <td><%=elem.name%></td>
+          <td><%=elem.category%></td>
+          <td></td>
+        </tr>
+      <%
+      })%>
+    </tbody>
+  </table>
+  <%}%>
+<% include ../partials/footer %>

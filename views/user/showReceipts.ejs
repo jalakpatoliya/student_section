@@ -6,11 +6,6 @@
   <h2> Students who have not submitted their Term Fees Receipts: </h2>
 <%} %>
 
-<form class="ui form" action="/welcome" method="post">
-  <input type="hidden" name="students" value="<%=studs_not%>">
-  <button type="submit" class="ui red button"name="button">warn them</button>
-</form>
-
 
 <table class="ui red table">
   <thead>
@@ -36,7 +31,6 @@
       <td><%=stud_not.cur_sem%></td>
       <td><%=stud_not.basic.mob_no%></td>
       <td><%=stud_not.basic.email%></td>
-
     </tr>
   <%})%>
   </tbody>
@@ -91,6 +85,7 @@
   <%})%>
   </tbody>
 </table>
+
 
 
 <% include ../partials/footer %>

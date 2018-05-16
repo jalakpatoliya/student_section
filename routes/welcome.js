@@ -15,9 +15,21 @@ router.get("/welcome",authFunctions.isLoggedIn,function(req,res){
    res.redirect("/index");
  })
 
-router.post("/welcome",function(req,res){
-  console.log(req.body.students);
-    res.redirect("/welcome")
+router.post('/welcome',function(req,res){
+  console.log("came");
+var  arr=req.body.students;
+//console.log(arr);
+  var listofemails=[];
+  // arr.forEach(elem=>{
+  //  listofemails.push((elem.basic.email).trim());
+  // });
+
+  len=arr.length;
+  for(i=0;i<len;i++){
+    listofemails.push((arr[i].basic.email).trim());
+  }
+  console.log(listofemails);
+  res.redirect('/welcome')
 })
 
 module.exports = router;

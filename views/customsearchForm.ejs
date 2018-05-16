@@ -5,13 +5,15 @@
     <div class="ui two column grid">
       <div class="column" id="DividedBlock1">
 
-        <h5>View Parameter:</h5>
+        <div class="ui field">
+          <label for="column1"> view parameter </label>
+        </div>
         <div class="ui two column grid" id="column1">
           <div class="column" id="c1Internalcolumn1">
             <div class="ui multiple dropdown button"  id="BasicDropdown">
               <input name="Basic" type="hidden">
               <i class="filter icon"></i>
-              <span class="text">Select What to View </span>
+              <span class="text">Basic choose</span>
               <div class="menu">
                 <div class="item" data-value="_id">All</div>
                 <div class="item" data-value="basic.name">Name</div>
@@ -48,13 +50,15 @@
         </div><!-- column1 -->
       </div><!-- divided block 1 -->
       <div class="column" id="dividedBlock2">
-        <h5>Query Parameter:</h5>
+        <div class="ui field">
+          <label for="column2"> Query Parameter </label>
+        </div>
         <div class="ui two column grid" id="column2">
           <div class="column" id="c2Internalcolumn1">
             <div class="ui multiple dropdown button"  id="QueryDropdown">
               <input name="Basic" type="hidden">
               <i class="filter icon"></i>
-              <span class="text">Select Query</span>
+              <span class="text">Basic choose</span>
               <div class="menu">
                 <div class="item">Category
                   <div class="menu">
@@ -98,7 +102,7 @@
 
     <div class="ui grid">
     <div class="two wide column">
-      <input class="ui red button" type="submit" name="Fiilter" value="Filter">
+      <input type="submit" name="Fiilter" value="Filter">
     </div>
 
   </div><!-- UIgrid -->
