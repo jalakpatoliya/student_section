@@ -6,29 +6,13 @@ var passport              = require("passport"),
     mongoose              = require("mongoose"),
     User                  = require("../models/user"),
     TempUser              = require("../models/tempUser"),
-    authFunctions         = require('../validation/authFunctions'),
-    cookieParser          = require('cookie-parser'),
-    flash                 = require('connect-flash'),
-    expressSession        = require("express-session");
+    expressSession        = require("express-session"),
+    authFunctions         = require('../validation/authFunctions');
 
     //====================================================
     passport.use(new LocalStrategy(User.authenticate()));
     passport.serializeUser(User.serializeUser()); // it reades, decodes information in session,encodes it
     passport.deserializeUser(User.deserializeUser());
-
-    // Express-session Middleware
-    router.use(expressSession({
-      secret: 'keyboard cat',
-      resave: true,
-      saveUninitialized: true,
-      cookie: { secure: true }
-    }))
-    // Express-mesages Middleware
-    router.use(require('connect-flash')());
-    router.use(function (req, res, next) {
-      res.locals.messages = require('express-messages')(req, res);
-      next();
-    });
 
     //=========================================================
     //=============Login route================================
@@ -108,46 +92,6 @@ var passport              = require("passport"),
           }
         })
       }
-    })
-    //=========================================================
-    //=============Get Request for changing password =============
-    //=========================================================
-    // Render form for password change
-    router.get('/changePassword',function(req,res){
-      console.log("Username:",req.user.username);
-      res.render("./student/changePassword.ejs");
-    })
-    //=========================================================
-    //=============Post Request for changing password =============
-    //=========================================================
-    router.post('/changePassword',function(req,res){
-      console.log("Username:",req.user.username);
-      User.findOne({username:req.user.username},function(err,user){
-        if(!user){
-          req.flash('error','Failed to change the password')
-          return res.redirect('/changePassword');
-        }
-        else {
-          console.log(req.body.password);
-          if (req.body.password===req.body.confirm_password) {
-            console.log("password confimed");
-            user.setPassword(req.body.password,function(err){
-              user.save(function(err){
-                req.login(user,function(err){
-                  done(err,user);
-                })
-              })
-            })
-            req.flash('ui ','Password changed successfully!');
-            res.redirect("/changePassword");
-          }else {
-
-            req.flash('ui','Failed to change the password');
-            res.redirect('/changePassword');
-          }
-
-        }
-      })
     })
 
 module.exports = router;

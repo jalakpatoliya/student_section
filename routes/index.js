@@ -52,6 +52,7 @@ var Students          = require("../models/student");
 var model=null;
 var validate          = require('../validation/insertValidate');
 var authFunctions     = require('../validation/authFunctions');
+var mail              = require('../validation/mailer');
 // var isLoggedIn     = require('../validation/authFunctions');
 //======================================
 // GET Route
@@ -256,6 +257,8 @@ sync.do(function(){
         }//fivalidate enroll
       })//mongoData.foreach
       //====================== finally after updating whole marksheet calculating and updating detain over whole database ===
+
+       var listofemails=[];
       Students.find(function(err,collection){
         collection.forEach(doc=>{
           var obj={},
@@ -269,6 +272,8 @@ sync.do(function(){
                    year = (doc.cur_sem==3 || doc.cur_sem==4) ? 2 :(doc.cur_sem==5 || doc.cur_sem==6) ? 3 : 4 ;
                    obj.detain_history.push(year);
                    obj.cur_sem = doc.cur_sem+1;
+
+                   listofemails.push((doc.basic.email).trim());
               }//fi kt
               else{
                 obj.cur_sem = doc.cur_sem+1;
@@ -283,6 +288,7 @@ sync.do(function(){
                })//find and update
         })//collection.forEach
       })//studentsfind
+      mail.bulk_mail(listofemails,"Regarding Detaintion","WE are very sorry to inform you that you are datained so please consult your college in case u have any doubt");
       //============================ detain currnt sem updated ===========================================================
     }//req.body
 

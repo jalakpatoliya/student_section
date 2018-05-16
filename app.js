@@ -55,8 +55,9 @@ var indexRoute   = require('./routes/index'),
     redirect     = require('./routes/redirect'),
     welcome      = require("./routes/welcome"),
     uploads      = require('./routes/student/uploads'),
-   insertScheme = require('./routes/admin/insertSchema'),
+   insertScheme  = require('./routes/admin/insertSchema'),
    receipts      =require('./routes/user/receipts');
+   searchScheme  =require('./routes/user/searchScheme');
 
 //=========================================================
 //=============Initializing Session & Passport=============
@@ -89,6 +90,7 @@ app.use(show);
 app.use(uploads);
 app.use(insertScheme);
 app.use(receipts);
+app.use(searchScheme);
 //=========================================================
 //============= To create Admin ===========================
 //=========================================================

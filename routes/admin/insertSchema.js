@@ -105,7 +105,7 @@ var mongoose    = require('mongoose'),
        year: year,
        residency:residency };
       Scheme.findByIdAndUpdate({_id:req.body.id},obj,function(err,data){
-        res.render("./admin/editscheme.ejs",{data:data});
+        res.render("./admin//insertSchema.ejs",{data:data});
       })
   })
 

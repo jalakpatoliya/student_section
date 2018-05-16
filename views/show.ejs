@@ -132,7 +132,7 @@ else if(currentUser.role=="admin"){
             <%   var cusem = 0 ;
           cusem =  data.cur_sem;
           var i=0;
-    for( i=1;i<= cusem ;i++){
+    for( i=1;i< cusem ;i++){
           %>
           <tr>
             <td>
@@ -175,7 +175,7 @@ else if(currentUser.role=="admin"){
           </thead>
           <%
           var i=0;
-         for( i=1;i<=data.cur_sem;i++){
+         for( i=1;i<data.cur_sem;i++){
            var s;
            s = 's_'+i;
            %>
@@ -208,7 +208,7 @@ else if(currentUser.role=="admin"){
 
 
 
-  <% for(var i = 1;i<= data.cur_sem;i++) {
+  <% for(var i = 1;i< data.cur_sem;i++) {
          var sem ;
          sem = "s_" + i;
          var total_sub = data[sem].Tsubject; %>
@@ -234,7 +234,7 @@ else if(currentUser.role=="admin"){
       <th>Total</th>
     </tr>
   </thead>
-  <%  for (var j = 1; j < total_sub; j++) {
+  <%  for (var j = 1; j < 7; j++) {
       var sub = "sub" +j;  %>
   <tr>
     <td><%=data[sem].result[sub].code %></td>
