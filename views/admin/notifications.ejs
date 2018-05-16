@@ -1,0 +1,21 @@
+<% include ./partials/header %>
+ <% data.forEach(elem => { %>
+  <form  action="/notifications" method="post">
+  <input type="hidden" name="username" value="<%=elem.username%>">
+  <input type="hidden" name="password" value="<%=elem.password%>">
+
+<div class="ui grid align centered">
+  <div class="ten wide column ">
+    <div class="ui clearing red  segment">Do you want to give faculty level access to   -  <%= elem.username %>
+    <div class="ui right floated buttons">
+     <button class="ui  green basic button" name="add" value="add">Add</button>
+     <button class="ui  red basic button" name="delete" value="delete">Delete</button>
+     </div>
+    </div>
+  </div>
+</div>
+
+</form>
+<% }); %>
+
+<% include ../partials/footer %>

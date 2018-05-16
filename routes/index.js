@@ -56,13 +56,13 @@ var authFunctions     = require('../validation/authFunctions');
 //======================================
 // GET Route
 //======================================
-router.get("/",authFunctions.isLoggedIn,function(req,res){
+router.get("/index",authFunctions.isLoggedIn,function(req,res){
   res.render("index.ejs");
 })
 //======================================
 // PoST Route
 //======================================
-router.post("/",authFunctions.isLoggedIn,upload.single("file"),function (req,res){
+router.post("/index",authFunctions.isLoggedIn,upload.single("file"),function (req,res){
   console.log("File Path:",req.file.path);
   console.log("File Category:",req.body.fc);
   var model = null;
@@ -86,7 +86,7 @@ sync.do(function(){
           else{
               var obj ={};
         if((enrol.toString()).charAt(5)=='0'){
-           obj = {_id : enrol, start_sem : 1, cur_sem : 1, detain : false, basic : {course : "B.E."} };
+           obj = {_id : enrol, start_sem : 1, cur_sem : 1, detain : false,TFee_pdf:false,EFee_pdf:false, basic : {course : "B.E."} };
 
            Students.create(obj,function (err,data) {
              if (err) {
@@ -98,9 +98,9 @@ sync.do(function(){
            });
 
         }
-        
+
         else if ((enrol.toString()).charAt(5)=='3') {
-           obj = {_id : enrol, start_sem : 3, cur_sem : 3, detain : false, basic : {course : "B.E."} };
+           obj = {_id : enrol, start_sem : 3, cur_sem : 3, detain : false,TFee_pdf:false,EFee_pdf:false, basic : {course : "B.E."} };
 
            Students.create(obj,function (err,data) {
              if (err) {
@@ -361,7 +361,7 @@ sync.do(function(){
       }
    else{
 
-     res.redirect("/");
+     res.redirect("/index");
    }
 //==================================================================================
 

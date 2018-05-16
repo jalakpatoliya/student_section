@@ -1,0 +1,161 @@
+<% include ./partials/header %>
+<div class="ui tab" data-tab="tab-name">
+  <!-- <div class="ui active dimmer"> -->
+  <!-- </div> -->
+</div>
+<!-- -------------------------------------------------------------------------------------- -->
+<form action="/search" method="get">
+  <input type="text" placeholder="Enrollment" name="search_query">
+</form>
+
+<form id="form2" action="modifyscheme" method="get">
+    <div class="field">
+      <div class="ui input">
+        <button class="ui button" type="submit" name="button">Modify Existing Scholarship</button>
+      </div>
+    </div>
+</form>
+
+<br><hr><br>
+<form class="ui form" action="insertSchema" method="post">
+  <div class="field">
+    <b>SCHEME NAME</b>
+    <hr>
+    <input type="text" name="name" placeholder="Enter Scheme Name.." required>
+  </div>
+
+<br><b>CONDITIONS FOR SCHEME</b>
+<hr><br>
+  <div class="ui grid">
+    <div class="four wide blue column">
+      <div class="field">
+        <label>Category</label>
+        <div class="ui dropdown button"  name="cat" id="cat">
+          <input name="category" type="hidden">
+          <i class="filter icon"></i>
+          <span class="text">Category</span>
+          <div class="menu">
+            <div class="item" data-value="all">All</div>
+            <div class="item" data-value="gen">Genral</div>
+            <div class="item" data-value="sebc">SEBC</div>
+            <div class="item" data-value="sc">SC</div>
+            <div class="item" data-value="st">ST</div>
+          </div><!-- menu -->
+        </div><!-- OtherDropdown -->
+      </div><!--f  -->
+    </div>
+    <div class="three wide blue column">
+      <div class="field">
+        <label>Gender</label>
+        <div class="ui dropdown button"   id="gender">
+          <input name="gender" type="hidden" >
+          <i class="filter icon"></i>
+          <span class="text">Gender</span>
+          <div class="menu">
+            <div class="item" data-value="both">Both</div>
+            <div class="item" data-value="male">male</div>
+            <div class="item" data-value="female">Female</div>
+          </div><!-- menu -->
+        </div><!-- OtherDropdown -->
+      </div><!--f  -->
+    </div>
+    <div class="four wide blue column">
+      <div class="field">
+        <label>Family Income</label>
+        <div class="ui right labeled input">
+          <input name="income" type="number" placeholder="Salary in rupees">
+          <div class="ui dropdown button" id="rel" >
+            <input name="cond" type="hidden">
+            <span class="text">Rel</span>
+            <div class="menu" >
+              <div class="item" data-value="gt"><b>>=</b></div>
+              <div class="item" data-value="lt"><b><=</b></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="five wide blue column">
+      <!-- remaining blocks -->
+    </div>
+
+
+  </div>
+
+    <div class="ui  grid">
+      <div class="four wide blue column">
+        <div class="field">
+          <label>Min. 12th Marks</label>
+          <div class="ui right labeled input">
+            <input name="marks" type="Number" placeholder="85.2">
+            <div class="ui basic label">%</div>
+          </div>
+        </div>
+    </div>
+    <div class="three wide blue column">
+      <div class="field">
+        <label>Year of Study</label>
+        <div class="ui dropdown button"  name="comparision" id="year">
+          <input name="yearofstudy" type="hidden" >
+          <i class="filter icon"></i>
+          <span class="text">Year</span>
+          <div class="menu">
+            <div class="item" data-value="all">All</div>
+            <div class="item" data-value="one">1st</div>
+            <div class="item" data-value="two">2nd</div>
+            <div class="item" data-value="three">3rd</div>
+            <div class="item" data-value="four">4th</div>
+          </div><!-- menu -->
+        </div><!-- OtherDropdown -->
+      </div>
+    </div>
+    <div class="four wide blue column">
+      <div class="field">
+        <label>Residency</label>
+        <div class="ui dropdown button"  name="comparision" id="residency">
+          <input name="residency" type="hidden" >
+          <i class="filter icon"></i>
+          <span class="text">Residency</span>
+          <div class="menu">
+            <div class="item" data-value="both">Both </div>
+            <div class="item" data-value="hl">Gov. Hostel</div>
+            <div class="item" data-value="pr">Personal Residence</div>
+          </div><!-- menu -->
+        </div><!-- OtherDropdown -->
+      </div>
+    </div>
+    <div class="five wide blue column">
+      <!-- remaining blocks -->
+    </div>
+
+  </div>
+
+<br><br><br>
+  <div class="field">
+    <div class="ui input">
+      <button class="ui blue button" type="submit" name="button" id="tog" >Insert</button>
+    </div>
+  </div>
+
+
+</form>
+<% include ../partials/footer %>
+<script type="text/javascript">
+$('#cat').dropdown({on:'hover'});
+$('#comparision').dropdown({on:'hover'});
+$('#year').dropdown({on:'hover'});
+$('#residency').dropdown({on:'hover'});
+$('#rel').dropdown({on:'hover'});
+$('#gender').dropdown({on:'hover'});
+
+
+//
+// function myFunction(){
+//   $.tab('change tab', 'tab-name');
+// }
+//
+
+
+
+</script>

@@ -1,0 +1,37 @@
+<% include ./partials/header %>
+
+<div class="ui  buttons" id="togglebut">
+  <button class="ui positive button" id="tooglebut1" onclick="togfun1()">Insert NewScheme</button>
+  <div class="or"></div>
+  <button class="ui  button" id="tooglebut2" onclick="togfun2()">Modify Existing Scheme</button>
+</div>
+<form id="form1" action="insertSchema" method="get"></form>
+<br><hr><br>
+<!--------------------------------------------------------------------------------------------- -->
+<% data.forEach(elem => { %>
+ <form  action="/modifyscheme" method="post">
+ <input type="hidden" name="id" value="<%=elem._id%>">
+ <div class="ui grid align centered">
+ <div class="ten wide column ">
+   <div class="ui clearing red  segment"><b>  <%= elem.name %></b>
+   <div class="ui right floated buttons">
+    <button class="ui  green basic button" name="edit" value="edit">Edit</button>
+    <button class="ui  red basic button" name="delete" value="delete">Delete</button>
+    </div>
+   </div>
+ </div>
+</div>
+
+</form>
+<% }); %>
+<!-- ------------------------------------------------------------------------------------------------- -->
+<% include ../partials/footer %>
+<script type="text/javascript">
+document.getElementById("tooglebut2").className = "ui positive button";
+document.getElementById("tooglebut1").className = "ui button";
+function togfun1(){
+document.getElementById("form1").submit();
+}
+
+
+</script>

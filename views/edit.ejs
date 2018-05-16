@@ -1,0 +1,254 @@
+<%
+if(currentUser.role=="user"){
+  %>
+  <% include ./user/partials/header %>
+<%}
+else if(currentUser.role=="admin"){
+  %>
+  <% include ./admin/partials/header %>
+<%}else if(currentUser.role=="student"){
+  %>
+  <% include ./student/partials/header %>
+<%}%>
+
+
+<% if(currentUser.role=="user"||currentUser.role=="admin"){ %>
+  <form class="ui form" action="/edit" method="post">
+<%}
+else if(currentUser.role=="student"){
+  %>
+  <form class="ui form" action="/edit/student" method="post">
+<%}%>
+
+  <input type="hidden" name="enroll" value="<%=data._id%>">
+  <div class="ui grid">
+
+    <div class="eight wide column">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" name="basic[name]"  value="<%=data.basic.name%>">
+      </div>
+    </div>
+
+    <div class="six wide column">
+      <div class="field">
+        <label>Email Id</label>
+        <input type="text" name="basic[email]" value="<%=data.basic.email%>">
+      </div>
+    </div>
+
+    <div class="eight wide column">
+      <div class="field">
+        <label>Address Permanent</label>
+        <input type="text" name="basic[add_p]" value="<%=data.basic.add_p%>">
+      </div>
+    </div>
+
+    <div class="eight wide column">
+      <div class="field">
+        <label>Address Temporary</label>
+        <input type="text" name="basic[add_t]" value="<%=data.basic.add_t%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>District</label>
+        <input type="text" name="basic[district]" value="<%=data.basic.district%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>City</label>
+        <input type="text" name="basic[city]" value="<%=data.basic.city%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>State</label>
+        <input type="text" name="basic[state]" value="<%=data.basic.state%>">
+      </div>
+    </div>
+
+    <div class="four wide column">
+      <div class="field">
+        <label>Pincode</label>
+        <input type="text" name="basic[pincode]" value="<%=data.basic.pincode%>">
+      </div>
+    </div>
+
+    <div class="three wide column">
+      <div class="field">
+        <label>Mobile No.</label>
+        <input type="text" name="basic[mob_no]" value="<%=data.basic.mob_no%>">
+      </div>
+    </div>
+
+
+      <div class="two wide column">
+        <div class="field">
+      <label>Caste</label>
+        <select name="basic[category]" class="ui fluid search dropdown" id="ab">
+          <% if (!data.basic.category) { %>
+            <option value="">Select</option>
+          <%}else {%>
+            <option value="<%=data.basic.category%>"><%=data.basic.category%></option>
+          <%}%>
+          <% if (data.basic.category!="Open") { %>
+            <option value="Open">Open</option>
+          <%}%>
+          <% if (data.basic.category!="SEBC") { %>
+            <option value="SEBC">SEBC</option>
+          <%}%>
+          <% if (data.basic.category!="ST") { %>
+            <option value="ST">ST</option>
+          <%}%>
+          <% if (data.basic.category!="SC") { %>
+            <option value="SC">SC</option>
+          <%}%>
+        </select>
+      </div>
+    </div>
+
+      <div class="two wide column">
+        <div class="field">
+      <label>Mode of Admission</label>
+        <select name="basic[mode_of_adm]" class="ui fluid search dropdown" id="ab">
+          <% if (!data.basic.mode_of_adm) { %>
+            <option value="">Select</option>
+          <%}else {%>
+            <option value="<%=data.basic.mode_of_adm%>"><%=data.basic.mode_of_adm%></option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="General") { %>
+            <option value="General">General</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="D to D") { %>
+            <option value="D to D">D to D</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="J and k") { %>
+            <option value="J and k">J and k</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="Ex-servicemen") { %>
+            <option value="Ex-servicemen">Ex-servicemen</option>
+          <%}%>
+          <% if (data.basic.mode_of_adm!="GN") { %>
+            <option value="GN">GN</option>
+          <%}%>
+        </select>
+      </div>
+    </div>
+
+    <div class="two wide column">
+      <div class="field">
+    <label>TFW</label>
+      <select name="basic[tfw]" class="ui fluid search dropdown" id="ab">
+        <% if (!data.basic.tfw) { %>
+          <option value="">Select</option>
+        <%}else {%>
+          <option value="<%=data.basic.tfw%>"><%=data.basic.tfw%></option>
+        <%}%>
+        <% if (data.basic.tfw!="Yes") { %>
+          <option value="Yes">Yes</option>
+        <%}%>
+        <% if (data.basic.tfw!="No") { %>
+          <option value="No">No</option>
+        <%}%>
+      </select>
+    </div>
+  </div>
+
+
+      <div class="two wide column">
+        <div class="field">
+      <label>Branch</label>
+        <select name="basic[branch]" class="ui fluid search dropdown" id="ab">
+          <% if (!data.basic.mode_of_adm) { %>
+            <option value="">Select</option>
+          <%}else {%>
+            <option value="<%=data.basic.branch%>"><%=data.basic.branch%></option>
+          <%}%>
+          <% if (data.basic.branch!="Computer") { %>
+            <option value="Computer">Computer</option>
+          <%}%>
+          <% if (data.basic.branch!="Information Technology") { %>
+            <option value="Information Technology">Information Technology</option>
+          <%}%>
+          <% if (data.basic.branch!="Electronics & Communication") { %>
+            <option value="Electronics & Communication">Electronics & Communication</option>
+          <%}%>
+          <% if (data.basic.branch!="Electrical") { %>
+            <option value="Electrical">Electrical</option>
+          <%}%>
+          <% if (data.basic.branch!="Civil") { %>
+            <option value="Civil">Civil</option>
+          <%}%>
+          <% if (data.basic.branch!="Automobile") { %>
+            <option value="Automobile">Automobile</option>
+          <%}%>
+          <% if (data.basic.branch!="Mechanical") { %>
+            <option value="Mechanical">Mechanical</option>
+          <%}%>
+        </select>
+      </div>
+    </div>
+
+      <div class="three wide column">
+        <div class="field">
+          <label>Date of Birth</label>
+          <div class="ui calendar" id="example1">
+            <div class="ui input left icon">
+              <i class="calendar icon"></i>
+              <input type="text" name="basic[dob]" value="<%=data.basic.dob%>" placeholder="Date">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two wide column">
+        <div class="field">
+          <label>Division</label>
+          <input type="text" name="basic[division]" value="<%=data.basic.division%>">
+        </div>
+      </div>
+
+      <div class="four wide column">
+          <div class="ui form" >
+          <div class="inline fields">
+          <label>Gender</label> <br>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input  type="radio" name="basic[gender]" checked="checked" value="M">
+                <label>Male</label>
+              </div>
+            </div>
+            <div class="field">
+            <div class="ui radio checkbox">
+            <input  type="radio" name="basic[gender]"  value="f">
+            <label>Female</label>
+            </div>
+            </div>
+          </div>
+          </div>
+      </div>
+
+    </div><br><br>
+  <button class="ui green button" type="submit">Submit</button>
+</form>
+
+<script type="text/javascript">
+  $('#example1').calendar({type: 'date'});
+  $('#BasicDropdown').dropdown({ on: 'hover'});
+  $('abc').dropdown({ on: 'click'});
+  $('ab')
+  .dropdown({
+    allowAdditions: true
+  })
+;
+</script>
+
+
+
+
+ <% include ./partials/footer %>
