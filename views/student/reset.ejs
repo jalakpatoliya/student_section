@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.js">
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+  <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
+  <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>
+  <link rel="stylesheet" href="/stylesheets/main.css">
+
+  <body>
+    <br>
+    <div class="ui container">
+      <form class="ui form" action="/reset/<%= token %>" method="POST">
+
+          <div class="ui center aligned block header ">
+            <h3>Reset Password</h3>
+          </div>
+          <br>
+          <div class="ui four fields">
+            <div class="ui field">
+              <%- messages() %>
+              <br>
+            </div>
+          </div>
+        <div class="four fields">
+          <div class="field">
+            <label for="password">New Password</label>
+            <input type="password" name="password" value="" placeholder="New password" autofocus="autofocus" />
+          </div>
+        </div>
+        <div class="four fields">
+          <div class="field">
+            <label for="confirm">Confirm Password</label>
+            <input type="password" name="confirm" value="" placeholder="Confirm password" class="form-control"/>
+          </div>
+        </div>
+  		    <button type="submit" class="ui basic blue button">Update Password</button>
+  		</form>

@@ -1,18 +1,51 @@
 //=====================Importing all dependencies============
-var mongoose = require('mongoose'),
-    express  = require('express'),
-    mongoXlsx = require("mongo-xlsx"),
-    bodyParser = require("body-parser"),
-    multer    = require("multer"),
-    storage = multer.diskStorage(
-      {
-        destination: function (req, file, cb) {cb(null, 'uploads/')},
-        filename: function (req, file, cb) {cb(null, file.originalname)}
-      }),
-    authFunctions  = require('../validation/authFunctions');
+var mongoose                  = require('mongoose'),
+    express                   = require('express'),
+    mongoXlsx                 = require("mongo-xlsx"),
+    bodyParser                = require("body-parser"),
+    multer                    = require("multer"),
+    storage                   = multer.diskStorage(
+                                  {
+                                    destination: function (req, file, cb) {cb(null, 'uploads/')},
+                                    filename: function (req, file, cb) {cb(null, file.originalname)}
+                                  }),
+    authFunctions             = require('../validation/authFunctions'),
+    passport                  = require("passport"),
+    LocalStrategy             = require("passport-local"),
+    passportLocalMongoose     = require("passport-local-mongoose"),
+    mongoose                  = require("mongoose"),
+    User                      = require("../models/user"),
+    TempUser                  = require("../models/tempUser"),
+    authFunctions             = require('../validation/authFunctions'),
+    cookieParser              = require('cookie-parser'),
+    flash                     = require('connect-flash'),
+    expressSession            = require("express-session"),
+    nodemailer                = require("nodemailer"),
+    async                     = require("async"),
+    crypto                    = require("crypto");
 var upload = multer({ storage: storage }),
     router      = express.Router();
 var flatten = require('flat');
+//===============================================================================
+//======================= Accuring user module  =================================
+//===============================================================================
+      passport.use(new LocalStrategy(User.authenticate()));
+      passport.serializeUser(User.serializeUser()); // it reades, decodes information in session,encodes it
+      passport.deserializeUser(User.deserializeUser());
+
+      // Express-session Middleware
+      router.use(expressSession({
+        secret: 'keyboard cat',
+        resave: true,
+        saveUninitialized: true,
+        cookie: { secure: true }
+      }))
+      // Express-mesages Middleware
+      router.use(require('connect-flash')());
+      router.use(function (req, res, next) {
+        res.locals.messages = require('express-messages')(req, res);
+        next();
+      });
 //===============================================================================
 //======================= Accuring internal module =============================
 //===============================================================================
@@ -91,6 +124,15 @@ router.post("/edit/student",authFunctions.isLoggedIn,function (req,res) {
   console.log(req.body.enroll);
   var obj = {basic:req.body.basic};
 console.log(obj);
+console.log(req.body.basic['email']);
+console.log(req.user.username);
+  User.findOne({username:req.user.username},function(err,user){
+    console.log("INto the user:");
+    console.log(user.username);
+    console.log(user.role);
+    user.email = req.body.basic['email'];
+    user.save();
+  })
 
   Students.findByIdAndUpdate(req.body.enroll,flatten(obj),{overwrite:false},function (err,UpdatedData) {
     if (err) {
