@@ -7,37 +7,38 @@
   <button class="ui  button" id="tooglebut2" onclick="togfun2()">Time Event</button>
 </div>
 <hr>
-<form class="ui form" method="post" action="notify" >
+<form class="ui form" method="post" action="notify" id="abc">
 <input  name="eventoption" id="eventoption" type="hidden" value="instant">
   <div class="field">
     <label>To:</label>
-    <div class="ui dropdown button"  name="to" id="sem">
-      <input name="year" type="hidden" >
+    <div class="ui dropdown button"  name="to" id="sem" >
+      <input name="year" type="hidden" id="aaa" >
       <i class="filter icon"></i>
       <span class="text">Year</span>
-      <div class="menu">
+      <div class="menu" required>
         <div class="item" data-value="all">All four years</div>
         <div class="item" data-value="first">1 YEAR</div>
         <div class="item" data-value="second">2 YEAR</div>
         <div class="item" data-value="third">3 YEAR</div>
         <div class="item" data-value="fourth">4 YEAR</div>
+        <div class="default" data-value="all"></div>
       </div><!-- menu -->
     </div><!-- OtherDropdown -->
     <div class="ui dropdown button"  name="to" id="to">
-      <input name="branch" type="hidden"  required>
+      <input name="branch" type="hidden"  id="bbb">
       <i class="filter icon"></i>
       <span class="text">Select User</span>
       <div class="menu">
         <div class="item" data-value="all">All Branch</div>
         <div class="item">Specific Branch
           <div class="menu">
-            <div class="item" data-value=" Electronics and Comm">EC</div>
-            <div class="item" data-value=" Computer">computer</div>
-            <div class="item" data-value=" IT">IT</div>
+            <div class="item" data-value="Computer">Computer</div>
+            <div class="item" data-value="Electronics & Communication">EC</div>
+            <div class="item" data-value="Information Technology">IT</div>
             <div class="item" data-value="Automobile">Automobile</div>
-            <div class="item" data-value=" Mechanical">Mechanical</div>
+            <div class="item" data-value="Mechanical">Mechanical</div>
             <div class="item" data-value="Civil">Civil</div>
-            <div class="item" data-value=" Electrical">Electrical</div>
+            <div class="item" data-value="Electrical">Electrical</div>
           </div>
         </div>
       </div><!-- menu -->
@@ -54,7 +55,7 @@
   </div>
   <div class="field">
     <label>Content:</label>
-    <textarea name="msg" placeholder="Message.................!"></textarea>
+    <textarea name="msg" placeholder="Message.................!" id="ccc"></textarea>
   </div>
 
   <button class="ui button" type="submit">Send</button>
@@ -92,4 +93,44 @@ $('#togopt2').show();
 }
 
 $('#togopt2').hide();
+
+
+
+$('#abc')
+  .form({
+    on: 'blur',
+    fields: {
+      aaa: {
+        identifier  : 'aaa',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      },
+      bbb: {
+        identifier  : 'bbb',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      },
+      ccc: {
+        identifier  : 'ccc',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      }
+
+
+    }
+  })
+;
+
 </script>

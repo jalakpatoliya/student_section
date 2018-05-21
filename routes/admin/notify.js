@@ -45,34 +45,37 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
          console.log("all");
          if(sem=="all"){
            data.forEach(elem=>{
-               listofemails.push((elem.basic.email).trim());
+             console.log(elem);
+             console.log(elem.basic.email);
+             Create_List_of_emails(elem.basic.email);
            });//data.foreach
+           console.log("listofemails:",listofemails);
          }//all sem
          else{
 
            if(sem=="first"){
              data.forEach(elem=>{
              if(elem.cur_sem==1||elem.cur_sem==2){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
                });//data.forEach
            }else if(sem=="second"){
              data.forEach(elem=>{
              if(elem.cur_sem==3||elem.cur_sem==4){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
                });//data.forEach
            }else if(sem=="third"){
              data.forEach(elem=>{
              if(elem.cur_sem==5||elem.cur_sem==6){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
                });//data.forEach
 
            }else if(sem=="fourth"){
              data.forEach(elem=>{
              if(elem.cur_sem==7||elem.cur_sem==8){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
                });//data.forEach
            }
@@ -84,32 +87,32 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
          sem = (req.body.year).trim();
          if(sem=="all"){
            data.forEach(elem=>{
-             if((elem.basic.branch).trim()==(req.body.branch).trim()){
-               listofemails.push((elem.basic.email).trim());
+             if(elem.basic.branch==req.body.branch){
+               Create_List_of_emails(elem.basic.email);
              }
            });//data.foreach
          }//all sem
          else{
            data.forEach(elem=>{
-             if((elem.basic.branch).trim()==(req.body.branch).trim()){
+             if(elem.basic.branch==req.body.branch){
            if(sem=="first"){
              if(elem.cur_sem==1||elem.cur_sem==2){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
 
            }else if(sem=="second"){
              if(elem.cur_sem==3||elem.cur_sem==4){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
 
            }else if(sem=="third"){
              if(elem.cur_sem==5||elem.cur_sem==6){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
 
            }else if(sem=="fourth"){
              if(elem.cur_sem==7||elem.cur_sem==8){
-               listofemails.push((elem.basic.email).trim());
+               Create_List_of_emails(elem.basic.email);
              }
            }
          }//Branch
@@ -176,7 +179,7 @@ if(req.body.branch=="all"){
  console.log(sem);
  if(sem=="all"){
    data.forEach(elem=>{
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
    });//data.foreach
  }//all sem
  else{
@@ -184,26 +187,26 @@ if(req.body.branch=="all"){
    if(sem=="first"){
      data.forEach(elem=>{
      if(elem.cur_sem==1||elem.cur_sem==2){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
        });//data.forEach
    }else if(sem=="second"){
      data.forEach(elem=>{
      if(elem.cur_sem==3||elem.cur_sem==4){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
        });//data.forEach
    }else if(sem=="third"){
      data.forEach(elem=>{
      if(elem.cur_sem==5||elem.cur_sem==6){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
        });//data.forEach
 
    }else if(sem=="fourth"){
      data.forEach(elem=>{
      if(elem.cur_sem==7||elem.cur_sem==8){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
        });//data.forEach
    }
@@ -215,32 +218,32 @@ else{
  sem = (req.body.year).trim();
  if(sem=="all"){
    data.forEach(elem=>{
-     if((elem.basic.branch).trim()==(req.body.branch).trim()){
-       listofemails.push((elem.basic.email).trim());
+     if(elem.basic.branch==req.body.branch){
+       Create_List_of_emails(elem.basic.email);
      }
    });//data.foreach
  }//all sem
  else{
    data.forEach(elem=>{
-     if((elem.basic.branch).trim()==(req.body.branch).trim()){
+     if(elem.basic.branch==req.body.branch){
    if(sem=="first"){
      if(elem.cur_sem==1||elem.cur_sem==2){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
 
    }else if(sem=="second"){
      if(elem.cur_sem==3||elem.cur_sem==4){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
 
    }else if(sem=="third"){
      if(elem.cur_sem==5||elem.cur_sem==6){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
 
    }else if(sem=="fourth"){
      if(elem.cur_sem==7||elem.cur_sem==8){
-       listofemails.push((elem.basic.email).trim());
+       Create_List_of_emails(elem.basic.email);
      }
    }
  }//Branch
@@ -316,6 +319,11 @@ router.get("/notify",authFunctions.isLoggedIn,function(req,res){
   res.render("./admin/notify.ejs")
 })
 
-
+function Create_List_of_emails(email) {
+  if (!email) {
+  } else {
+    listofemails.push((email).trim());
+  }
+}
 
 module.exports = router;

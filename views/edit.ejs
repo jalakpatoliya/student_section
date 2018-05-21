@@ -33,7 +33,7 @@ else if(currentUser.role=="student"){
     <div class="six wide column">
       <div class="field">
         <label>Email Id</label>
-        <input type="text" name="basic[email]" value="<%=data.basic.email%>">
+        <input type="email" name="basic[email]" value="<%=data.basic.email%>">
       </div>
     </div>
 
@@ -75,14 +75,14 @@ else if(currentUser.role=="student"){
     <div class="four wide column">
       <div class="field">
         <label>Pincode</label>
-        <input type="text" name="basic[pincode]" value="<%=data.basic.pincode%>">
+        <input type="number" name="basic[pincode]" value="<%=data.basic.pincode%>">
       </div>
     </div>
 
     <div class="three wide column">
       <div class="field">
         <label>Mobile No.</label>
-        <input type="text" name="basic[mob_no]" value="<%=data.basic.mob_no%>">
+        <input type="number" min="1000000000" max="9999999999"  name="basic[mob_no]" value="<%=data.basic.mob_no%>">
       </div>
     </div>
 
@@ -164,7 +164,7 @@ else if(currentUser.role=="student"){
         <div class="field">
       <label>Branch</label>
         <select name="basic[branch]" class="ui fluid search dropdown" id="ab">
-          <% if (!data.basic.mode_of_adm) { %>
+          <% if (!data.basic.branch) { %>
             <option value="">Select</option>
           <%}else {%>
             <option value="<%=data.basic.branch%>"><%=data.basic.branch%></option>
