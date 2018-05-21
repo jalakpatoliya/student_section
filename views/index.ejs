@@ -37,15 +37,16 @@ else if(currentUser.role=="admin"){
       <div class="field">
         <label for="file"> File    Path   : </label>
       </div>
+      <div class="uploadExtensionError" style="display: none">Only Excel sheets allowed! Select only Excel file.</div>
       <div class="four fields">
         <div class="field">
           <div class="ui input">
-            <input class="ui input  button" type="file" name="file" required>
+            <input class="ui input  button" type="file" name="file"  id="check_ext" accept=".xlsx,.xls,.csv" required>
           </div>
         </div>
         <div class="field">
           <div class="ui input">
-            <button class="ui green button" type="submit" name="button" id="tog" >upload</button>
+            <button id="submit" class="ui green button" type="submit" name="button" id="tog" >upload</button>
           </div>
         </div>
       </div>
@@ -61,6 +62,25 @@ else if(currentUser.role=="admin"){
   // $('#tog').on('submit', function() {
   //   $.tab('change tab', 'tab-name');
   // });
+
+  $('#check_ext').on( 'change', function() {
+   myfile= $( this ).val();
+   var ext = myfile.split('.').pop();
+   if(ext=="csv" || ext=="xlsx" || ext=="xls"){
+
+   } else{
+       alert("Only Excel sheets are allowed!!");
+   }
+  });
+
+      $('#submit').click(function(event) {
+          var val = $('input[type=file]').val().toLowerCase();
+          var regex = new RegExp("(.*?)\.(csv|xlsx|xls)$");
+          if(!(regex.test(val))) {
+              $('.uploadExtensionError').show();
+              event.preventDefault();
+          }
+      });
 
   </script>
 

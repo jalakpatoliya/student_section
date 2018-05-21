@@ -19,17 +19,18 @@
   <div class="field">
     <label for="file"> Select file : </label>
   </div>
-
+  <div class="uploadExtensionError" style="display: none">Only PDF allowed! Select only pdf file.</div>
+  <br>
   <div class="four fields">
     <div class="field">
-      <input type="file" name="file" >
+      <input type="file" id="check_ext"accept=".pdf,.docx,.doc" name="file" >
     </div>
   </div>
 
   <div class="four fields">
     <div class="field">
       <div class="ui input">
-        <button class="ui green button" type="submit" name="button">upload</button>
+        <button class="ui green button" id="submit" type="submit" name="button">upload</button>
       </div>
     </div>
   </div>
@@ -53,5 +54,26 @@
 <%}else { %>
   No files to show
 <% }%>
+
+<script type="text/javascript">
+$('#check_ext').on( 'change', function() {
+ myfile= $( this ).val();
+ var ext = myfile.split('.').pop();
+ if(ext=="pdf" || ext=="docx" || ext=="doc"){
+
+ } else{
+     alert("Only pdf files are allowed!!");
+ }
+});
+
+    $('#submit').click(function(event) {
+        var val = $('input[type=file]').val().toLowerCase();
+        var regex = new RegExp("(.*?)\.(pdf|docx|doc)$");
+        if(!(regex.test(val))) {
+            $('.uploadExtensionError').show();
+            event.preventDefault();
+        }
+    });
+</script>
 
 <% include ../partials/footer %>
