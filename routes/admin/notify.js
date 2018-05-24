@@ -2,10 +2,21 @@
 var mongoose = require('mongoose'),
     express  = require('express'),
     router   = express.Router(),
-    Students  = require('../../models/student'); //Importing multiple models and schemas
-    authFunctions = require('../../validation/authFunctions');
+    Students  = require('../../models/student'), //Importing multiple models and schemas
+    authFunctions = require('../../validation/authFunctions'),
+    path                  = require('path'),
+    crypto                = require('crypto'),
+    multer          = require("multer"),
+    storage         = multer.diskStorage(
+      {
+        destination: function (req, file, cb) {cb(null, 'uploads/')},
+        filename: function (req, file, cb) {cb(null, file.originalname)}
+      }),
+     upload        = multer({ storage: storage });
 
-/*******************************************************************************/
+    //****************************************************************************************
+    //****************************************************************************************
+    //****************************************************************************************
     var schedule = require('node-schedule');
     var async = require("async");
     var nodemailer = require("nodemailer");
@@ -29,7 +40,8 @@ var mongoose = require('mongoose'),
 //======================
 // SHOW ROUTE
 //======================
-router.post("/notify",authFunctions.isLoggedIn,function(req,res){
+router.post("/notify",upload.array('file',100),function(req,res){
+
 
  if(req.body.eventoption=="instant"){
 
@@ -126,6 +138,8 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
      self.invokeOperation();
     };
 
+
+
     massMailer.prototype.invokeOperation = function() {
      var self = this;
      async.each(listofemails,self.SendEmail);
@@ -137,21 +151,53 @@ router.post("/notify",authFunctions.isLoggedIn,function(req,res){
      self.status = false;
      async.waterfall([
        function(callback) {
-          var mailOptions = {
-              from: 'GEC Modasa <fygecmodasa@gmail.com>',
-              to: Email,
-              subject: sub,
-              text: content
+
+          if (!req.files) {
+            console.log("true is running");
+            var mailOptions = {
+                from: 'GEC Modasa <fygecmodasa@gmail.com>',
+                to: Email,
+                subject: sub,
+                text: content,
+            }
+           transporter.sendMail(mailOptions, function(error, info) {
+             if(error) {
+               console.log(error)
+               failure_email.push(Email);
+             } else {
+               self.status = true;
+               success_email.push(Email);
+             }
+           });
+         } else {
+          var attachementList = [];
+          for (var i = 0; i < req.files.length; i++) {
+            attachementList.push({
+              filename: req.files[i].originalname,
+              path: req.files[i].path
+            })
           }
-         transporter.sendMail(mailOptions, function(error, info) {
-           if(error) {
-             console.log(error)
-             failure_email.push(Email);
-           } else {
-             self.status = true;
-             success_email.push(Email);
-           }
-         });
+
+           console.log("false is running");
+           console.log("req.files :- ",req.files);
+            var mailOptions = {
+                from: 'GEC Modasa <fygecmodasa@gmail.com>',
+                to: Email,
+                subject: sub,
+                text: content,
+                attachments:attachementList
+            }
+           transporter.sendMail(mailOptions, function(error, info) {
+             if(error) {
+               console.log(error)
+               failure_email.push(Email);
+             } else {
+               self.status = true;
+               success_email.push(Email);
+             }
+           });
+          }
+
        },
      ]);
     }
@@ -274,21 +320,44 @@ else{
   self.status = false;
   async.waterfall([
     function(callback) {
-       var mailOptions = {
-           from: 'GEC Modasa <fygecmodasa@gmail.com>',
-           to: Email,
-           subject: sub,
-           text: content
-       }
-      transporter.sendMail(mailOptions, function(error, info) {
-        if(error) {
-          console.log(error)
-          failure_email.push(Email);
-        } else {
-          self.status = true;
-          success_email.push(Email);
+
+      if (!req.file) {
+        var mailOptions = {
+            from: 'GEC Modasa <fygecmodasa@gmail.com>',
+            to: Email,
+            subject: sub,
+            text: content
         }
-      });
+       transporter.sendMail(mailOptions, function(error, info) {
+         if(error) {
+           console.log(error)
+           failure_email.push(Email);
+         } else {
+           self.status = true;
+           success_email.push(Email);
+         }
+       });
+      } else {
+        var mailOptions = {
+            from: 'GEC Modasa <fygecmodasa@gmail.com>',
+            to: Email,
+            subject: sub,
+            text: content,
+            attachments:{   // file on disk as an attachment
+                            path: req.file.path // stream this file
+                        }
+        }
+       transporter.sendMail(mailOptions, function(error, info) {
+         if(error) {
+           console.log(error)
+           failure_email.push(Email);
+         } else {
+           self.status = true;
+           success_email.push(Email);
+         }
+       });
+      }
+
     },
   ]);
  }

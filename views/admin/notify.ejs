@@ -7,14 +7,14 @@
   <button class="ui  button" id="tooglebut2" onclick="togfun2()">Time Event</button>
 </div>
 <hr>
-<form class="ui form" method="post" action="notify" id="abc">
+<form class="ui form" method="post" enctype="multipart/form-data" action="notify" id="abc">
 <input  name="eventoption" id="eventoption" type="hidden" value="instant">
   <div class="field">
     <label>To:</label>
     <div class="ui dropdown button"  name="to" id="sem" >
-      <input name="year" type="hidden" id="aaa" >
+      <input name="year" type="hidden" id="aaa" id="ddd">
       <i class="filter icon"></i>
-      <span class="text">Year</span>
+      <span class="text">Select Year</span>
       <div class="menu" required>
         <div class="item" data-value="all">All four years</div>
         <div class="item" data-value="first">1 YEAR</div>
@@ -48,6 +48,15 @@
     <label>Event Ending Date/Time:</label>
     <input type="datetime-local" name="dt" >
   </div>
+
+<span id = "status"></span>
+
+  <div class="four fields">
+    <div class="field">
+      <input type="file" id="check_ext" name="file" multiple>
+    </div>
+  </div>
+
   <div class="field">
     <label>Subject:</label>
     <input type="text" name="sub" >
