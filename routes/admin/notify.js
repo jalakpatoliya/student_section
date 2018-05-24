@@ -170,6 +170,7 @@ router.post("/notify",upload.array('file',100),function(req,res){
              }
            });
          } else {
+
           var attachementList = [];
           for (var i = 0; i < req.files.length; i++) {
             attachementList.push({
@@ -177,9 +178,9 @@ router.post("/notify",upload.array('file',100),function(req,res){
               path: req.files[i].path
             })
           }
-
            console.log("false is running");
            console.log("req.files :- ",req.files);
+           
             var mailOptions = {
                 from: 'GEC Modasa <fygecmodasa@gmail.com>',
                 to: Email,
@@ -338,14 +339,23 @@ else{
          }
        });
       } else {
+
+        var attachementList = [];
+        for (var i = 0; i < req.files.length; i++) {
+          attachementList.push({
+            filename: req.files[i].originalname,
+            path: req.files[i].path
+          })
+        }
+         console.log("false is running");
+         console.log("req.files :- ",req.files);
+
         var mailOptions = {
             from: 'GEC Modasa <fygecmodasa@gmail.com>',
             to: Email,
             subject: sub,
             text: content,
-            attachments:{   // file on disk as an attachment
-                            path: req.file.path // stream this file
-                        }
+            attachments:attachementList
         }
        transporter.sendMail(mailOptions, function(error, info) {
          if(error) {
