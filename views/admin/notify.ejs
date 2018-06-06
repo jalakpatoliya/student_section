@@ -53,7 +53,8 @@
 
   <div class="four fields">
     <div class="field">
-      <input type="file" id="check_ext" name="file" multiple>
+      <label>Attach files:</label>
+      <input type="file"  name="file" multiple>
     </div>
   </div>
 
@@ -83,9 +84,6 @@ $('#to').dropdown({
   }
 });
 $('#sem').dropdown({ on: 'hover'}).hide();
-
-
-
 // $('#tooglebut1').button().on("click",function(){alert("happening")})
 function togfun1(){
 document.getElementById("tooglebut2").className = "ui button";
@@ -97,14 +95,9 @@ function togfun2(){
 document.getElementById("tooglebut1").className = "ui button";
 document.getElementById("tooglebut2").className = "ui positive button";
 document.getElementById("eventoption").value = "timedriven";
-
 $('#togopt2').show();
 }
-
 $('#togopt2').hide();
-
-
-
 $('#abc')
   .form({
     on: 'blur',
@@ -136,10 +129,7 @@ $('#abc')
           }
         ]
       }
-
-
     }
   })
 ;
-
 </script>

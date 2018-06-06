@@ -42,6 +42,20 @@ var studentSchema = new mongoose.Schema({
     pincode         :String,
   },
 
+  notifications :[
+    {
+        sub           :String,
+        content       :String,
+        attachments   :[
+                        {
+                          filename :String,
+                          path     :String
+                        }
+                      ],
+        date_time     :String 
+    }
+  ],
+
   s_1:{
     Term_fee     :Number,
     Exam_fee_Reg :Number,

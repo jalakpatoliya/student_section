@@ -1,0 +1,41 @@
+<% include ./partials/header %>
+
+<%notifications.forEach(function (notif) {%>
+  <div class="ui big message">
+    <i class="close icon"></i>
+    <form class="ui form" action="/deleteNotification/<%=notif._id%>?_method=DELETE" method="post">
+        
+      <button type="submit" name="delete">delete</button>
+    </form>
+    <div class="header">
+      Subject :<%=notif.sub%>
+      <div style="text-align: right;">
+
+      <%=notif.date_time%>
+      </div>
+    </div>
+    Message :
+    <p><%=notif.content%></p>
+
+
+
+      <%  if (notif.attachments) { %>
+          <div class="ui images">
+          <%notif.attachments.forEach(function(fil){%>
+            <% if (fil.filename.slice((fil.filename.lastIndexOf(".") - 1 >>> 0) + 2)=='png'||fil.filename.slice((fil.filename.lastIndexOf(".") - 1 >>> 0) + 2)=='jpg'||fil.filename.slice((fil.filename.lastIndexOf(".") - 1 >>> 0) + 2)=='jpeg') { %>
+                <img class="ui image" src="http://localhost:3823/<%=fil.filename%>"  alt="image not displayed" class="ui medium image">
+              <br><br>
+            <% }%>
+          <%})%>
+          </div>
+        <%}%>
+  </div>
+<%})%>
+
+<div style="text-align: right;">
+
+</div>
+
+
+
+<% include ../partials/footer %>

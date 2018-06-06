@@ -41,23 +41,25 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname+"/public"));
+app.use(express.static(__dirname+"/uploads"));
 //============================================================================
 //===================== acquiring router =====================================
 //============================================================================
-var indexRoute   = require('./routes/index'),
-    searchRoute  = require('./routes/search'),
-    show         = require('./routes/show'),
-    showError    = require('./routes/error'),
-    edit         = require('./routes/edit'),
-    filt         = require('./routes/customsearch'),
-    userRoute    = require('./routes/userRoute')
-    notify       = require('./routes/admin/notify'),
-    redirect     = require('./routes/redirect'),
-    welcome      = require("./routes/welcome"),
-    uploads      = require('./routes/student/uploads'),
-   insertScheme  = require('./routes/admin/insertSchema'),
-   receipts      =require('./routes/user/receipts');
-   searchScheme  =require('./routes/user/searchScheme');
+var indexRoute             = require('./routes/index'),
+    searchRoute            = require('./routes/search'),
+    show                   = require('./routes/show'),
+    showError              = require('./routes/error'),
+    edit                   = require('./routes/edit'),
+    filt                   = require('./routes/customsearch'),
+    userRoute              = require('./routes/userRoute')
+    notify                 = require('./routes/admin/notify'),
+    redirect               = require('./routes/redirect'),
+    welcome                = require("./routes/welcome"),
+    uploads                = require('./routes/student/uploads'),
+    insertScheme           = require('./routes/admin/insertSchema'),
+    receipts               = require('./routes/user/receipts'),
+    searchScheme           = require('./routes/user/searchScheme'),
+    studentNotifications   = require('./routes/student/studentNotifications');
 
 //=========================================================
 //=============Initializing Session & Passport=============
@@ -91,6 +93,7 @@ app.use(uploads);
 app.use(insertScheme);
 app.use(receipts);
 app.use(searchScheme);
+app.use(studentNotifications);
 //=========================================================
 //============= To create Admin ===========================
 //=========================================================
@@ -123,6 +126,27 @@ TempUser.find({},function(err,data){
   }
 })
 //============================================================================
+//============================================================================
+//===========================================================================
+function date_time() {
+  var objToday = new Date(),
+  	weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
+  	dayOfWeek = weekday[objToday.getDay()],
+  	domEnder = function() { var a = objToday; if (/1/.test(parseInt((a + "").charAt(0)))) return "th"; a = parseInt((a + "").charAt(1)); return 1 == a ? "st" : 2 == a ? "nd" : 3 == a ? "rd" : "th" }(),
+  	dayOfMonth = today + ( objToday.getDate() < 10) ? '0' + objToday.getDate() + domEnder : objToday.getDate() + domEnder,
+  	months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+  	curMonth = months[objToday.getMonth()],
+  	curYear = objToday.getFullYear(),
+  	curHour = objToday.getHours() > 12 ? objToday.getHours() - 12 : (objToday.getHours() < 10 ? "0" + objToday.getHours() : objToday.getHours()),
+  	curMinute = objToday.getMinutes() < 10 ? "0" + objToday.getMinutes() : objToday.getMinutes(),
+  	curSeconds = objToday.getSeconds() < 10 ? "0" + objToday.getSeconds() : objToday.getSeconds(),
+  	curMeridiem = objToday.getHours() > 12 ? "PM" : "AM";
+  var today = curHour + ":" + curMinute + "." + curSeconds + curMeridiem + " " + dayOfWeek + " " + dayOfMonth + " of " + curMonth + ", " + curYear;
+  return today
+}
+console.log(date_time());
+
+//===========================================================================
 //============================================================================
 //===========================================================================
 app.listen(3823,function(){

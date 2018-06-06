@@ -21,6 +21,7 @@ var mongoose = require('mongoose'),
     var async = require("async");
     var nodemailer = require("nodemailer");
     var listofemails  = [];
+    var list_of_id  = [];
     var success_email = [];
     var failure_email = [];
 
@@ -51,8 +52,10 @@ router.post("/notify",upload.array('file',100),function(req,res){
         content=req.body.msg;
         sem=req.body.year;
 
+
      Students.find().lean().exec(function(err,data){
           listofemails=[]
+          list_of_id=[]
        if(req.body.branch=="all"){
          console.log("all");
          if(sem=="all"){
@@ -60,8 +63,10 @@ router.post("/notify",upload.array('file',100),function(req,res){
              console.log(elem);
              console.log(elem.basic.email);
              Create_List_of_emails(elem.basic.email);
+             Create_List_of_id(elem._id);
            });//data.foreach
            console.log("listofemails:",listofemails);
+           console.log("list_of_id:",list_of_id);
          }//all sem
          else{
 
@@ -69,18 +74,21 @@ router.post("/notify",upload.array('file',100),function(req,res){
              data.forEach(elem=>{
              if(elem.cur_sem==1||elem.cur_sem==2){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
                });//data.forEach
            }else if(sem=="second"){
              data.forEach(elem=>{
              if(elem.cur_sem==3||elem.cur_sem==4){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
                });//data.forEach
            }else if(sem=="third"){
              data.forEach(elem=>{
              if(elem.cur_sem==5||elem.cur_sem==6){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
                });//data.forEach
 
@@ -88,6 +96,7 @@ router.post("/notify",upload.array('file',100),function(req,res){
              data.forEach(elem=>{
              if(elem.cur_sem==7||elem.cur_sem==8){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
                });//data.forEach
            }
@@ -101,6 +110,7 @@ router.post("/notify",upload.array('file',100),function(req,res){
            data.forEach(elem=>{
              if(elem.basic.branch==req.body.branch){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
            });//data.foreach
          }//all sem
@@ -110,21 +120,25 @@ router.post("/notify",upload.array('file',100),function(req,res){
            if(sem=="first"){
              if(elem.cur_sem==1||elem.cur_sem==2){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
 
            }else if(sem=="second"){
              if(elem.cur_sem==3||elem.cur_sem==4){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
 
            }else if(sem=="third"){
              if(elem.cur_sem==5||elem.cur_sem==6){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
 
            }else if(sem=="fourth"){
              if(elem.cur_sem==7||elem.cur_sem==8){
                Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
              }
            }
          }//Branch
@@ -153,13 +167,21 @@ router.post("/notify",upload.array('file',100),function(req,res){
        function(callback) {
 
           if (!req.files) {
-            console.log("true is running");
+            console.log("Sending mails without attachment");
             var mailOptions = {
                 from: 'GEC Modasa <fygecmodasa@gmail.com>',
                 to: Email,
                 subject: sub,
                 text: content,
-            }
+            };
+
+            list_of_id.forEach(function(id) {
+              Students.findById(id,(err,stud ) => {
+                var notif_object = {sub:req.body.sub,content:req.body.msg,date_time:date_time()}
+                stud.notifications.push(notif_object)
+                stud.save();
+              });
+            })
            transporter.sendMail(mailOptions, function(error, info) {
              if(error) {
                console.log(error)
@@ -178,16 +200,23 @@ router.post("/notify",upload.array('file',100),function(req,res){
               path: req.files[i].path
             })
           }
-           console.log("false is running");
+           console.log("Sending mails with attachments.");
            console.log("req.files :- ",req.files);
-           
+
             var mailOptions = {
                 from: 'GEC Modasa <fygecmodasa@gmail.com>',
                 to: Email,
                 subject: sub,
                 text: content,
                 attachments:attachementList
-            }
+            };
+            list_of_id.forEach(function(id) {
+              Students.findById(id,(err,stud ) => {
+                var notif_object = {sub:req.body.sub,content:req.body.msg,attachments:attachementList,date_time:date_time()}
+                stud.notifications.push(notif_object)
+                stud.save();
+              });
+            })
            transporter.sendMail(mailOptions, function(error, info) {
              if(error) {
                console.log(error)
@@ -221,12 +250,14 @@ console.log(req.body.eventoption);
 Students.find().lean().exec(function(err,data){
   //////////////finding list of email//////////////////////////
   listofemails=[]
+  list_of_id=[]
 if(req.body.branch=="all"){
  console.log("all");
  console.log(sem);
  if(sem=="all"){
    data.forEach(elem=>{
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
    });//data.foreach
  }//all sem
  else{
@@ -235,18 +266,21 @@ if(req.body.branch=="all"){
      data.forEach(elem=>{
      if(elem.cur_sem==1||elem.cur_sem==2){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
        });//data.forEach
    }else if(sem=="second"){
      data.forEach(elem=>{
      if(elem.cur_sem==3||elem.cur_sem==4){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
        });//data.forEach
    }else if(sem=="third"){
      data.forEach(elem=>{
      if(elem.cur_sem==5||elem.cur_sem==6){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
        });//data.forEach
 
@@ -254,6 +288,7 @@ if(req.body.branch=="all"){
      data.forEach(elem=>{
      if(elem.cur_sem==7||elem.cur_sem==8){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
        });//data.forEach
    }
@@ -267,6 +302,7 @@ else{
    data.forEach(elem=>{
      if(elem.basic.branch==req.body.branch){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
    });//data.foreach
  }//all sem
@@ -276,21 +312,25 @@ else{
    if(sem=="first"){
      if(elem.cur_sem==1||elem.cur_sem==2){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
 
    }else if(sem=="second"){
      if(elem.cur_sem==3||elem.cur_sem==4){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
 
    }else if(sem=="third"){
      if(elem.cur_sem==5||elem.cur_sem==6){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
 
    }else if(sem=="fourth"){
      if(elem.cur_sem==7||elem.cur_sem==8){
        Create_List_of_emails(elem.basic.email);
+               Create_List_of_id(elem._id);
      }
    }
  }//Branch
@@ -329,6 +369,14 @@ else{
             subject: sub,
             text: content
         }
+        var notif_object = {sub:req.body.sub,content:req.body.msg};
+        list_of_id.forEach(function(id) {
+          Students.findById(id,(err,stud ) => {
+            var notif_object = {sub:req.body.sub,content:req.body.msg,date_time:date_time()};
+            stud.notifications.push(notif_object)
+            stud.save();
+          });
+        })
        transporter.sendMail(mailOptions, function(error, info) {
          if(error) {
            console.log(error)
@@ -356,7 +404,15 @@ else{
             subject: sub,
             text: content,
             attachments:attachementList
-        }
+        };
+
+        list_of_id.forEach(function(id) {
+          Students.findById(id,(err,stud ) => {
+            var notif_object = {sub:req.body.sub,content:req.body.msg,attachments:attachementList,date_time:date_time()};
+            stud.notifications.push(notif_object)
+            stud.save();
+          });
+        })
        transporter.sendMail(mailOptions, function(error, info) {
          if(error) {
            console.log(error)
@@ -405,4 +461,27 @@ function Create_List_of_emails(email) {
   }
 }
 
+function Create_List_of_id(id) {
+  if (!id) {
+  } else {
+    list_of_id.push(id);
+  }
+}
+
+function date_time() {
+  var objToday = new Date(),
+  	weekday = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
+  	dayOfWeek = weekday[objToday.getDay()],
+  	domEnder = function() { var a = objToday; if (/1/.test(parseInt((a + "").charAt(0)))) return "th"; a = parseInt((a + "").charAt(1)); return 1 == a ? "st" : 2 == a ? "nd" : 3 == a ? "rd" : "th" }(),
+  	dayOfMonth = today + ( objToday.getDate() < 10) ? '0' + objToday.getDate() + domEnder : objToday.getDate() + domEnder,
+  	months = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'),
+  	curMonth = months[objToday.getMonth()],
+  	curYear = objToday.getFullYear(),
+  	curHour = objToday.getHours() > 12 ? objToday.getHours() - 12 : (objToday.getHours() < 10 ? "0" + objToday.getHours() : objToday.getHours()),
+  	curMinute = objToday.getMinutes() < 10 ? "0" + objToday.getMinutes() : objToday.getMinutes(),
+  	curSeconds = objToday.getSeconds() < 10 ? "0" + objToday.getSeconds() : objToday.getSeconds(),
+  	curMeridiem = objToday.getHours() > 12 ? "PM" : "AM";
+  var today = curHour + ":" + curMinute + "." + curSeconds + curMeridiem + " " + dayOfWeek + " " + dayOfMonth + " of " + curMonth + ", " + curYear;
+  return today
+}
 module.exports = router;
