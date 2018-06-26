@@ -4,6 +4,7 @@ var mongoose        = require('mongoose'),
     mongoXlsx       = require("mongo-xlsx"),
     bodyParser      = require("body-parser"),
     multer          = require("multer"),
+    flash           = require('connect-flash'),
     storage         = multer.diskStorage(
       {
         destination: function (req, file, cb) {cb(null, 'uploads/')},
@@ -54,6 +55,11 @@ var validate          = require('../validation/insertValidate');
 var authFunctions     = require('../validation/authFunctions');
 var mail              = require('../validation/mailer');
 // var isLoggedIn     = require('../validation/authFunctions');
+router.use(require('connect-flash')());
+router.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 //======================================
 // GET Route
 //======================================
@@ -70,6 +76,31 @@ router.post("/index",authFunctions.isLoggedIn,upload.single("file"),function (re
 sync.do(function(){
 //=========================================================================
   mongoXlsx.xlsx2MongoData("./"+req.file.path,model,function (err,mongoData) {
+    var empty_header = false;
+
+  mongoData.forEach(objects=>{
+    if ((Object.keys(objects).length==0)||(Object.keys(objects).length==1)) {
+        console.log("Delete the upper rows of  header row and try again");
+    } else {
+        var x = Object.keys(objects);
+        var n = 0;
+        x.forEach(key=>{
+          var no_head_str = '_no_header_at_col_'+n;
+          if (empty_header==false) {
+            if (key==no_head_str) {
+              console.log(no_head_str,"  is caught");
+              empty_header=true;
+            }
+          }
+
+          n=n+1;
+        })
+
+    }
+  })
+
+  if (empty_header==false) {
+    // console.log(Object.keys(element).length);
     //======================== basic detail Regular  ===========================
     //==========================================================================
     if(req.body.fc=="basic"){
@@ -353,6 +384,11 @@ sync.do(function(){
         })
     }
     //======================================================================
+  } else {
+    req.flash('error','Data of Excel is not in correct position. Header row should be the first row of the excel sheet!!')
+    res.redirect('/index')
+  }
+
   sync.done();
   })//mongoXlsx
 

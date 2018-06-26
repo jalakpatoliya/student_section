@@ -1,18 +1,42 @@
 //=================================Importing all dependencies============
-var mongoose = require('mongoose'),
-    express  = require('express'),
-    router   = express.Router(),
-    Students  = require('../../models/student'), //Importing multiple models and schemas
-    authFunctions = require('../../validation/authFunctions'),
+var mongoose              = require('mongoose'),
+    express               = require('express'),
+    router                = express.Router(),
+    Students              = require('../../models/student'),
+    User                  = require("../../models/user"),
+    passport              = require("passport"),
+    LocalStrategy         = require("passport-local"),
+    passportLocalMongoose = require("passport-local-mongoose"),
+    authFunctions         = require('../../validation/authFunctions'),
+    expressSession        = require("express-session"),
     path                  = require('path'),
     crypto                = require('crypto'),
-    multer          = require("multer"),
-    storage         = multer.diskStorage(
+    multer                = require("multer"),
+    storage               = multer.diskStorage(
       {
-        destination: function (req, file, cb) {cb(null, 'uploads/')},
+        destination: function (req, file, cb) {cb(null, 'uploads/notifications/')},
         filename: function (req, file, cb) {cb(null, file.originalname)}
       }),
      upload        = multer({ storage: storage });
+
+     //====================================================
+     passport.use(new LocalStrategy(User.authenticate()));
+     passport.serializeUser(User.serializeUser()); // it reades, decodes information in session,encodes it
+     passport.deserializeUser(User.deserializeUser());
+
+     // Express-session Middleware
+     router.use(expressSession({
+       secret: 'keyboard cat',
+       resave: true,
+       saveUninitialized: true,
+       cookie: { secure: true }
+     }))
+     // Express-mesages Middleware
+     router.use(require('connect-flash')());
+     router.use(function (req, res, next) {
+       res.locals.messages = require('express-messages')(req, res);
+       next();
+     });
 
     //****************************************************************************************
     //****************************************************************************************
@@ -181,7 +205,7 @@ router.post("/notify",upload.array('file',100),function(req,res){
                 stud.notifications.push(notif_object)
                 stud.save();
               });
-            })
+            });
            transporter.sendMail(mailOptions, function(error, info) {
              if(error) {
                console.log(error)
@@ -216,6 +240,15 @@ router.post("/notify",upload.array('file',100),function(req,res){
                 stud.notifications.push(notif_object)
                 stud.save();
               });
+            })
+            console.log("yes got here findallyyy...........");
+            console.log(req.user.username);
+            User.findOne({username:req.user.username},function(err,user){
+              console.log("yes got here findallyyy...........",user);
+
+              var notif_object = {sub:req.body.sub,content:req.body.msg,attachments:attachementList,date_time:date_time()}
+              user.notifications.push(notif_object)
+              user.save(function(err){});
             })
            transporter.sendMail(mailOptions, function(error, info) {
              if(error) {
@@ -376,6 +409,10 @@ else{
             stud.notifications.push(notif_object)
             stud.save();
           });
+        })
+        console.log("yes got here findallyyy...........");
+        User.findOne({username:req.body.username},function(err,user){
+          console.log("yes got here findallyyy...........",user);
         })
        transporter.sendMail(mailOptions, function(error, info) {
          if(error) {

@@ -10,6 +10,12 @@ else if(currentUser.role=="admin"){
   %>
   <% include ./student/partials/header %>
 <%}%>
+<div class="ui four fields">
+  <div class="ui field">
+    <%- messages() %>
+    <br>
+  </div>
+</div>
 <div class="ui tab" data-tab="tab-name">
   <div class="ui active dimmer">
     <div class="ui text loader">Uploading</div>

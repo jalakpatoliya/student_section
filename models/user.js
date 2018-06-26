@@ -13,6 +13,21 @@ var UserSchema = new mongoose.Schema({
   email               : String,
   resetPasswordToken  : String,
   resetPasswordExpires: Date,
+  notifications       :[
+                          {
+                              sub           :String,
+                              content       :String,
+                              attachments   :[
+                                              {
+                                                filename :String,
+                                                path     :String
+                                              }
+                                            ],
+                              date_time     :String,
+                              year          :String,
+                              branch        :String
+                          }
+                        ],
 })
 
 
